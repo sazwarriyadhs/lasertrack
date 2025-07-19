@@ -3,54 +3,44 @@ import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocat
 
 export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'superadmin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100', address: '123 Admin Plaza, Suite 100, Capital City', contact: {email: 'superadmin@lasertrack.com', phone: '555-0101'} },
-  { id: 'user-2', name: 'West Coast Distribution', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/3B82F6/FFFFFF', distributorId: 'dist-1', address: '456 Distributor Ave, Commerce City', contact: {email: 'contact@westcoast.com', phone: '123-456-7890'} },
-  { id: 'user-3', name: 'Sunset Aesthetics Clinic', email: 'clinic@lasertrack.com', role: 'Clinic', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: '789 Clinic Rd, Wellness Town', contact: {email: 'info@sunset.com', phone: '123-111-2222'} },
-  { id: 'user-4', name: 'Tech Maria', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: '101 Technician St, fieldwork', contact: {email: 'maria.t@tech.com', phone: '111-222-3333'} },
+  { id: 'user-2', name: 'PT Regenesis Indonesia', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', distributorId: 'dist-5', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia', contact: {email: 'info@regenesis.co.id', phone: '021-1234-5678'} },
+  { id: 'user-3', name: 'Klinik Dr. Ananda', email: 'clinic@lasertrack.com', role: 'Clinic', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Margonda Raya No. 5, Depok', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'} },
+  { id: 'user-4', name: 'Budi Teknisi', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: 'Jl. Teknisi No. 1, Jakarta', contact: {email: 'budi.t@tech.com', phone: '0812-1111-2222'} },
 ];
 
 export const devices: Device[] = [
-  { id: 'dev-1', name: 'LightSheer Desire', model: 'LS-2000', serialNumber: 'SN-A1B2C3D4', clinicId: 'clinic-1', status: 'Operational', lastMaintenance: '2024-05-01' },
-  { id: 'dev-2', name: 'Lumenis M22', model: 'M22-ResurFX', serialNumber: 'SN-E5F6G7H8', clinicId: 'clinic-1', status: 'Under Maintenance', lastMaintenance: '2024-04-15' },
-  { id: 'dev-3', name: 'Cynosure PicoSure', model: 'PS-300', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-2', status: 'Needs Attention', lastMaintenance: '2024-03-20' },
-  { id: 'dev-4', name: 'Candela GentleMax Pro', model: 'GMP-500', serialNumber: 'SN-M3N4O5P6', clinicId: 'clinic-2', status: 'Operational', lastMaintenance: '2024-06-10' },
-  { id: 'dev-5', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-3', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
-  { id: 'dev-6', name: 'Alma Soprano', model: 'Soprano-ICE', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-4', status: 'Operational', lastMaintenance: '2024-07-01' },
-  { id: 'dev-7', name: 'BTL Emsculpt', model: 'Emsculpt-Neo', serialNumber: 'SN-Z5A6B7C8', clinicId: 'clinic-5', status: 'Needs Attention', lastMaintenance: '2024-06-18' },
-  { id: 'dev-8', name: 'LightSheer Desire', model: 'LS-2000', serialNumber: 'SN-J4K5L6M7', clinicId: 'clinic-6', status: 'Operational', lastMaintenance: '2024-07-10' },
-  { id: 'dev-9', name: 'Lumenis M22', model: 'M22-ResurFX', serialNumber: 'SN-N8O9P0Q1', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-07-12' },
-  { id: 'dev-10', name: 'Cynosure PicoSure', model: 'PS-300', serialNumber: 'SN-R2S3T4U5', clinicId: 'clinic-8', status: 'Under Maintenance', lastMaintenance: '2024-07-15' },
-  { id: 'dev-11', name: 'Candela GentleMax Pro', model: 'GMP-500', serialNumber: 'SN-V6W7X8Y9', clinicId: 'clinic-9', status: 'Operational', lastMaintenance: '2024-07-18' },
-  { id: 'dev-12', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Z0A1B2C3', clinicId: 'clinic-10', status: 'Needs Attention', lastMaintenance: '2024-07-20' },
+  { id: 'dev-1', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-A1B2C3D4', clinicId: 'clinic-6', status: 'Operational', lastMaintenance: '2024-05-01' },
+  { id: 'dev-2', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-E5F6G7H8', clinicId: 'clinic-6', status: 'Under Maintenance', lastMaintenance: '2024-04-15' },
+  { id: 'dev-3', name: 'Cellec V', model: 'Jeisys-CV', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-7', status: 'Needs Attention', lastMaintenance: '2024-03-20' },
+  { id: 'dev-4', name: 'BeautiFill', model: 'Alma-BF', serialNumber: 'SN-M3N4O5P6', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-06-10' },
+  { id: 'dev-5', name: 'BiAxis QS™', model: 'BiAxis-QS', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-8', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
+  { id: 'dev-6', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-9', status: 'Operational', lastMaintenance: '2024-07-01' },
+  { id: 'dev-7', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-Z5A6B7C8', clinicId: 'clinic-10', status: 'Needs Attention', lastMaintenance: '2024-06-18' },
 ];
 
 export const distributorLocations: DistributorLocation[] = [
-  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 }, applicationStatus: 'Active', licenseDuration: '280 days remaining', clinicCount: 3, lastLogin: '2024-07-20', contact: { email: 'contact@westcoast.com', phone: '123-456-7890' }, avatarUrl: 'https://placehold.co/100x100/3B82F6/FFFFFF', address: "123 Distribution Way, Los Angeles, CA" },
-  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 2, lastLogin: '2024-07-21', contact: { email: 'support@eastcoast.com', phone: '987-654-3210' }, avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', address: "456 Supply St, New York, NY" },
-  { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15', contact: { email: 'info@southern.com', phone: '555-123-4567' }, avatarUrl: 'https://placehold.co/100x100/EF4444/FFFFFF', address: "789 Southern Blvd, Houston, TX" },
-  { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19', contact: { email: 'sales@midwest.com', phone: '222-333-4444' }, avatarUrl: 'https://placehold.co/100x100/6366F1/FFFFFF', address: "101 Midwest Ave, Chicago, IL" },
-  { id: 'dist-5', name: 'PT Regenesis Indonesia', type: 'Distributor', position: { lat: -6.2088, lng: 106.8456 }, applicationStatus: 'Active', licenseDuration: '365 days remaining', clinicCount: 5, lastLogin: '2024-07-22', contact: { email: 'info@regenesis.co.id', phone: '021-1234-5678' }, avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia' },
+  { id: 'dist-5', name: 'PT Regenesis Indonesia', type: 'Distributor', position: { lat: -6.224, lng: 106.805 }, applicationStatus: 'Active', licenseDuration: '365 days remaining', clinicCount: 5, lastLogin: '2024-07-22', contact: { email: 'info@regenesis.co.id', phone: '021-1234-5678' }, avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', address: 'Gedung Sahid Sudirman Center, Jl. Jend. Sudirman Kav. 86, Jakarta' },
+  { id: 'dist-2', name: 'PT Innomed Jaya Utama', type: 'Distributor', position: { lat: -6.18, lng: 106.83 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 0, lastLogin: '2024-07-21', contact: { email: 'support@innomed.asia', phone: '021-987-6543' }, avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', address: "Jl. Kramat Raya No. 45, Jakarta" },
+  { id: 'dist-3', name: 'PT Redo Marketing Indonesia', type: 'Distributor', position: { lat: -6.25, lng: 106.80 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15', contact: { email: 'info@redo.co.id', phone: '021-555-1234' }, avatarUrl: 'https://placehold.co/100x100/EF4444/FFFFFF', address: "Jl. Wolter Monginsidi No. 10, Jakarta Selatan" },
+  { id: 'dist-4', name: 'PT Estetika Pro International', type: 'Distributor', position: { lat: -6.21, lng: 106.85 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19', contact: { email: 'sales@espro.co.id', phone: '021-222-3333' }, avatarUrl: 'https://placehold.co/100x100/6366F1/FFFFFF', address: "Jl. KH. Wahid Hasyim No. 50, Jakarta Pusat" },
 ];
 
 export const distributorClinics: ClinicLocation[] = [
-    { id: 'clinic-1', name: 'Sunset Aesthetics Clinic', type: 'Clinic', distributorId: 'dist-1', position: { lat: 34.0904, lng: -118.3618 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@sunset.com', phone: '123-111-2222'}, address: "1 Hollywood Hills Rd, Los Angeles, CA" },
-    { id: 'clinic-2', name: 'Metropolis Laser Center', type: 'Clinic', distributorId: 'dist-2', position: { lat: 40.758, lng: -73.9855 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@metropolis.com', phone: '123-222-3333'}, address: "2 Times Square, New York, NY" },
-    { id: 'clinic-3', name: 'Downtown MedSpa', type: 'Clinic', distributorId: 'dist-1', position: { lat: 29.75, lng: -95.37 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@downtown.com', phone: '123-333-4444'}, address: "3 Downtown St, Houston, TX" },
-    { id: 'clinic-4', name: 'Windy City Wellness', type: 'Clinic', distributorId: 'dist-2', position: { lat: 41.89, lng: -87.63 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@windy.com', phone: '123-444-5555'}, address: "4 Michigan Ave, Chicago, IL" },
-    { id: 'clinic-5', name: 'Golden Gate Health', type: 'Clinic', distributorId: 'dist-1', position: { lat: 37.7749, lng: -122.4194 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@gg.com', phone: '123-555-6666'}, address: "5 Lombard St, San Francisco, CA" },
-    { id: 'clinic-6', name: 'Klinik Dr. Ananda Depok', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.4025, lng: 106.7942 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'}, address: 'Jl. Margonda Raya No. 5, Depok'},
+    { id: 'clinic-6', name: 'Klinik Dr. Ananda', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.4025, lng: 106.7942 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'}, address: 'Jl. Margonda Raya No. 5, Depok'},
     { id: 'clinic-7', name: 'Klinik Pratama Divine', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.1751, lng: 106.8650 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'contact@divineclinic.com', phone: '021-888-2222'}, address: 'Jl. Gatot Subroto No. 12, Jakarta'},
     { id: 'clinic-8', name: 'Klinik Surya Medika', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.1783, lng: 106.6319 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'cs@suryamedika.co.id', phone: '021-999-3333'}, address: 'Jl. Daan Mogot No. 8, Tangerang'},
-    { id: 'clinic-9', name: 'Klinik Meiril Medical Center', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.2383, lng: 106.9756 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'support@meiril.com', phone: '021-111-4444'}, address: 'Jl. Patriot No. 1, Bekasi'},
+    { id: 'clinic-9', name: 'Klinik Meiril Center', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.2383, lng: 106.9756 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'support@meiril.com', phone: '021-111-4444'}, address: 'Jl. Patriot No. 1, Bekasi'},
     { id: 'clinic-10', name: 'Klinik Baruna', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.5950, lng: 106.8062 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'}, address: 'Jl. Pajajaran No. 9, Bogor'},
 ];
 
 export const technicianLocations: TechnicianLocation[] = [
-    { id: 'tech-1', name: 'Tech Maria', type: 'Technician', distributorId: 'dist-1', position: { lat: 34.1522, lng: -118.4436 }, dutyStatus: 'On Duty', handlingStatus: 'Dalam Perjalanan', destinationClinicId: 'clinic-1', handledDeviceId: 'dev-2', contact: { email: 'maria.t@tech.com', phone: '111-222-3333' }, avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: "Tech Hub 1, Los Angeles, CA" },
-    { id: 'tech-2', name: 'Tech John', type: 'Technician', distributorId: 'dist-2', position: { lat: 40.6127, lng: -73.9059 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-2', handledDeviceId: 'dev-3', contact: { email: 'john.d@tech.com', phone: '444-555-6666' }, avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: "Tech Hub 2, New York, NY" },
-    { id: 'tech-3', name: 'Tech David', type: 'Technician', distributorId: 'dist-1', position: { lat: 37.8044, lng: -122.2711 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-5', handledDeviceId: 'dev-7', contact: { email: 'dave.s@tech.com', phone: '777-888-9999' }, avatarUrl: 'https://placehold.co/100x100/0EA5E9/FFFFFF', address: "Tech Hub 3, San Francisco, CA" },
-    { id: 'tech-4', name: 'Tech Sarah', type: 'Technician', distributorId: 'dist-1', position: { lat: 33.9522, lng: -118.3436 }, dutyStatus: 'Off Duty', contact: { email: 'sarah.w@tech.com', phone: '121-212-3232' }, avatarUrl: 'https://placehold.co/100x100/EC4899/FFFFFF', address: "Tech Hub 4, Los Angeles, CA" },
-    { id: 'tech-5', name: 'Tech Mike', type: 'Technician', distributorId: 'dist-1', position: { lat: 34.05, lng: -118.24 }, dutyStatus: 'On Duty', handlingStatus: 'Standby', contact: { email: 'mike.p@tech.com', phone: '321-654-9870' }, avatarUrl: 'https://placehold.co/100x100/14B8A6/FFFFFF', address: "Tech Hub 5, Los Angeles, CA" }
+    { id: 'tech-1', name: 'Budi Teknisi', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.36, lng: 106.82 }, dutyStatus: 'On Duty', handlingStatus: 'Dalam Perjalanan', destinationClinicId: 'clinic-6', handledDeviceId: 'dev-2', contact: { email: 'budi.t@tech.com', phone: '0812-1111-2222' }, avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: "Jl. Teknisi No. 1, Jakarta" },
+    { id: 'tech-2', name: 'Citra Ayu', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.17, lng: 106.80 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-7', handledDeviceId: 'dev-3', contact: { email: 'citra.a@tech.com', phone: '0812-3333-4444' }, avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: "Jl. Teknisi No. 2, Jakarta" },
+    { id: 'tech-3', name: 'Agus Setiawan', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.24, lng: 106.99 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-10', handledDeviceId: 'dev-7', contact: { email: 'agus.s@tech.com', phone: '0812-5555-6666' }, avatarUrl: 'https://placehold.co/100x100/0EA5E9/FFFFFF', address: "Jl. Teknisi No. 3, Bekasi" },
+    { id: 'tech-4', name: 'Dewi Lestari', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.59, lng: 106.81 }, dutyStatus: 'Off Duty', contact: { email: 'dewi.l@tech.com', phone: '0812-7777-8888' }, avatarUrl: 'https://placehold.co/100x100/EC4899/FFFFFF', address: "Jl. Teknisi No. 4, Bogor" },
+    { id: 'tech-5', name: 'Eko Nugroho', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.18, lng: 106.63 }, dutyStatus: 'On Duty', handlingStatus: 'Standby', contact: { email: 'eko.n@tech.com', phone: '0812-9999-0000' }, avatarUrl: 'https://placehold.co/100x100/14B8A6/FFFFFF', address: "Jl. Teknisi No. 5, Tangerang" }
 ];
+
 
 export const locations: Location[] = [
   ...distributorLocations,
@@ -59,12 +49,12 @@ export const locations: Location[] = [
 ];
 
 export const maintenanceChecklist: MaintenanceChecklistItem[] = [
-  { id: 'check-1', label: 'Calibrate laser output', checked: false },
-  { id: 'check-2', label: 'Inspect cooling system', checked: false },
-  { id: 'check-3', label: 'Clean optical components', checked: false },
-  { id: 'check-4', label: 'Verify emergency shutoff', checked: false },
-  { id: 'check-5', label: 'Update device firmware', checked: false },
-  { id: 'check-6', label: 'Check power supply stability', checked: false },
+  { id: 'check-1', label: 'Kalibrasi output laser', checked: false },
+  { id: 'check-2', label: 'Inspeksi sistem pendingin', checked: false },
+  { id: 'check-3', label: 'Bersihkan komponen optik', checked: false },
+  { id: 'check-4', label: 'Verifikasi tombol darurat', checked: false },
+  { id: 'check-5', label: 'Perbarui firmware perangkat', checked: false },
+  { id: 'check-6', label: 'Periksa stabilitas catu daya', checked: false },
 ];
 
 export const activityLogs: ActivityLog[] = [
@@ -87,23 +77,20 @@ export const userActivityData: UserActivity[] = [
 ];
 
 export const maintenanceHistory: MaintenanceRecord[] = [
-    { id: 'hist-1', deviceId: 'dev-1', date: '2024-05-01', technicianName: 'Tech Maria', description: 'Annual calibration and cooling system check.' },
-    { id: 'hist-2', deviceId: 'dev-2', date: '2024-04-15', technicianName: 'Tech John', description: 'Replaced optical filter and firmware update.' },
-    { id: 'hist-3', deviceId: 'dev-3', date: '2024-03-20', technicianName: 'Tech John', description: 'Power supply diagnostics. Needs replacement.' },
-    { id: 'hist-4', deviceId: 'dev-1', date: '2023-11-10', technicianName: 'Tech Maria', description: 'Emergency shutoff test and general cleaning.' },
-    { id: 'hist-5', deviceId: 'dev-7', date: '2024-06-18', technicianName: 'Tech David', description: 'Software glitch resolved.' },
-    { id: 'hist-6', deviceId: 'dev-10', date: '2024-07-15', technicianName: 'Tech Budi', description: 'Initial setup and calibration.' },
-    { id: 'hist-7', deviceId: 'dev-12', date: '2024-07-20', technicianName: 'Tech Citra', description: 'Diagnostic check for error code 501.' },
+    { id: 'hist-1', deviceId: 'dev-1', date: '2024-05-01', technicianName: 'Budi Teknisi', description: 'Kalibrasi tahunan dan pemeriksaan sistem pendingin.' },
+    { id: 'hist-2', deviceId: 'dev-2', date: '2024-04-15', technicianName: 'Citra Ayu', description: 'Mengganti filter optik dan pembaruan firmware.' },
+    { id: 'hist-3', deviceId: 'dev-3', date: '2024-03-20', technicianName: 'Citra Ayu', description: 'Diagnostik catu daya. Perlu penggantian.' },
+    { id: 'hist-4', deviceId: 'dev-1', date: '2023-11-10', technicianName: 'Budi Teknisi', description: 'Uji tombol darurat dan pembersihan umum.' },
+    { id: 'hist-5', deviceId: 'dev-7', date: '2024-06-18', technicianName: 'Agus Setiawan', description: 'Masalah perangkat lunak teratasi.' },
+    { id: 'hist-6', deviceId: 'dev-10', date: '2024-07-15', technicianName: 'Budi Teknisi', description: 'Pengaturan awal dan kalibrasi.' },
 ];
 
 export const purchaseHistory: PurchaseHistoryRecord[] = [
-    { id: 'pur-1', deviceId: 'dev-1', deviceName: 'LightSheer Desire', purchaseDate: '2023-01-15', distributorName: 'West Coast Distribution', warrantyEndDate: '2025-01-15' },
-    { id: 'pur-2', deviceId: 'dev-2', deviceName: 'Lumenis M22', purchaseDate: '2022-11-20', distributorName: 'West Coast Distribution', warrantyEndDate: '2024-11-20' },
-    { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cynosure PicoSure', purchaseDate: '2023-03-10', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-03-10' },
-    { id: 'pur-4', deviceId: 'dev-4', deviceName: 'Candela GentleMax Pro', purchaseDate: '2023-06-01', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-06-01' },
-    { id: 'pur-5', deviceId: 'dev-8', deviceName: 'LightSheer Desire', purchaseDate: '2023-08-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-01' },
-    { id: 'pur-6', deviceId: 'dev-9', deviceName: 'Lumenis M22', purchaseDate: '2023-08-05', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-05' },
-    { id: 'pur-7', deviceId: 'dev-10', deviceName: 'Cynosure PicoSure', purchaseDate: '2023-09-10', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-09-10' },
+    { id: 'pur-1', deviceId: 'dev-1', deviceName: 'PicoWay®', purchaseDate: '2023-01-15', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-01-15' },
+    { id: 'pur-2', deviceId: 'dev-2', deviceName: 'Vbeam Perfecta®', purchaseDate: '2022-11-20', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2024-11-20' },
+    { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cellec V', purchaseDate: '2023-03-10', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-03-10' },
+    { id: 'pur-4', deviceId: 'dev-4', deviceName: 'BeautiFill', purchaseDate: '2023-06-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-06-01' },
+    { id: 'pur-5', deviceId: 'dev-6', deviceName: 'PicoWay®', purchaseDate: '2023-08-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-01' },
 ];
 
     

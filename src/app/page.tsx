@@ -53,10 +53,10 @@ const valueAddedServicesRegenesis = [
 ];
 
 const featuredProductsInnomed = [
-    { product: 'Transcranial Pulse Stimulation (TPS®)', brand: 'STORZ Medical – Neurolith®', indication: 'Terapi non-invasif untuk Alzheimer & demensia; stimulasi neuroplastisitas.', image: "https://placehold.co/600x400.png" },
-    { product: 'Phototherapy & Photobiomodulation', brand: 'Daavlin – Series 3 Neolux', indication: 'Terapi fototerapi untuk vitiligo, eczema, dan kondisi kulit lainnya.', image: "https://placehold.co/600x400.png" },
-    { product: 'Skin Analysis & Imaging System', brand: 'Canfield – VISIA®', indication: 'Analisis kulit profesional untuk pigmentasi, pori, dan tekstur.', image: "https://placehold.co/600x400.png" },
-    { product: 'CO₂ Fractional Laser', brand: 'Lasering – Slim Evolution II', indication: 'Resurfacing kulit, reduksi kerutan dan bekas luka.', image: "https://placehold.co/600x400.png" },
+    { product: 'Transcranial Pulse Stimulation (TPS®)', brand: 'STORZ Medical – Neurolith®', indication: 'Terapi non-invasif untuk Alzheimer & demensia; stimulasi neuroplastisitas.' },
+    { product: 'Phototherapy & Photobiomodulation', brand: 'Daavlin – Series 3 Neolux', indication: 'Terapi fototerapi untuk vitiligo, eczema, dan kondisi kulit lainnya.' },
+    { product: 'Skin Analysis & Imaging System', brand: 'Canfield – VISIA®', indication: 'Analisis kulit profesional untuk pigmentasi, pori, dan tekstur.' },
+    { product: 'CO₂ Fractional Laser', brand: 'Lasering – Slim Evolution II', indication: 'Resurfacing kulit, reduksi kerutan dan bekas luka.' },
 ];
 
 const distributorNetwork = [

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { useApp } from '@/context/app-context';
 
 
 const statusColors: Record<DeviceStatus, string> = {
@@ -67,8 +68,8 @@ const TechnicianStatusCard = ({ technician, device }: { technician: TechnicianLo
 }
 
 const ContactCard = () => {
-    const distributor = distributorLocations.find(d => d.id === 'dist-1');
-    const technician = technicianLocations.find(t => t.id === 'tech-1');
+    const distributor = distributorLocations.find(d => d.id === 'dist-5');
+    const technicians = technicianLocations.filter(t => t.distributorId === 'dist-5');
 
     return (
         <Card>
@@ -98,23 +99,25 @@ const ContactCard = () => {
                 </div>
                  <div>
                     <h3 className="font-semibold mb-2">Teknisi Tersedia</h3>
-                     <div className="flex items-center gap-4">
-                         <Avatar>
-                            <AvatarImage src={technician?.avatarUrl} alt={technician?.name} data-ai-hint="person portrait" />
-                            <AvatarFallback>{technician?.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                             <p className="font-medium">{technician?.name}</p>
-                             <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
-                                <Mail className="h-4 w-4" />
-                                <span>{technician?.contact.email}</span>
-                             </div>
-                             <div className="text-sm text-muted-foreground flex items-center gap-2">
-                                <Phone className="h-4 w-4" />
-                                <span>{technician?.contact.phone}</span>
-                             </div>
+                     {technicians.map(technician => (
+                        <div key={technician.id} className="flex items-center gap-4 mb-3">
+                            <Avatar>
+                                <AvatarImage src={technician?.avatarUrl} alt={technician?.name} data-ai-hint="person portrait" />
+                                <AvatarFallback>{technician?.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-medium">{technician?.name}</p>
+                                <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                                    <Mail className="h-4 w-4" />
+                                    <span>{technician?.contact.email}</span>
+                                </div>
+                                <div className="text-sm text-muted-foreground flex items-center gap-2">
+                                    <Phone className="h-4 w-4" />
+                                    <span>{technician?.contact.phone}</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </CardContent>
         </Card>
@@ -195,7 +198,8 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
 
 
 export default function ClinicDashboard() {
-    const clinicId = 'clinic-1'; // Static for demo
+    const { user } = useApp();
+    const clinicId = 'clinic-6'; // Static for demo - assuming logged in user is from this clinic
     const clinicDevices = devices.filter(d => d.clinicId === clinicId);
     const clinicMaintenanceHistory = maintenanceHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
     const clinicPurchaseHistory = purchaseHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
@@ -209,7 +213,7 @@ export default function ClinicDashboard() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Perangkat Saya</CardTitle>
-                        <CardDescription>Daftar semua perangkat yang terdaftar di klinik Anda.</CardDescription>
+                        <CardDescription>Daftar semua perangkat yang terdaftar di klinik Anda, {user.name}.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Table>
