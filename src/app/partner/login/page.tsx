@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/layout/logo';
@@ -11,7 +11,8 @@ import { useApp } from '@/context/app-context';
 import type { Role } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, UserPlus } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function DistributorLoginPage() {
   const router = useRouter();
@@ -84,6 +85,16 @@ export default function DistributorLoginPage() {
                     </Button>
                 </form>
             </CardContent>
+            <Separator className="my-4" />
+            <CardFooter className="flex-col gap-4">
+                <p className="text-sm text-muted-foreground">Belum menjadi partner?</p>
+                 <Button variant="outline" asChild className="w-full">
+                    <Link href="/partner/register">
+                        <UserPlus className="mr-2" />
+                        Daftar sebagai Distributor
+                    </Link>
+                </Button>
+            </CardFooter>
         </Card>
       </div>
     </div>
