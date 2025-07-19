@@ -1,5 +1,7 @@
+
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -9,7 +11,13 @@ import type { Role } from '@/lib/types';
 import { Bell, ChevronsUpDown, LifeBuoy, LogOut, Settings, User as UserIcon } from 'lucide-react';
 
 export function Header() {
-  const { user, setUserRole } = useApp();
+  const { user, setUserRole, logout } = useApp();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  }
 
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-6 sticky top-0 z-30">
@@ -69,7 +77,7 @@ export function Header() {
               <span>Support</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

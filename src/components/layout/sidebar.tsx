@@ -1,3 +1,4 @@
+
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
@@ -8,30 +9,22 @@ import { Logo } from '@/components/layout/logo';
 
 
 const superAdminNavItems = [
-    { href: '#map-section', label: 'Peta', icon: Map },
-    { href: '#stats-section', label: 'Statistik', icon: BarChart2 },
-    { href: '#distributor-management-section', label: 'Manajemen Lisensi', icon: BadgeCheck },
-    { href: '#activity-logs-section', label: 'Log Aktivitas', icon: FileText },
+    { href: '/dashboard#map-section', label: 'Peta', icon: Map },
+    { href: '/dashboard#stats-section', label: 'Statistik', icon: BarChart2 },
+    { href: '/dashboard#distributor-management-section', label: 'Manajemen Lisensi', icon: BadgeCheck },
+    { href: '/dashboard#activity-logs-section', label: 'Log Aktivitas', icon: FileText },
 ];
 
 const distributorNavItems = [
-    { href: '#', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '#', label: 'Manajemen Tim', icon: Users },
-    { href: '#', label: 'Monitoring Device', icon: Wrench },
-    { href: '#', label: 'Laporan', icon: AreaChart },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
 const clinicNavItems = [
-    { href: '#', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '#', label: 'Perangkat Saya', icon: Wrench },
-    { href: '#', label: 'Riwayat', icon: FileText },
-    { href: '#', label: 'Kontak', icon: Users },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
 const technicianNavItems = [
-    { href: '#', label: 'Tugas Saya', icon: LayoutDashboard },
-    { href: '/maintenance/dev-2', label: 'Maintenance Aktif', icon: Wrench },
-    { href: '#', label: 'Pengaturan', icon: Settings },
+    { href: '/dashboard', label: 'Tugas Saya', icon: LayoutDashboard },
 ];
 
 const getNavItemsByRole = (role: string) => {
@@ -54,19 +47,31 @@ export function Sidebar() {
     const pathname = usePathname();
     const navItems = getNavItemsByRole(user.role);
 
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        if (pathname === '/dashboard' && href.includes('#')) {
+            e.preventDefault();
+            const targetId = href.split('#')[1];
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    };
+
+
     return (
         <aside className="hidden lg:block w-64 flex-shrink-0 border-r bg-card">
             <div className="flex h-full flex-col">
                 <div className="border-b">
-                    <Logo />
+                    <Link href="/dashboard"><Logo /></Link>
                 </div>
                 <nav className="flex-1 px-4 py-4">
                      <p className="px-2 py-1 text-xs font-semibold text-muted-foreground">{user.role} Menu</p>
                     <ul className="space-y-1">
                         {navItems.map((item) => (
                             <li key={item.label}>
-                                <Button asChild variant={pathname === item.href ? 'secondary' : 'ghost'} className="w-full justify-start gap-2">
-                                    <Link href={item.href}>
+                                <Button asChild variant={'ghost'} className="w-full justify-start gap-2">
+                                    <Link href={item.href} onClick={(e) => handleNavClick(e, item.href)}>
                                         <item.icon className="h-5 w-5" />
                                         {item.label}
                                     </Link>

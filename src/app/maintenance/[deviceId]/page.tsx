@@ -1,16 +1,32 @@
+
+'use client';
 import { MaintenanceForm } from '@/components/maintenance/maintenance-form';
 import { devices } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Logo } from '@/components/layout/logo';
+import { useApp } from '@/context/app-context';
+import { useEffect } from 'react';
 
 export default function MaintenancePage({ params }: { params: { deviceId: string } }) {
     const device = devices.find(d => d.id === params.deviceId);
+    const { isAuthenticated } = useApp();
+    const router = useRouter();
+
+    useEffect(() => {
+        if(!isAuthenticated) {
+            router.push('/');
+        }
+    }, [isAuthenticated, router])
 
     if (!device) {
         notFound();
+    }
+    
+    if (!isAuthenticated) {
+        return null;
     }
 
     return (
@@ -19,7 +35,7 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
                 <Logo />
                 <nav className="flex-1">
                     <Button asChild variant="outline">
-                        <Link href="/">
+                        <Link href="/dashboard">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Kembali ke Dashboard
                         </Link>
