@@ -1,4 +1,4 @@
-import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity } from '@/lib/types';
+import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity, ClinicLocation, TechnicianLocation } from '@/lib/types';
 
 export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'admin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100' },
@@ -12,24 +12,37 @@ export const devices: Device[] = [
   { id: 'dev-2', name: 'Lumenis M22', model: 'M22-ResurFX', serialNumber: 'SN-E5F6G7H8', clinicId: 'clinic-1', status: 'Under Maintenance', lastMaintenance: '2024-04-15' },
   { id: 'dev-3', name: 'Cynosure PicoSure', model: 'PS-300', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-2', status: 'Needs Attention', lastMaintenance: '2024-03-20' },
   { id: 'dev-4', name: 'Candela GentleMax Pro', model: 'GMP-500', serialNumber: 'SN-M3N4O5P6', clinicId: 'clinic-2', status: 'Operational', lastMaintenance: '2024-06-10' },
-  { id: 'dev-5', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-1', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
+  { id: 'dev-5', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-3', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
+  { id: 'dev-6', name: 'Alma Soprano', model: 'Soprano-ICE', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-4', status: 'Operational', lastMaintenance: '2024-07-01' },
+  { id: 'dev-7', name: 'BTL Emsculpt', model: 'Emsculpt-Neo', serialNumber: 'SN-Z5A6B7C8', clinicId: 'clinic-5', status: 'Needs Attention', lastMaintenance: '2024-06-18' },
 ];
 
 export const distributorLocations: DistributorLocation[] = [
-  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 }, applicationStatus: 'Active', licenseDuration: '280 days remaining', clinicCount: 8, lastLogin: '2024-07-20' },
-  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 12, lastLogin: '2024-07-21' },
-  { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 5, lastLogin: '2024-06-15' },
-  { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 15, lastLogin: '2024-07-19' },
+  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 }, applicationStatus: 'Active', licenseDuration: '280 days remaining', clinicCount: 3, lastLogin: '2024-07-20' },
+  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 2, lastLogin: '2024-07-21' },
+  { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15' },
+  { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19' },
+];
+
+const clinicLocations: ClinicLocation[] = [
+    { id: 'clinic-1', name: 'Sunset Aesthetics Clinic', type: 'Clinic', distributorId: 'dist-1', position: { lat: 34.0904, lng: -118.3618 } },
+    { id: 'clinic-2', name: 'Metropolis Laser Center', type: 'Clinic', distributorId: 'dist-2', position: { lat: 40.758, lng: -73.9855 } },
+    { id: 'clinic-3', name: 'Downtown MedSpa', type: 'Clinic', distributorId: 'dist-1', position: { lat: 29.75, lng: -95.37 } },
+    { id: 'clinic-4', name: 'Windy City Wellness', type: 'Clinic', distributorId: 'dist-2', position: { lat: 41.89, lng: -87.63 } },
+    { id: 'clinic-5', name: 'Golden Gate Health', type: 'Clinic', distributorId: 'dist-1', position: { lat: 37.7749, lng: -122.4194 } },
+];
+
+const technicianLocations: TechnicianLocation[] = [
+    { id: 'tech-1', name: 'Tech Maria', type: 'Technician', distributorId: 'dist-1', position: { lat: 34.1522, lng: -118.4436 }, dutyStatus: 'On Duty', handlingStatus: 'Dalam Perjalanan', destinationClinicId: 'clinic-1', handledDeviceId: 'dev-2' },
+    { id: 'tech-2', name: 'Tech John', type: 'Technician', distributorId: 'dist-2', position: { lat: 40.6127, lng: -73.9059 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-2', handledDeviceId: 'dev-3' },
+    { id: 'tech-3', name: 'Tech David', type: 'Technician', distributorId: 'dist-1', position: { lat: 37.8044, lng: -122.2711 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-5', handledDeviceId: 'dev-7' },
+    { id: 'tech-4', name: 'Tech Sarah', type: 'Technician', distributorId: 'dist-1', position: { lat: 33.9522, lng: -118.3436 }, dutyStatus: 'Off Duty' },
 ];
 
 export const locations: Location[] = [
   ...distributorLocations,
-  { id: 'clinic-1', name: 'Sunset Aesthetics Clinic', type: 'Clinic', position: { lat: 34.0904, lng: -118.3618 } },
-  { id: 'clinic-2', name: 'Metropolis Laser Center', type: 'Clinic', position: { lat: 40.758, lng: -73.9855 } },
-  { id: 'clinic-3', name: 'Downtown MedSpa', type: 'Clinic', position: { lat: 29.75, lng: -95.37 } },
-  { id: 'clinic-4', name: 'Windy City Wellness', type: 'Clinic', position: { lat: 41.89, lng: -87.63 } },
-  { id: 'tech-1', name: 'Tech Maria', type: 'Technician', position: { lat: 34.1522, lng: -118.4436 } },
-  { id: 'tech-2', name: 'Tech John', type: 'Technician', position: { lat: 40.6127, lng: -73.9059 } },
+  ...clinicLocations,
+  ...technicianLocations,
 ];
 
 export const maintenanceChecklist: MaintenanceChecklistItem[] = [

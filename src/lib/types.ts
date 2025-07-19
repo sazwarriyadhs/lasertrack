@@ -25,6 +25,7 @@ export interface Location {
   name: string;
   type: 'Distributor' | 'Clinic' | 'Technician';
   position: { lat: number; lng: number };
+  distributorId?: string;
 }
 
 export interface DistributorLocation extends Location {
@@ -34,6 +35,23 @@ export interface DistributorLocation extends Location {
   clinicCount: number;
   lastLogin: string;
 }
+
+export interface ClinicLocation extends Location {
+    type: 'Clinic';
+    distributorId: string;
+}
+
+export type HandlingStatus = 'Dalam Perjalanan' | 'Menangani' | 'Selesai';
+
+export interface TechnicianLocation extends Location {
+    type: 'Technician';
+    distributorId: string;
+    dutyStatus: 'On Duty' | 'Off Duty';
+    handlingStatus?: HandlingStatus;
+    destinationClinicId?: string;
+    handledDeviceId?: string;
+}
+
 
 export interface MaintenanceChecklistItem {
   id: string;
