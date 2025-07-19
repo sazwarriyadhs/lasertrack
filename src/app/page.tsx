@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/layout/logo';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Bot, FileText, MapPin } from 'lucide-react';
 import Image from 'next/image';
 
 export default function LandingPage() {
@@ -21,7 +21,15 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        <section className="relative h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center" style={{ backgroundImage: "url('https://placehold.co/1200x800/1E293B/FFFFFF?text=.')" }}>
+        <section className="relative h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center" >
+           <Image
+            src="https://placehold.co/1200x800"
+            alt="Laser device"
+            layout="fill"
+            objectFit="cover"
+            className="z-0"
+            data-ai-hint="laser device technology"
+           />
            <div className="absolute inset-0 bg-black/50" />
            <div className="relative z-10 p-4">
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tight">SERENITY LaserTrack</h1>
@@ -34,27 +42,27 @@ export default function LandingPage() {
            </div>
         </section>
 
-        <section className="py-12 md:py-20 bg-background">
+        <section className="py-12 md:py-20 bg-muted/30">
             <div className="container mx-auto px-4">
                 <h2 className="text-3xl font-bold text-center mb-12">Fitur Unggulan Kami</h2>
                 <div className="grid md:grid-cols-3 gap-8">
                     <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
                         <div className="p-4 bg-primary/10 rounded-full mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <MapPin className="w-8 h-8 text-primary" />
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Monitoring Real-time</h3>
                         <p className="text-muted-foreground">Lacak lokasi teknisi, status perangkat, dan progres penanganan secara langsung melalui peta interaktif.</p>
                     </div>
                      <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
                         <div className="p-4 bg-primary/10 rounded-full mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-text text-primary"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                            <FileText className="w-8 h-8 text-primary" />
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Manajemen Terpusat</h3>
                         <p className="text-muted-foreground">Kelola semua lisensi, akun distributor, jadwal teknisi, dan riwayat maintenance dalam satu platform.</p>
                     </div>
                      <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
                         <div className="p-4 bg-primary/10 rounded-full mb-4">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bot text-primary"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                           <Bot className="w-8 h-8 text-primary" />
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Laporan Otomatis</h3>
                         <p className="text-muted-foreground">Hasilkan Surat Perintah Kerja (SPK) dan laporan maintenance PDF secara otomatis dengan bantuan AI.</p>

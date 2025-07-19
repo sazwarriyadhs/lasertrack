@@ -30,9 +30,8 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
     }
 
     return (
-        <div className="flex min-h-screen w-full flex-col bg-background">
+        <div className="flex min-h-screen w-full flex-col bg-muted/40">
             <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
-                <Logo />
                 <nav className="flex-1">
                     <Button asChild variant="outline">
                         <Link href="/dashboard">
@@ -41,13 +40,14 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
                         </Link>
                     </Button>
                 </nav>
+                 <Logo />
             </header>
             <main className="flex-1 p-4 sm:p-6 md:p-10">
-                <div className="mx-auto grid w-full max-w-4xl gap-2 mb-6">
+                <div className="mx-auto grid w-full max-w-6xl gap-2 mb-6">
                     <h1 className="text-3xl font-semibold">Maintenance untuk {device.name}</h1>
                     <p className="text-muted-foreground">SN: {device.serialNumber}</p>
                 </div>
-                <div className="mx-auto grid w-full max-w-4xl items-start gap-6">
+                <div className="mx-auto grid w-full max-w-6xl items-start gap-6">
                     <MaintenanceForm device={device} />
                 </div>
             </main>

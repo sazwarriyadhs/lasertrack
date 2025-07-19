@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useTransition } from 'react';
@@ -166,7 +167,7 @@ export default function DistributorDashboard() {
                         <CardTitle>Peta Tim Teknisi</CardTitle>
                         <CardDescription>Lokasi realtime teknisi yang sedang bertugas. Klik marker untuk detail.</CardDescription>
                     </CardHeader>
-                    <CardContent className="h-[calc(100%-6rem)] p-0">
+                    <CardContent className="h-[calc(100%-8rem)] p-0">
                         <MapView locations={onDutyTechnicians} />
                     </CardContent>
                 </Card>
@@ -224,7 +225,7 @@ export default function DistributorDashboard() {
                     <CardContent>
                          <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmitAssignment)} className="space-y-6">
-                                <div className='grid md:grid-cols-2 gap-4'>
+                                <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
                                     <FormField
                                         control={form.control}
                                         name="clinicId"
@@ -234,7 +235,7 @@ export default function DistributorDashboard() {
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Pilih klinik yang membutuhkan bantuan" />
+                                                        <SelectValue placeholder="Pilih klinik" />
                                                     </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
@@ -251,10 +252,10 @@ export default function DistributorDashboard() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Pilih Perangkat</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!form.watch('clinicId')}>
                                                     <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Pilih perangkat yang bermasalah" />
+                                                        <SelectValue placeholder="Pilih perangkat" />
                                                     </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
@@ -274,7 +275,7 @@ export default function DistributorDashboard() {
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Pilih teknisi yang akan ditugaskan" />
+                                                        <SelectValue placeholder="Pilih teknisi" />
                                                     </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
@@ -391,6 +392,7 @@ export default function DistributorDashboard() {
                                         axisLine={false}
                                         tickMargin={10}
                                         width={120}
+                                        tick={{ fontSize: 12 }}
                                     />
                                     <XAxis dataKey="usage" type="number" hide />
                                     <ChartTooltip
