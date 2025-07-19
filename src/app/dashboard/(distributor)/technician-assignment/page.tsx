@@ -37,7 +37,7 @@ export default function TechnicianAssignmentPage() {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
 
-    const distributorId = 'dist-1'; // Static for now
+    const distributorId = user.distributorId;
     const myClinics = distributorClinics.filter(loc => loc.distributorId === distributorId);
     const myTechnicians = allTechnicians.filter(loc => loc.distributorId === distributorId);
     const myDevices = devices.filter(device => myClinics.some(c => c.id === device.clinicId));

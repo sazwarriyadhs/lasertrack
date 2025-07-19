@@ -28,10 +28,13 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { TechnicianForm } from '@/components/technician-form';
+import { useApp } from '@/context/app-context';
 
 
 export default function TechnicianManagementPage() {
-    const distributorId = 'dist-1'; // Static for now
+    const { user } = useApp();
+    const distributorId = user.distributorId;
+    
     const [technicians, setTechnicians] = useState<TechnicianLocation[]>(
         allTechnicians.filter(loc => loc.distributorId === distributorId)
     );
@@ -58,6 +61,8 @@ export default function TechnicianManagementPage() {
             setTechnicians(prev => prev.map(d => d.id === selectedTechnician.id ? { ...selectedTechnician, ...data } : d));
         } else {
             // Create
+            if(!distributorId) return;
+
             const newTechnician: TechnicianLocation = {
                 id: `tech-${Date.now()}`,
                 ...data,

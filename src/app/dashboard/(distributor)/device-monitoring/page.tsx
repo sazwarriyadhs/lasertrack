@@ -9,6 +9,7 @@ import { devices, distributorClinics } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import type { DeviceStatus } from '@/lib/types';
 import Link from 'next/link';
+import { useApp } from '@/context/app-context';
 
 const statusColors: Record<DeviceStatus, string> = {
     Operational: 'bg-green-500/80',
@@ -18,7 +19,8 @@ const statusColors: Record<DeviceStatus, string> = {
 };
 
 export default function DeviceMonitoringPage() {
-    const distributorId = 'dist-1'; // Static for now
+    const { user } = useApp();
+    const distributorId = user.distributorId;
     const myClinics = distributorClinics.filter(loc => loc.distributorId === distributorId);
     const myDevices = devices.filter(device => myClinics.some(c => c.id === device.clinicId));
 

@@ -5,9 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { MapView } from '@/components/map-view';
 import { distributorClinics as allClinics, devices } from '@/lib/data';
 import type { ClinicLocation } from '@/lib/types';
+import { useApp } from '@/context/app-context';
 
 export default function DistributorDashboard() {
-    const distributorId = 'dist-1'; // Static for now
+    const { user } = useApp();
+    const distributorId = user.distributorId;
     const myClinics = allClinics.filter(loc => loc.distributorId === distributorId);
 
     const clinicsWithDevices = myClinics.map(clinic => ({

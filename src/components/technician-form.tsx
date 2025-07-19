@@ -16,10 +16,11 @@ const formSchema = z.object({
         email: z.string().email({ message: 'Format email tidak valid.' }),
         phone: z.string().min(10, { message: 'Nomor telepon minimal 10 digit.' }),
     }),
+    address: z.string().min(10, { message: "Alamat harus diisi minimal 10 karakter."}),
     avatarUrl: z.string().url({ message: 'URL avatar tidak valid.' }).optional().or(z.literal('')),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = Omit<TechnicianLocation, 'id' | 'type' | 'position' | 'distributorId' | 'dutyStatus' | 'handlingStatus' | 'destinationClinicId' | 'handledDeviceId'>
 
 interface TechnicianFormProps {
     onSubmit: (data: FormValues) => void;
@@ -36,6 +37,7 @@ export function TechnicianForm({ onSubmit, onCancel, defaultValues }: Technician
                 email: defaultValues?.contact.email || '',
                 phone: defaultValues?.contact.phone || '',
             },
+            address: defaultValues?.address || '',
             avatarUrl: defaultValues?.avatarUrl || '',
         },
     });
@@ -51,6 +53,19 @@ export function TechnicianForm({ onSubmit, onCancel, defaultValues }: Technician
                             <FormLabel>Nama Teknisi</FormLabel>
                             <FormControl>
                                 <Input placeholder="Contoh: Budi Santoso" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Alamat</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Alamat lengkap teknisi" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
