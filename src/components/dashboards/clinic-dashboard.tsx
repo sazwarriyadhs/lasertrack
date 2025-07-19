@@ -9,7 +9,7 @@ import { devices, maintenanceHistory, technicianLocations, distributorLocations,
 import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord, DistributorLocation } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar } from 'lucide-react';
+import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -159,7 +159,7 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
     };
 
     return (
-        <Card>
+        <Card id="request-service-section">
             <CardHeader>
                 <CardTitle>Permintaan Maintenance & Laporan</CardTitle>
                 <CardDescription>Laporkan masalah perangkat atau minta jadwal maintenance.</CardDescription>
@@ -217,7 +217,7 @@ export default function ClinicDashboard() {
     return (
         <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2 space-y-6">
-                <Card>
+                <Card id="my-devices-section">
                     <CardHeader>
                         <CardTitle>Perangkat Saya</CardTitle>
                         <CardDescription>Daftar semua perangkat yang terdaftar di klinik Anda, {user.name}.</CardDescription>
@@ -259,7 +259,7 @@ export default function ClinicDashboard() {
                         </Table>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card id="maintenance-history-section">
                     <CardHeader>
                         <CardTitle>Riwayat Maintenance</CardTitle>
                         <CardDescription>Catatan maintenance untuk semua perangkat Anda.</CardDescription>
@@ -272,6 +272,7 @@ export default function ClinicDashboard() {
                                     <TableHead>Perangkat</TableHead>
                                     <TableHead>Teknisi</TableHead>
                                     <TableHead>Deskripsi</TableHead>
+                                    <TableHead className='text-right'>Laporan</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -283,12 +284,17 @@ export default function ClinicDashboard() {
                                             <TableCell className="font-medium">{device?.name}</TableCell>
                                             <TableCell>{record.technicianName}</TableCell>
                                             <TableCell>{record.description}</TableCell>
+                                            <TableCell className='text-right'>
+                                                <Button variant="ghost" size="icon">
+                                                    <FileText className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     )
                                 })}
                                  {clinicMaintenanceHistory.length === 0 && (
                                      <TableRow>
-                                        <TableCell colSpan={4} className="text-center">
+                                        <TableCell colSpan={5} className="text-center">
                                             Tidak ada riwayat maintenance.
                                         </TableCell>
                                     </TableRow>

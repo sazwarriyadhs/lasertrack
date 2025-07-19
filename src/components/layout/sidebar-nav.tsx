@@ -1,7 +1,8 @@
+
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route, Wrench, FileText, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -33,6 +34,8 @@ const distributorNavItems = [
 
 const clinicNavItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/dashboard#maintenance-history-section', label: 'Riwayat Maintenance', icon: FileText },
+    { href: '/dashboard#request-service-section', label: 'Permintaan Layanan', icon: Send },
 ];
 
 const technicianNavItems = [
@@ -46,10 +49,15 @@ export function SidebarNav() {
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         if (href.includes('#')) {
             e.preventDefault();
-            const targetId = href.split('#')[1];
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
+            if (pathname !== '/dashboard') {
+                // Navigate to dashboard first, then scroll
+                 window.location.href = href;
+            } else {
+                const targetId = href.split('#')[1];
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         }
     };
@@ -125,7 +133,7 @@ export function SidebarNav() {
                         {navItems.map((item) => (
                             <li key={item.label}>
                                 <Button asChild variant={pathname === item.href ? 'secondary' : 'ghost'} className="w-full justify-start gap-2">
-                                    <Link href={item.href}>
+                                     <Link href={item.href} onClick={(e) => handleNavClick(e, item.href)}>
                                         <item.icon className="h-5 w-5" />
                                         {item.label}
                                     </Link>
