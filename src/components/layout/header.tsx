@@ -9,6 +9,8 @@ import { useApp } from '@/context/app-context';
 import { users } from '@/lib/data';
 import type { Role } from '@/lib/types';
 import { Bell, ChevronsUpDown, LifeBuoy, LogOut, Settings, User as UserIcon } from 'lucide-react';
+import { Logo } from './logo';
+import Link from 'next/link';
 
 export function Header() {
   const { user, setUserRole, logout } = useApp();
@@ -21,7 +23,12 @@ export function Header() {
 
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-6 sticky top-0 z-30">
-      <div className="flex-1">
+      <div className="flex-1 lg:hidden">
+        <Link href="/dashboard">
+            <Logo />
+        </Link>
+      </div>
+      <div className='hidden lg:block flex-1'>
          <h1 className="text-lg font-semibold">{user.role} Dashboard</h1>
       </div>
       <div className="flex items-center gap-4">

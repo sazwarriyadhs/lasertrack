@@ -45,7 +45,7 @@ export default function DashboardPage() {
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Header />
-        <main className="flex-1 p-4 sm:p-6">
+        <main className="flex-1 p-4 sm:p-6 bg-muted/30">
           {renderDashboard()}
         </main>
       </div>
