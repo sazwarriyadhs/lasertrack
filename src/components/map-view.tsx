@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { Map, View } from 'ol';
+import { Map, View, Overlay } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import OSM from 'ol/source/OSM';
@@ -10,19 +10,49 @@ import { fromLonLat } from 'ol/proj';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { Style, Circle, Fill, Stroke } from 'ol/style';
-import type { Location } from '@/lib/types';
+import type { DistributorLocation } from '@/lib/types';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { Hospital, CalendarDays } from 'lucide-react';
 
 const COLORS = {
-    Clinic: 'rgba(239, 68, 68, 0.8)', // red-500
-    Distributor: 'rgba(59, 130, 246, 0.8)', // blue-500
-    Technician: 'rgba(34, 197, 94, 0.8)', // green-500
+    Distributor: 'rgba(59, 130, 246, 0.9)', // blue-500
 };
 
-export function MapView({ locations }: { locations: Location[] }) {
+const statusBadge: Record<DistributorLocation['applicationStatus'], string> = {
+    'Active': 'bg-green-500/80',
+    'Inactive': 'bg-gray-500/80',
+    'Expired': 'bg-red-500/80',
+}
+
+export function MapView({ locations }: { locations: DistributorLocation[] }) {
     const mapRef = useRef<HTMLDivElement>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!mapRef.current) return;
+        if (!mapRef.current || !popupRef.current) return;
+
+        const popupContainer = popupRef.current;
+
+        const overlay = new Overlay({
+            element: popupContainer,
+            autoPan: {
+                animation: {
+                    duration: 250,
+                },
+            },
+        });
+        
+        const closer = popupContainer.querySelector('.ol-popup-closer') as HTMLElement;
+        if(closer) {
+            closer.onclick = () => {
+                overlay.setPosition(undefined);
+                closer.blur();
+                return false;
+            };
+        }
+
 
         const center = locations.length > 0
             ? fromLonLat([locations[0].position.lng, locations[0].position.lat])
@@ -31,7 +61,7 @@ export function MapView({ locations }: { locations: Location[] }) {
         const features = locations.map(loc => {
             const feature = new Feature({
                 geometry: new Point(fromLonLat([loc.position.lng, loc.position.lat])),
-                name: loc.name,
+                ...loc
             });
             feature.setStyle(new Style({
                 image: new Circle({
@@ -48,7 +78,8 @@ export function MapView({ locations }: { locations: Location[] }) {
         });
 
         const vectorLayer = new VectorLayer({
-            source: vectorSource
+            source: vectorSource,
+            
         });
 
         const map = new Map({
@@ -59,6 +90,7 @@ export function MapView({ locations }: { locations: Location[] }) {
                 }),
                 vectorLayer
             ],
+            overlays: [overlay],
             view: new View({
                 center: center,
                 zoom: 4,
@@ -66,14 +98,65 @@ export function MapView({ locations }: { locations: Location[] }) {
             controls: [],
         });
 
-        // Cleanup on unmount
+        map.on('click', (evt) => {
+            const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => {
+                return feature;
+            });
+            const content = popupContainer.querySelector('.popup-content') as HTMLElement;
+            if (feature) {
+                const props = feature.getProperties() as DistributorLocation;
+                const coordinates = (feature.getGeometry() as Point).getCoordinates();
+                
+                let statusColor = statusBadge[props.applicationStatus];
+
+                content.innerHTML = `
+                    <div class="p-1">
+                        <h3 class="font-bold text-lg">${props.name}</h3>
+                        <div class="text-sm mt-2 space-y-2">
+                             <div class="flex items-center gap-2">
+                                <p class="font-semibold">Status:</p>
+                                <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                                    <span class="h-2 w-2 rounded-full mr-2 ${statusColor}"></span>
+                                    ${props.applicationStatus}
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-muted-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                                <span>${props.licenseDuration}</span>
+                            </div>
+                             <div class="flex items-center gap-2 text-muted-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hospital"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 10h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/><path d="M10 6h4"/></svg>
+                                <span>Manages ${props.clinicCount} clinics</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                overlay.setPosition(coordinates);
+            } else {
+                overlay.setPosition(undefined);
+            }
+        });
+
+        map.on('pointermove', function (e) {
+            const pixel = map.getEventPixel(e.originalEvent);
+            const hit = map.hasFeatureAtPixel(pixel);
+            if(mapRef.current) {
+               mapRef.current.style.cursor = hit ? 'pointer' : '';
+            }
+        });
+
         return () => map.setTarget(undefined);
 
     }, [locations]);
 
     return (
-        <div style={{ height: '100%', width: '100%' }} className="rounded-b-lg overflow-hidden">
+        <div style={{ height: '100%', width: '100%' }} className="rounded-b-lg overflow-hidden relative">
             <div ref={mapRef} style={{ width: '100%', height: '100%' }}></div>
+            <div ref={popupRef} className="ol-popup">
+                <a href="#" className="ol-popup-closer"></a>
+                <div className="popup-content"></div>
+            </div>
         </div>
     );
 }

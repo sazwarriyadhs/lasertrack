@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MapView } from '@/components/map-view';
-import { locations, devices } from '@/lib/data';
+import { locations, devices, distributorLocations } from '@/lib/data';
 import { Hospital, Truck, Wrench, Bot, Pencil, Trash2 } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
@@ -14,7 +14,7 @@ export default function SuperAdminDashboard() {
         devices: devices.length,
     };
 
-    const distributors = locations.filter(l => l.type === 'Distributor');
+    const distributors = distributorLocations;
 
     return (
         <div className="grid gap-6">
@@ -67,7 +67,7 @@ export default function SuperAdminDashboard() {
                      <Card className="h-[60vh] mt-4">
                         <CardHeader>
                             <CardTitle>Peta Distributor Global</CardTitle>
-                            <CardDescription>Lokasi distributor di seluruh dunia.</CardDescription>
+                            <CardDescription>Lokasi distributor di seluruh dunia. Klik marker untuk melihat detail.</CardDescription>
                         </CardHeader>
                         <CardContent className="h-[calc(100%-6rem)] p-0">
                            <MapView locations={distributors} />
@@ -86,6 +86,8 @@ export default function SuperAdminDashboard() {
                                     <TableRow>
                                         <TableHead>Nama Distributor</TableHead>
                                         <TableHead>Lokasi</TableHead>
+                                        <TableHead>Status Aplikasi</TableHead>
+                                        <TableHead>Jumlah Klinik</TableHead>
                                         <TableHead className="text-right">Aksi</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -93,7 +95,9 @@ export default function SuperAdminDashboard() {
                                     {distributors.map(d => (
                                         <TableRow key={d.id}>
                                             <TableCell className="font-medium">{d.name}</TableCell>
-                                            <TableCell>{`Lat: ${d.position.lat}, Lng: ${d.position.lng}`}</TableCell>
+                                            <TableCell>{`Lat: ${d.position.lat.toFixed(4)}, Lng: ${d.position.lng.toFixed(4)}`}</TableCell>
+                                            <TableCell>{d.applicationStatus}</TableCell>
+                                            <TableCell>{d.clinicCount}</TableCell>
                                             <TableCell className="text-right space-x-2">
                                                 <Button variant="outline" size="icon">
                                                     <Pencil className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import type { User, Device, Location, MaintenanceChecklistItem } from '@/lib/types';
+import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation } from '@/lib/types';
 
 export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'admin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100' },
@@ -15,14 +15,22 @@ export const devices: Device[] = [
   { id: 'dev-5', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-1', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
 ];
 
+export const distributorLocations: DistributorLocation[] = [
+  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 }, applicationStatus: 'Active', licenseDuration: '280 days remaining', clinicCount: 8 },
+  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 12 },
+  { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 5 },
+  { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 15 },
+];
+
+
 export const locations: Location[] = [
-  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 } },
-  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 } },
+  ...distributorLocations,
   { id: 'clinic-1', name: 'Sunset Aesthetics Clinic', type: 'Clinic', position: { lat: 34.0904, lng: -118.3618 } },
   { id: 'clinic-2', name: 'Metropolis Laser Center', type: 'Clinic', position: { lat: 40.758, lng: -73.9855 } },
   { id: 'tech-1', name: 'Tech Maria', type: 'Technician', position: { lat: 34.1522, lng: -118.4436 } },
   { id: 'tech-2', name: 'Tech John', type: 'Technician', position: { lat: 40.6127, lng: -73.9059 } },
 ];
+
 
 export const maintenanceChecklist: MaintenanceChecklistItem[] = [
   { id: 'check-1', label: 'Calibrate laser output', checked: false },

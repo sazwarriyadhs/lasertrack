@@ -27,6 +27,13 @@ export interface Location {
   position: { lat: number; lng: number };
 }
 
+export interface DistributorLocation extends Location {
+  type: 'Distributor';
+  applicationStatus: 'Active' | 'Inactive' | 'Expired';
+  licenseDuration: string;
+  clinicCount: number;
+}
+
 export interface MaintenanceChecklistItem {
   id: string;
   label: string;
