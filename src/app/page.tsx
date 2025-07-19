@@ -40,8 +40,8 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-card px-4 md:px-6">
         <Logo />
         <div className='flex items-center gap-2'>
-            <Button variant="ghost" asChild><Link href="/login/distributor">Distributor Login</Link></Button>
-            <Button asChild><Link href="/login/superadmin">Super Admin Login</Link></Button>
+            <Button variant="ghost" asChild><Link href="/partner/login">Distributor Login</Link></Button>
+            <Button asChild><Link href="/adminlogon">Super Admin Login</Link></Button>
         </div>
       </header>
 
@@ -60,10 +60,10 @@ export default function LandingPage() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild size="lg">
-                    <Link href="/login/distributor">Mulai sebagai Distributor</Link>
+                    <Link href="/partner/login">Mulai sebagai Distributor</Link>
                   </Button>
                    <Button asChild variant="outline" size="lg">
-                    <Link href="/login/superadmin">Akses Super Admin</Link>
+                    <Link href="/adminlogon">Akses Super Admin</Link>
                   </Button>
                 </div>
               </div>
@@ -103,7 +103,7 @@ export default function LandingPage() {
                         </CardContent>
                         <div className="p-6 pt-0">
                             <Button asChild className="w-full">
-                                <Link href="/login/superadmin">Login sebagai Super Admin <ArrowRight className='ml-2' /></Link>
+                                <Link href="/adminlogon">Login sebagai Super Admin <ArrowRight className='ml-2' /></Link>
                             </Button>
                         </div>
                     </Card>
@@ -120,7 +120,7 @@ export default function LandingPage() {
                         </CardContent>
                          <div className="p-6 pt-0">
                             <Button asChild className="w-full">
-                                <Link href="/login/distributor">Login sebagai Distributor <ArrowRight className='ml-2' /></Link>
+                                <Link href="/partner/login">Login sebagai Distributor <ArrowRight className='ml-2' /></Link>
                             </Button>
                         </div>
                     </Card>

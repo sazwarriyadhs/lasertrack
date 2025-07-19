@@ -53,7 +53,7 @@ export default function DistributorLoginPage() {
         </div>
         <Card>
             <CardHeader className="text-center pb-4">
-                <CardTitle className="text-2xl">Login Distributor</CardTitle>
+                <CardTitle className="text-2xl">Login Partner Distributor</CardTitle>
                 <CardDescription>Akses dasbor Anda untuk mengelola klinik dan teknisi.</CardDescription>
             </CardHeader>
             <CardContent>
