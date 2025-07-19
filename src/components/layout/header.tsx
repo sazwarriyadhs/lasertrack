@@ -8,9 +8,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useApp } from '@/context/app-context';
 import { users } from '@/lib/data';
 import type { Role } from '@/lib/types';
-import { Bell, ChevronsUpDown, LifeBuoy, LogOut, Settings, User as UserIcon } from 'lucide-react';
+import { Bell, ChevronsUpDown, LifeBuoy, LogOut, Settings, User as UserIcon, Menu } from 'lucide-react';
 import { Logo } from './logo';
 import Link from 'next/link';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { SidebarNav } from './sidebar-nav';
+
 
 export function Header() {
   const { user, setUserRole, logout } = useApp();
@@ -24,9 +31,18 @@ export function Header() {
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-card px-6 sticky top-0 z-30">
       <div className="flex-1 lg:hidden">
-        <Link href="/dashboard">
-            <Logo />
-        </Link>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 pt-10 w-64">
+               <div className='px-4 mb-4'><Logo /></div>
+               <SidebarNav />
+            </SheetContent>
+          </Sheet>
       </div>
       <div className='hidden lg:block flex-1'>
          <h1 className="text-lg font-semibold">{user.role} Dashboard</h1>

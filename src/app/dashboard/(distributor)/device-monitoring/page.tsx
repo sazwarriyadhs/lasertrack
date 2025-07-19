@@ -8,6 +8,7 @@ import { PlusCircle } from 'lucide-react';
 import { devices, distributorClinics } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import type { DeviceStatus } from '@/lib/types';
+import Link from 'next/link';
 
 const statusColors: Record<DeviceStatus, string> = {
     Operational: 'bg-green-500/80',
@@ -28,9 +29,11 @@ export default function DeviceMonitoringPage() {
                     <CardTitle>Monitoring Perangkat</CardTitle>
                     <CardDescription>Status semua perangkat di klinik yang Anda kelola.</CardDescription>
                 </div>
-                <Button>
-                    <PlusCircle className='mr-2' />
-                    Jadwalkan Maintenance
+                 <Button asChild>
+                    <Link href="/dashboard/technician-assignment">
+                        <PlusCircle className='mr-2' />
+                        Jadwalkan Maintenance
+                    </Link>
                 </Button>
             </CardHeader>
             <CardContent>
