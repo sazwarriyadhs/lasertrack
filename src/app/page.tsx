@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/layout/logo';
-import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound, Building2 } from 'lucide-react';
+import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound, Building2, UserCheck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -53,10 +53,10 @@ const valueAddedServicesRegenesis = [
 ];
 
 const featuredProductsInnomed = [
-    { product: 'Transcranial Pulse Stimulation (TPS®)', brand: 'STORZ Medical – Neurolith®', indication: 'Terapi non-invasif untuk Alzheimer & demensia; stimulasi neuroplastisitas.' },
-    { product: 'Phototherapy & Photobiomodulation', brand: 'Daavlin – Series 3 Neolux', indication: 'Terapi fototerapi untuk vitiligo, eczema, dan kondisi kulit lainnya.' },
-    { product: 'Skin Analysis & Imaging System', brand: 'Canfield – VISIA®', indication: 'Analisis kulit profesional untuk pigmentasi, pori, dan tekstur.' },
-    { product: 'CO₂ Fractional Laser', brand: 'Lasering – Slim Evolution II', indication: 'Resurfacing kulit, reduksi kerutan dan bekas luka.' },
+    { product: 'Transcranial Pulse Stimulation (TPS®)', brand: 'STORZ Medical – Neurolith®', indication: 'Terapi non-invasif untuk Alzheimer & demensia; stimulasi neuroplastisitas.', image: "https://placehold.co/600x400.png" },
+    { product: 'Phototherapy & Photobiomodulation', brand: 'Daavlin – Series 3 Neolux', indication: 'Terapi fototerapi untuk vitiligo, eczema, dan kondisi kulit lainnya.', image: "https://placehold.co/600x400.png" },
+    { product: 'Skin Analysis & Imaging System', brand: 'Canfield – VISIA®', indication: 'Analisis kulit profesional untuk pigmentasi, pori, dan tekstur.', image: "https://placehold.co/600x400.png" },
+    { product: 'CO₂ Fractional Laser', brand: 'Lasering – Slim Evolution II', indication: 'Resurfacing kulit, reduksi kerutan dan bekas luka.', image: "https://placehold.co/600x400.png" },
 ];
 
 const distributorNetwork = [
@@ -67,6 +67,11 @@ const distributorNetwork = [
   { company: 'PT I-Tech Lafacos', brands: 'Quanta System, Jeisys, Apyx', services: 'Q-Switched Nd:YAG, Pico laser, CO₂ fractional, LIPO laser', website: 'https://itechlafacos.com' },
   { company: 'ASAA Medical Indonesia', brands: 'Alma Lasers (exklusif Indonesia)', services: 'Harmony XL Pro, Soprano Titanium, Accent Prime, BeautiFill', website: 'https://asaamedical.com' },
   { company: 'PT Optima Derma Tech (Optiderm)', brands: 'OZONOVA, CFU ELIFE, dan laser OEM Korea', services: 'Laser untuk skin rejuvenation, whitening, pigmentation', website: 'https://optiderm.co.id' },
+];
+
+const regenesisPartnerClinics = [
+    { name: 'Arayu Aesthetic Clinic', city: 'Makassar', focus: 'Produk ISISPHARMA, pelatihan & dukungan Regenesis' },
+    { name: 'Dermalogia Aesthetic Clinic', city: 'Jakarta', focus: 'Alat-alat laser seperti PicoWay, Vbeam, Cellec V' },
 ];
 
 
@@ -154,8 +159,8 @@ export default function LandingPage() {
                         </p>
                     </div>
                 </div>
-                <div className="mx-auto grid max-w-5xl gap-8 mt-12 md:grid-cols-2">
-                    <Card className="md:col-span-2">
+                <div className="mx-auto grid max-w-5xl gap-8 mt-12">
+                    <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><Award className="text-primary"/>Produk & Alat Medis</CardTitle>
                         </CardHeader>
@@ -180,6 +185,32 @@ export default function LandingPage() {
                            </Table>
                         </CardContent>
                     </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><UserCheck className="text-primary"/>Contoh Jaringan Klinik</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                           <Table>
+                               <TableHeader>
+                                   <TableRow>
+                                       <TableHead>Nama Klinik</TableHead>
+                                       <TableHead>Kota</TableHead>
+                                       <TableHead>Indikasi Kerjasama / Produk Unggulan</TableHead>
+                                   </TableRow>
+                               </TableHeader>
+                               <TableBody>
+                                   {regenesisPartnerClinics.map((clinic, index) => (
+                                       <TableRow key={index}>
+                                           <TableCell className="font-medium">{clinic.name}</TableCell>
+                                           <TableCell>{clinic.city}</TableCell>
+                                           <TableCell className="text-muted-foreground">{clinic.focus}</TableCell>
+                                       </TableRow>
+                                   ))}
+                               </TableBody>
+                           </Table>
+                        </CardContent>
+                    </Card>
+
                      <div className="md:col-span-2 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {valueAddedServicesRegenesis.map((service, index) => (
                              <Card key={index}>
