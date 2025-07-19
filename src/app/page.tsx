@@ -4,9 +4,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/layout/logo';
-import { ArrowRight, Briefcase, Users } from 'lucide-react';
+import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CheckCircle } from 'lucide-react';
+
 
 const newsItems = [
     {
@@ -34,6 +36,23 @@ const newsItems = [
         link: '#',
     },
 ]
+
+const featuredProducts = [
+    "Laser PicoWay® untuk pigmentasi & tato",
+    "Vbeam Perfecta® (pulsed-dye laser)",
+    "BiAxis QS™ dan IPL Cellec V",
+    "BeautiFill by LipoLife",
+    "Teknologi anti-aging & pencerahan kulit",
+    "Perawatan jerawat & bekas luka",
+    "Contouring tubuh dan wajah",
+];
+
+const valueAddedServices = [
+    { icon: BrainCircuit, title: "Pelatihan & Edukasi", description: "Pelatihan teknis dan product knowledge dari tingkat dasar hingga mahir." },
+    { icon: UsersRound, title: "Webinar & Training", description: "Sesi bersama Key Opinion Leader (KOL) nasional dan internasional." },
+    { icon: Wrench, title: "Servis & Pemeliharaan", description: "Dukungan teknis, suku cadang asli, dan garansi resmi." },
+    { icon: Package, title: "Program Second-Life", description: "Revitalisasi perangkat bekas dengan kualitas terjamin seperti baru." },
+];
 
 export default function LandingPage() {
   return (
@@ -108,7 +127,53 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section id="news" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+        <section id="featured-partner" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+            <div className="container px-4 md:px-6">
+                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div className="space-y-2">
+                        <span className="text-primary font-semibold">Mitra Unggulan</span>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">PT Regenesis Indonesia</h2>
+                        <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                          Menyediakan layanan komprehensif dan produk alat estetik medis terdepan untuk lebih dari 1.000 klinik kecantikan di seluruh Indonesia.
+                        </p>
+                    </div>
+                </div>
+                <div className="mx-auto grid max-w-5xl gap-8 mt-12 md:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Award className="text-primary"/>Produk & Alat Medis Unggulan</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                           {featuredProducts.map((product, index) => (
+                               <div key={index} className="flex items-center gap-3">
+                                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                                   <p className="text-muted-foreground">{product}</p>
+                               </div>
+                           ))}
+                        </CardContent>
+                    </Card>
+                    <div className="space-y-6">
+                        {valueAddedServices.map((service, index) => (
+                             <Card key={index}>
+                                <CardHeader className="p-4">
+                                     <div className="flex items-start gap-4">
+                                        <div className="bg-primary/10 p-2 rounded-full">
+                                            <service.icon className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <div>
+                                            <CardTitle className="text-lg">{service.title}</CardTitle>
+                                            <CardDescription>{service.description}</CardDescription>
+                                        </div>
+                                    </div>
+                                </CardHeader>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" className="w-full py-12 md:py-24 lg:py-32">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Berita &amp; Pembaruan Teknologi</h2>
