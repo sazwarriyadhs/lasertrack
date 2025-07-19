@@ -44,6 +44,10 @@ export default function DistributorDashboard() {
             devices: devices.filter(d => d.clinicId === clinic.id)
         }));
 
+        if (searchTerm === '' && statusFilter === 'All') {
+            return clinics;
+        }
+
         return clinics.filter(clinic => {
             const matchesSearch = clinic.name.toLowerCase().includes(searchTerm.toLowerCase());
             const clinicStatus = getClinicDeviceStatus(clinic.id);
