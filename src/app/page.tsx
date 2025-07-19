@@ -8,6 +8,7 @@ import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, Use
 import Image from 'next/image';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 
 const newsItems = [
@@ -106,14 +107,42 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-               <Image
-                    src="https://placehold.co/600x400.png"
-                    width="600"
-                    height="400"
-                    alt="Hero"
-                    data-ai-hint="aesthetic laser device"
-                    className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
-                />
+               <Carousel className="w-full max-w-xl mx-auto lg:order-last" opts={{ loop: true }}>
+                  <CarouselContent>
+                    <CarouselItem>
+                       <Image
+                            src="https://placehold.co/1200x600.png"
+                            width="1200"
+                            height="600"
+                            alt="Hero Image 1"
+                            data-ai-hint="aesthetic laser device"
+                            className="aspect-video w-full overflow-hidden rounded-xl object-cover"
+                        />
+                    </CarouselItem>
+                    <CarouselItem>
+                       <Image
+                            src="https://placehold.co/1200x600.png"
+                            width="1200"
+                            height="600"
+                            alt="Hero Image 2"
+                            data-ai-hint="modern clinic interior"
+                            className="aspect-video w-full overflow-hidden rounded-xl object-cover"
+                        />
+                    </CarouselItem>
+                    <CarouselItem>
+                        <Image
+                            src="https://placehold.co/1200x600.png"
+                            width="1200"
+                            height="600"
+                            alt="Hero Image 3"
+                            data-ai-hint="professional technician working"
+                            className="aspect-video w-full overflow-hidden rounded-xl object-cover"
+                        />
+                    </CarouselItem>
+                  </CarouselContent>
+                  <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
+                  <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
+                </Carousel>
             </div>
           </div>
         </section>
