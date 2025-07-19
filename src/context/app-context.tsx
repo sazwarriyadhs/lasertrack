@@ -8,8 +8,10 @@ import { users } from '@/lib/data';
 interface AppContextType {
   user: User;
   isAuthenticated: boolean;
+  loading: boolean;
   login: (role: Role) => void;
   logout: () => void;
+  updateUser: (updatedData: Partial<User>) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -17,51 +19,78 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User>(users[0]);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // Check for saved session on mount
+
   useEffect(() => {
     try {
         const savedUserRole = sessionStorage.getItem('userRole');
         if (savedUserRole) {
             const userToSet = users.find(u => u.role === savedUserRole) || users[0];
-            setCurrentUser(userToSet);
+            const savedUserData = sessionStorage.getItem(`user_data_${userToSet.id}`);
+            if (savedUserData) {
+                setCurrentUser(JSON.parse(savedUserData));
+            } else {
+                setCurrentUser(userToSet);
+            }
             setIsAuthenticated(true);
         }
     } catch (e) {
-        // sessionStorage is not available
         console.warn('Session storage is not available. User state will not be persisted.');
+    } finally {
+        setLoading(false);
     }
   }, []);
 
   const login = (role: Role) => {
     const newUser = users.find(u => u.role === role);
     if (newUser) {
-        setCurrentUser(newUser);
-        setIsAuthenticated(true);
+        setLoading(true);
         try {
+            const savedUserData = sessionStorage.getItem(`user_data_${newUser.id}`);
+            if (savedUserData) {
+                setCurrentUser(JSON.parse(savedUserData));
+            } else {
+                setCurrentUser(newUser);
+            }
             sessionStorage.setItem('userRole', role);
         } catch (e) {
             console.warn('Session storage is not available. User state will not be persisted.');
         }
+        setIsAuthenticated(true);
+        setLoading(false);
     }
   };
 
   const logout = () => {
+    setLoading(true);
     setIsAuthenticated(false);
     try {
         sessionStorage.removeItem('userRole');
     } catch (e) {
          console.warn('Session storage is not available.');
     }
-    // Redirect logic is handled in components
+    setLoading(false);
+  };
+  
+  const updateUser = (updatedData: Partial<User>) => {
+    const updatedUser = { ...currentUser, ...updatedData };
+    setCurrentUser(updatedUser);
+     try {
+        sessionStorage.setItem(`user_data_${currentUser.id}`, JSON.stringify(updatedUser));
+    } catch (e) {
+         console.warn('Session storage is not available.');
+    }
   };
 
   const contextValue = useMemo(() => ({
     user: currentUser,
     isAuthenticated,
+    loading,
     login,
     logout,
-  }), [currentUser, isAuthenticated]);
+    updateUser,
+  }), [currentUser, isAuthenticated, loading]);
 
   return (
     <AppContext.Provider value={contextValue}>

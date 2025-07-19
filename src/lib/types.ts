@@ -1,4 +1,10 @@
+
 export type Role = 'Super Admin' | 'Distributor' | 'Clinic' | 'Technician';
+
+interface ContactInfo {
+    email: string;
+    phone: string;
+}
 
 export interface User {
   id: string;
@@ -6,7 +12,9 @@ export interface User {
   email: string;
   role: Role;
   avatarUrl: string;
-  distributorId?: string; // Add this
+  distributorId?: string; 
+  contact?: ContactInfo;
+  address?: string;
 }
 
 export type DeviceStatus = 'Operational' | 'Under Maintenance' | 'Decommissioned' | 'Needs Attention';
@@ -21,11 +29,6 @@ export interface Device {
   lastMaintenance: string;
 }
 
-interface ContactInfo {
-    email: string;
-    phone: string;
-}
-
 export interface Location {
   id: string;
   name: string;
@@ -34,6 +37,7 @@ export interface Location {
   distributorId?: string;
   contact: ContactInfo;
   avatarUrl: string;
+  address: string;
 }
 
 export interface DistributorLocation extends Location {
