@@ -26,14 +26,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
         const savedUserRole = sessionStorage.getItem('userRole');
         if (savedUserRole) {
-            let userToSet = users.find(u => u.role === savedUserRole);
-
-            // Handle special cases for multiple users of same role
-            if (savedUserRole === 'Distributor') {
-                const savedUserId = sessionStorage.getItem('userId');
-                if (savedUserId) {
-                    userToSet = users.find(u => u.id === savedUserId) || userToSet;
-                }
+            let userToSet : User | undefined;
+            
+            const savedUserId = sessionStorage.getItem('userId');
+            if (savedUserId) {
+                userToSet = users.find(u => u.id === savedUserId);
+            } else {
+                 userToSet = users.find(u => u.role === savedUserRole);
             }
             
             if(userToSet) {
@@ -57,7 +56,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const login = (role: Role) => {
     // This is a simplified login. In a real app, you'd have user selection.
     // For now, we find the first user with that role.
-    const newUser = users.find(u => u.role === role);
+    let newUser;
+    if (role === 'Technician') {
+        newUser = users.find(u => u.id === 'tech-1');
+    } else {
+        newUser = users.find(u => u.role === role);
+    }
 
     if (newUser) {
         setLoading(true);

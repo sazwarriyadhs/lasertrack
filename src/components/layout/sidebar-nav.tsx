@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route, Wrench, FileText, Send, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route, Wrench, FileText, Send, MessageSquare, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -41,7 +41,8 @@ const clinicNavItems = [
 ];
 
 const technicianNavItems = [
-    { href: '/dashboard', label: 'Tugas Saya', icon: LayoutDashboard },
+    { href: '/dashboard', label: 'Dashboard Harian', icon: LayoutDashboard },
+    { href: '/dashboard/device-list', label: 'Daftar Perangkat', icon: List },
 ];
 
 export function SidebarNav() {

@@ -29,6 +29,9 @@ export interface Device {
   clinicId: string;
   status: DeviceStatus;
   lastMaintenance: string;
+  installDate: string;
+  warrantyEndDate: string;
+  assignedTechnicianId?: string;
 }
 
 export interface Location {

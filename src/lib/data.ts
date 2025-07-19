@@ -5,21 +5,21 @@ export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'superadmin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100', address: '123 Admin Plaza, Suite 100, Capital City', contact: {email: 'superadmin@lasertrack.com', phone: '555-0101'} },
   { id: 'user-2', name: 'PT Regenesis Indonesia', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', distributorId: 'dist-5', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia', contact: {email: 'info@regenesis.co.id', phone: '021-1234-5678'} },
   { id: 'user-3', name: 'Klinik Baruna', email: 'clinic@lasertrack.com', role: 'Clinic', clinicId: 'clinic-10', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Pajajaran No. 9, Bogor', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'} },
-  { id: 'user-4', name: 'Budi Teknisi', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: 'Jl. Teknisi No. 1, Jakarta', contact: {email: 'budi.t@tech.com', phone: '0812-1111-2222'}, distributorId: 'dist-5' },
+  { id: 'tech-1', name: 'Budi Teknisi', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: 'Jl. Teknisi No. 1, Jakarta', contact: {email: 'budi.t@tech.com', phone: '0812-1111-2222'}, distributorId: 'dist-5' },
   // Add other users for chat
   { id: 'user-5', name: 'PT Innomed Jaya Utama', email: 'distributor2@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', distributorId: 'dist-2', address: 'Jl. Kramat Raya No. 45, Jakarta', contact: {email: 'support@innomed.asia', phone: '021-987-6543'} },
   { id: 'user-6', name: 'Klinik Dr. Ananda', email: 'clinic2@lasertrack.com', role: 'Clinic', clinicId: 'clinic-6', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Margonda Raya No. 5, Depok', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'} },
-  { id: 'user-7', name: 'Citra Ayu', email: 'tech2@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: 'Jl. Teknisi No. 2, Jakarta', contact: {email: 'citra.a@tech.com', phone: '0812-3333-4444'}, distributorId: 'dist-5' },
+  { id: 'tech-2', name: 'Citra Ayu', email: 'tech2@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: 'Jl. Teknisi No. 2, Jakarta', contact: {email: 'citra.a@tech.com', phone: '0812-3333-4444'}, distributorId: 'dist-5' },
 ];
 
 export const devices: Device[] = [
-  { id: 'dev-1', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-A1B2C3D4', clinicId: 'clinic-6', status: 'Operational', lastMaintenance: '2024-05-01' },
-  { id: 'dev-2', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-E5F6G7H8', clinicId: 'clinic-6', status: 'Under Maintenance', lastMaintenance: '2024-04-15' },
-  { id: 'dev-3', name: 'Cellec V', model: 'Jeisys-CV', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-03-20' },
-  { id: 'dev-4', name: 'BeautiFill', model: 'Alma-BF', serialNumber: 'SN-M3N4O5P6', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-06-10' },
-  { id: 'dev-5', name: 'BiAxis QS™', model: 'BiAxis-QS', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-8', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
-  { id: 'dev-6', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-9', status: 'Operational', lastMaintenance: '2024-07-01' },
-  { id: 'dev-7', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-Z5A6B7C8', clinicId: 'clinic-10', status: 'Needs Attention', lastMaintenance: '2024-06-18' },
+  { id: 'dev-1', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-A1B2C3D4', clinicId: 'clinic-6', status: 'Operational', lastMaintenance: '2024-05-01', installDate: '2023-01-15', warrantyEndDate: '2025-01-15' },
+  { id: 'dev-2', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-E5F6G7H8', clinicId: 'clinic-6', status: 'Under Maintenance', lastMaintenance: '2024-04-15', installDate: '2022-11-20', warrantyEndDate: '2024-11-20', assignedTechnicianId: 'tech-1' },
+  { id: 'dev-3', name: 'Cellec V', model: 'Jeisys-CV', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-03-20', installDate: '2023-03-10', warrantyEndDate: '2025-03-10' },
+  { id: 'dev-4', name: 'BeautiFill', model: 'Alma-BF', serialNumber: 'SN-M3N4O5P6', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-06-10', installDate: '2023-06-01', warrantyEndDate: '2025-06-01' },
+  { id: 'dev-5', name: 'BiAxis QS™', model: 'BiAxis-QS', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-8', status: 'Decommissioned', lastMaintenance: '2023-12-01', installDate: '2022-05-20', warrantyEndDate: '2024-05-20' },
+  { id: 'dev-6', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-9', status: 'Operational', lastMaintenance: '2024-07-01', installDate: '2023-08-01', warrantyEndDate: '2025-08-01' },
+  { id: 'dev-7', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-Z5A6B7C8', clinicId: 'clinic-10', status: 'Needs Attention', lastMaintenance: '2024-06-18', installDate: '2023-09-01', warrantyEndDate: '2025-09-01', assignedTechnicianId: 'tech-2' },
 ];
 
 export const distributorLocations: DistributorLocation[] = [
@@ -109,8 +109,8 @@ export const chatConversations: ChatConversation[] = [
     { id: 'convo-4', participantIds: ['user-2', 'user-6'] }, // Regenesis <-> Klinik Dr. Ananda
 
     // Distributor to Technicians
-    { id: 'convo-5', participantIds: ['user-2', 'user-4'] }, // Regenesis <-> Budi Teknisi
-    { id: 'convo-6', participantIds: ['user-2', 'user-7'] }, // Regenesis <-> Citra Ayu
+    { id: 'convo-5', participantIds: ['user-2', 'tech-1'] }, // Regenesis <-> Budi Teknisi
+    { id: 'convo-6', participantIds: ['user-2', 'tech-2'] }, // Regenesis <-> Citra Ayu
 ];
 
 export const chatMessages: ChatMessage[] = [
@@ -119,7 +119,7 @@ export const chatMessages: ChatMessage[] = [
     { id: 'msg-3', conversationId: 'convo-3', senderId: 'user-3', timestamp: '2024-07-21T14:30:00Z', text: 'Halo, kami ada kendala dengan perangkat Vbeam, butuh bantuan teknisi segera.' },
     { id: 'msg-4', conversationId: 'convo-3', senderId: 'user-2', timestamp: '2024-07-21T14:32:00Z', text: 'Baik, Ibu. Kami akan segera kirimkan teknisi. Mohon tunggu informasi selanjutnya.' },
     { id: 'msg-5', conversationId: 'convo-5', senderId: 'user-2', timestamp: '2024-07-21T14:35:00Z', text: 'Budi, tolong segera ke Klinik Baruna. Ada masalah di Vbeam mereka.' },
-    { id: 'msg-6', conversationId: 'convo-5', senderId: 'user-4', timestamp: '2024-07-21T14:36:00Z', text: 'Siap, saya segera meluncur.' },
+    { id: 'msg-6', conversationId: 'convo-5', senderId: 'tech-1', timestamp: '2024-07-21T14:36:00Z', text: 'Siap, saya segera meluncur.' },
 ];
     
 
@@ -128,3 +128,4 @@ export const chatMessages: ChatMessage[] = [
 
 
     
+

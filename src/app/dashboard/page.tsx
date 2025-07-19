@@ -8,6 +8,9 @@ import ClinicDashboard from '@/components/dashboards/clinic-dashboard';
 import TechnicianDashboard from '@/components/dashboards/technician-dashboard';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import ClinicLayout from './(clinic)/layout';
+import DistributorLayout from './(distributor)/layout';
+import TechnicianLayout from './(technician)/layout';
 
 export default function DashboardPage() {
   const { user, isAuthenticated } = useApp();
@@ -24,11 +27,11 @@ export default function DashboardPage() {
       case 'Super Admin':
         return <SuperAdminDashboard />;
       case 'Distributor':
-        return <DistributorDashboard />;
+        return <DistributorLayout><DistributorDashboard /></DistributorLayout>;
       case 'Clinic':
-        return <ClinicDashboard />;
+        return <ClinicLayout><ClinicDashboard /></ClinicLayout>;
       case 'Technician':
-        return <TechnicianDashboard />;
+        return <TechnicianLayout><TechnicianDashboard /></TechnicianLayout>;
       default:
         return <div>Invalid Role</div>;
     }
