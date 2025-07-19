@@ -1,56 +1,79 @@
 'use client';
 
-import React from 'react';
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
-import { type Location } from '@/lib/types';
-import { Hospital, Truck, Wrench } from 'lucide-react';
-
-const ICONS = {
-    Clinic: <Hospital className="h-4 w-4 text-white" />,
-    Distributor: <Truck className="h-4 w-4 text-white" />,
-    Technician: <Wrench className="h-4 w-4 text-white" />,
-};
+import React, { useRef, useEffect } from 'react';
+import { Map, View } from 'ol';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+import { fromLonLat } from 'ol/proj';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import { Style, Circle, Fill, Stroke } from 'ol/style';
+import type { Location } from '@/lib/types';
 
 const COLORS = {
-    Clinic: 'bg-red-500',
-    Distributor: 'bg-blue-500',
-    Technician: 'bg-green-500',
+    Clinic: 'rgba(239, 68, 68, 0.8)', // red-500
+    Distributor: 'rgba(59, 130, 246, 0.8)', // blue-500
+    Technician: 'rgba(34, 197, 94, 0.8)', // green-500
 };
 
 export function MapView({ locations }: { locations: Location[] }) {
-    if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
-        return (
-            <div className="flex h-full items-center justify-center rounded-lg bg-muted">
-                <div className="text-center text-muted-foreground">
-                    <p className="font-semibold">Google Maps API Key is missing.</p>
-                    <p className="text-sm">Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your environment variables.</p>
-                </div>
-            </div>
-        );
-    }
+    const mapRef = useRef<HTMLDivElement>(null);
 
-    const center = locations.length > 0 ? locations[0].position : { lat: 38, lng: -95 };
+    useEffect(() => {
+        if (!mapRef.current) return;
+
+        const center = locations.length > 0
+            ? fromLonLat([locations[0].position.lng, locations[0].position.lat])
+            : fromLonLat([-95, 38]);
+
+        const features = locations.map(loc => {
+            const feature = new Feature({
+                geometry: new Point(fromLonLat([loc.position.lng, loc.position.lat])),
+                name: loc.name,
+            });
+            feature.setStyle(new Style({
+                image: new Circle({
+                    radius: 8,
+                    fill: new Fill({ color: COLORS[loc.type] }),
+                    stroke: new Stroke({ color: '#fff', width: 2 })
+                })
+            }));
+            return feature;
+        });
+
+        const vectorSource = new VectorSource({
+            features: features
+        });
+
+        const vectorLayer = new VectorLayer({
+            source: vectorSource
+        });
+
+        const map = new Map({
+            target: mapRef.current,
+            layers: [
+                new TileLayer({
+                    source: new OSM(),
+                }),
+                vectorLayer
+            ],
+            view: new View({
+                center: center,
+                zoom: 4,
+            }),
+            controls: [],
+        });
+
+        // Cleanup on unmount
+        return () => map.setTarget(undefined);
+
+    }, [locations]);
 
     return (
-        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
-            <div style={{ height: '100%', width: '100%' }} className="rounded-b-lg overflow-hidden">
-                <Map
-                    defaultCenter={center}
-                    defaultZoom={4}
-                    mapId="lasertrack-map-1"
-                    gestureHandling={'greedy'}
-                    disableDefaultUI={true}
-                    className="rounded-b-lg"
-                >
-                    {locations.map((loc) => (
-                         <AdvancedMarker key={loc.id} position={loc.position} title={loc.name}>
-                            <div className={`flex h-8 w-8 items-center justify-center rounded-full shadow-md ${COLORS[loc.type]}`}>
-                                {ICONS[loc.type]}
-                            </div>
-                         </AdvancedMarker>
-                    ))}
-                </Map>
-            </div>
-        </APIProvider>
+        <div style={{ height: '100%', width: '100%' }} className="rounded-b-lg overflow-hidden">
+            <div ref={mapRef} style={{ width: '100%', height: '100%' }}></div>
+        </div>
     );
 }
