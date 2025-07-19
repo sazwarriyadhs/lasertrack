@@ -8,7 +8,6 @@ import { users } from '@/lib/data';
 interface AppContextType {
   user: User;
   isAuthenticated: boolean;
-  setUserRole: (role: Role) => void;
   login: (role: Role) => void;
   logout: () => void;
 }
@@ -34,18 +33,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const setUserRole = (role: Role) => {
-    const newUser = users.find(u => u.role === role);
-    if (newUser) {
-      setCurrentUser(newUser);
-       try {
-        sessionStorage.setItem('userRole', role);
-      } catch (e) {
-        console.warn('Session storage is not available. User state will not be persisted.');
-      }
-    }
-  };
-
   const login = (role: Role) => {
     const newUser = users.find(u => u.role === role);
     if (newUser) {
@@ -66,13 +53,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
          console.warn('Session storage is not available.');
     }
-    // Redirect logic should be handled in components, e.g., in a useEffect hook
+    // Redirect logic is handled in components
   };
 
   const contextValue = useMemo(() => ({
     user: currentUser,
     isAuthenticated,
-    setUserRole,
     login,
     logout,
   }), [currentUser, isAuthenticated]);

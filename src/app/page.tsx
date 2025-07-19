@@ -10,44 +10,45 @@ import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/layout/logo';
 import { useApp } from '@/context/app-context';
 import type { Role } from '@/lib/types';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-function LoginForm({ role, onLogin }: { role: Role, onLogin: (role: Role) => void }) {
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    onLogin(role);
-  };
-
-  return (
-    <form onSubmit={handleLogin} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor={`${role}-email`}>Alamat Email</Label>
-        <Input id={`${role}-email`} type="email" placeholder={`${role.toLowerCase()}@example.com`} required defaultValue={`${role.toLowerCase().replace(' ', '')}@lasertrack.com`} />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor={`${role}-password`}>Password</Label>
-        <Input id={`${role}-password`} type="password" required defaultValue="password" />
-      </div>
-      <Button type="submit" className="w-full">
-        Login
-      </Button>
-    </form>
-  )
-}
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, isAuthenticated } = useApp();
-  const [activeTab, setActiveTab] = useState('distributor');
+  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   if (isAuthenticated) {
     router.push('/dashboard');
     return null;
   }
 
-  const handleLogin = (role: Role) => {
-    login(role);
-    router.push('/dashboard');
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    let role: Role | null = null;
+    
+    // Determine role based on email
+    if (email.toLowerCase().startsWith('superadmin')) {
+      role = 'Super Admin';
+    } else if (email.toLowerCase().startsWith('distributor')) {
+      role = 'Distributor';
+    } else if (email.toLowerCase().startsWith('clinic')) {
+        role = 'Clinic';
+    } else if (email.toLowerCase().startsWith('tech')) {
+        role = 'Technician';
+    }
+
+    if (role) {
+      login(role);
+      router.push('/dashboard');
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Login Gagal',
+        description: 'Email atau password tidak valid.',
+      });
+    }
   };
 
   return (
@@ -57,31 +58,37 @@ export default function LoginPage() {
           <Logo />
         </div>
         <Card>
-            <CardHeader className="text-center pb-2">
+            <CardHeader className="text-center pb-4">
                 <CardTitle className="text-2xl">Selamat Datang</CardTitle>
                 <CardDescription>Silakan login untuk mengakses akun Anda</CardDescription>
             </CardHeader>
             <CardContent>
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="distributor">Distributor</TabsTrigger>
-                        <TabsTrigger value="superadmin">Super Admin</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="distributor">
-                        <Card className='border-0 shadow-none'>
-                             <CardContent className='p-2 pt-6'>
-                                <LoginForm role="Distributor" onLogin={handleLogin} />
-                             </CardContent>
-                        </Card>
-                    </TabsContent>
-                    <TabsContent value="superadmin">
-                         <Card className='border-0 shadow-none'>
-                             <CardContent className='p-2 pt-6'>
-                                <LoginForm role="Super Admin" onLogin={handleLogin} />
-                             </CardContent>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Alamat Email</Label>
+                        <Input 
+                            id="email" 
+                            type="email" 
+                            placeholder="user@example.com" 
+                            required 
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input 
+                            id="password" 
+                            type="password" 
+                            required 
+                            defaultValue="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <Button type="submit" className="w-full">
+                        Login
+                    </Button>
+                </form>
             </CardContent>
         </Card>
       </div>

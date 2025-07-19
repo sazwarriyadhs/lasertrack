@@ -4,13 +4,10 @@
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useApp } from '@/context/app-context';
-import { users } from '@/lib/data';
-import type { Role } from '@/lib/types';
-import { Bell, ChevronsUpDown, LifeBuoy, LogOut, Settings, User as UserIcon, Menu } from 'lucide-react';
+import { Bell, LifeBuoy, LogOut, Settings, User as UserIcon, Menu } from 'lucide-react';
 import { Logo } from './logo';
-import Link from 'next/link';
 import {
   Sheet,
   SheetContent,
@@ -20,7 +17,7 @@ import { SidebarNav } from './sidebar-nav';
 
 
 export function Header() {
-  const { user, setUserRole, logout } = useApp();
+  const { user, logout } = useApp();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -48,23 +45,6 @@ export function Header() {
          <h1 className="text-lg font-semibold">{user.role} Dashboard</h1>
       </div>
       <div className="flex items-center gap-4">
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2">
-                    <span>Role: {user.role}</span>
-                    <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Switch Role</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={user.role} onValueChange={(role) => setUserRole(role as Role)}>
-                    {users.map((u) => (
-                        <DropdownMenuRadioItem key={u.id} value={u.role}>{u.role}</DropdownMenuRadioItem>
-                    ))}
-                </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
-
         <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Notifications</span>
