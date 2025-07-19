@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,8 +20,13 @@ export default function SuperAdminLoginPage() {
   const [email, setEmail] = useState('superadmin@lasertrack.com');
   const [password, setPassword] = useState('password');
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
+
   if (isAuthenticated) {
-    router.push('/dashboard');
     return null;
   }
 
