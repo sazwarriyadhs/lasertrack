@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -40,8 +41,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-card px-4 md:px-6">
         <Logo />
         <div className='flex items-center gap-2'>
-            <Button variant="ghost" asChild><Link href="/partner/login">Distributor Login</Link></Button>
-            <Button asChild><Link href="/adminlogon">Super Admin Login</Link></Button>
+            <Button asChild><Link href="/partner/login">Distributor Login</Link></Button>
         </div>
       </header>
 
@@ -62,9 +62,6 @@ export default function LandingPage() {
                   <Button asChild size="lg">
                     <Link href="/partner/login">Mulai sebagai Distributor</Link>
                   </Button>
-                   <Button asChild variant="outline" size="lg">
-                    <Link href="/adminlogon">Akses Super Admin</Link>
-                  </Button>
                 </div>
               </div>
                <Image
@@ -83,30 +80,13 @@ export default function LandingPage() {
             <div className="container px-4 md:px-6">
                  <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Disesuaikan untuk Peran Anda</h2>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Disesuaikan untuk Distributor</h2>
                         <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                           Pilih jalur yang sesuai dengan tanggung jawab Anda dan akses alat yang Anda butuhkan untuk sukses.
+                           Akses semua alat yang Anda butuhkan untuk mengelola klinik, perangkat, dan tim teknisi Anda secara efisien.
                         </p>
                     </div>
                 </div>
-                <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:max-w-none mt-12">
-                    <Card className="flex flex-col">
-                        <CardHeader>
-                            <div className='flex items-center gap-4'>
-                                <Users className='w-8 h-8 text-primary' />
-                                <CardTitle className='text-2xl'>Untuk Super Admin</CardTitle>
-                            </div>
-                             <CardDescription>Kelola seluruh ekosistem dari satu tempat.</CardDescription>
-                        </CardHeader>
-                        <CardContent className='flex-1'>
-                           <p>Pantau dan kelola semua akun distributor, lisensi aplikasi, dan lihat gambaran umum jaringan secara nasional. Alat administratif yang kuat di ujung jari Anda.</p>
-                        </CardContent>
-                        <div className="p-6 pt-0">
-                            <Button asChild className="w-full">
-                                <Link href="/adminlogon">Login sebagai Super Admin <ArrowRight className='ml-2' /></Link>
-                            </Button>
-                        </div>
-                    </Card>
+                <div className="mx-auto grid max-w-2xl items-start gap-8 mt-12">
                      <Card className="flex flex-col">
                         <CardHeader>
                            <div className='flex items-center gap-4'>
