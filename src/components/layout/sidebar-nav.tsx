@@ -1,16 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, BarChart2, BadgeCheck, FileText, HardHat, Activity } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const superAdminNavItems = [
-    { href: '/dashboard', label: 'Peta', icon: Map },
-    { href: '/dashboard#stats-section', label: 'Statistik', icon: BarChart2 },
-    { href: '/dashboard#distributor-management-section', label: 'Manajemen Lisensi', icon: BadgeCheck },
-    { href: '/dashboard#activity-logs-section', label: 'Log Aktivitas', icon: FileText },
+    { href: '/dashboard', label: 'Peta Distributor', icon: Map },
+    { href: '/dashboard#distributor-management-section', label: 'Manajemen Distributor', icon: BadgeCheck },
 ];
 
 const distributorNavItems = [
