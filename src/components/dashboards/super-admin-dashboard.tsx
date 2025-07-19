@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { MapView } from '@/components/map-view';
 import { locations, distributorLocations, activityLogs, userActivityData } from '@/lib/data';
-import { Pencil, Trash2, Eye } from 'lucide-react';
+import { Pencil, Trash2, Eye, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import type { DistributorLocation } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -98,16 +98,16 @@ export default function SuperAdminDashboard() {
             <section id="distributor-management-section">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Manajemen Akun Distributor</CardTitle>
-                        <CardDescription>Kelola akun dan lisensi untuk semua distributor.</CardDescription>
+                        <CardTitle>Manajemen Lisensi & Akun Distributor</CardTitle>
+                        <CardDescription>Kelola lisensi aplikasi dan akun untuk semua distributor.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Table>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Nama Distributor</TableHead>
-                                    <TableHead>Status Aplikasi</TableHead>
-                                    <TableHead>Sisa Lisensi</TableHead>
+                                    <TableHead>Status Lisensi</TableHead>
+                                    <TableHead>Sisa Durasi</TableHead>
                                     <TableHead>Login Terakhir</TableHead>
                                     <TableHead className="text-right">Aksi</TableHead>
                                 </TableRow>

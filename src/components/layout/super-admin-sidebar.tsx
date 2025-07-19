@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bot, Map, BarChart2, Users, FileText } from 'lucide-react';
+import { Bot, Map, BarChart2, Users, FileText, BadgeCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -15,7 +15,7 @@ const Logo = () => (
 const navItems = [
     { href: '#map-section', label: 'Peta', icon: Map },
     { href: '#stats-section', label: 'Statistik', icon: BarChart2 },
-    { href: '#distributor-management-section', label: 'Manajemen Distributor', icon: Users },
+    { href: '#distributor-management-section', label: 'Manajemen Lisensi', icon: BadgeCheck },
     { href: '#activity-logs-section', label: 'Log Aktivitas', icon: FileText },
 ]
 

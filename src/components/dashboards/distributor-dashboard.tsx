@@ -3,13 +3,15 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { MapView } from '@/components/map-view';
-import { locations, devices } from '@/lib/data';
+import { locations, devices, distributorLocations } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import type { DeviceStatus } from '@/lib/types';
+import type { DeviceStatus, DistributorLocation } from '@/lib/types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { useApp } from '@/context/app-context';
+import { CheckCircle, Clock, XCircle, FileText } from 'lucide-react';
 
 
 const statusColors: Record<DeviceStatus, string> = {
@@ -18,6 +20,13 @@ const statusColors: Record<DeviceStatus, string> = {
     'Needs Attention': 'bg-orange-500/80',
     Decommissioned: 'bg-gray-500/80',
 };
+
+const licenseStatusInfo: Record<DistributorLocation['applicationStatus'], { icon: React.ElementType, color: string, label: string }> = {
+    'Active': { icon: CheckCircle, color: 'text-green-500', label: 'Lisensi Aktif' },
+    'Inactive': { icon: XCircle, color: 'text-gray-500', label: 'Lisensi Tidak Aktif' },
+    'Expired': { icon: Clock, color: 'text-red-500', label: 'Lisensi Kedaluwarsa' },
+};
+
 
 const clinicUsageData = [
   { name: 'Sunset Aesthetics', usage: 85 },
@@ -34,9 +43,37 @@ const chartConfig = {
   },
 } satisfies import('@/components/ui/chart').ChartConfig;
 
+const LicenseStatusCard = ({ distributor }: { distributor: DistributorLocation }) => {
+    const status = licenseStatusInfo[distributor.applicationStatus];
+    const StatusIcon = status.icon;
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-6 w-6" />
+                    <span>Status Lisensi Aplikasi</span>
+                </CardTitle>
+                <CardDescription>Status lisensi SERENITY LaserTrack Anda.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted">
+                    <StatusIcon className={cn("h-10 w-10", status.color)} />
+                    <div>
+                        <p className={cn("font-bold text-lg", status.color)}>{status.label}</p>
+                        <p className="text-sm text-muted-foreground">{distributor.licenseDuration}</p>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
+
 
 export default function DistributorDashboard() {
+    const { user } = useApp();
     const distributorId = 'dist-1'; // Static for now
+    const distributorDetails = distributorLocations.find(d => d.id === distributorId);
     const distributorClinics = locations.filter(loc => loc.type === 'Clinic' && loc.distributorId === distributorId);
     const distributorTechnicians = locations.filter(loc => loc.type === 'Technician' && loc.distributorId === distributorId);
     const distributorDevices = devices.filter(device => distributorClinics.some(c => c.id === device.clinicId));
@@ -49,6 +86,7 @@ export default function DistributorDashboard() {
                 <TabsTrigger value="map">Peta & Monitoring</TabsTrigger>
                 <TabsTrigger value="devices">Monitoring Perangkat</TabsTrigger>
                 <TabsTrigger value="reports">Laporan Penggunaan</TabsTrigger>
+                <TabsTrigger value="license">Status Lisensi</TabsTrigger>
             </TabsList>
             
             <TabsContent value="map">
@@ -135,6 +173,10 @@ export default function DistributorDashboard() {
                         </ChartContainer>
                     </CardContent>
                 </Card>
+            </TabsContent>
+
+            <TabsContent value="license">
+                {distributorDetails && <LicenseStatusCard distributor={distributorDetails} />}
             </TabsContent>
         </Tabs>
     );
