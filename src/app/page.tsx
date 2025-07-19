@@ -115,7 +115,7 @@ export default function LandingPage() {
                             width="1200"
                             height="600"
                             alt="Hero Image 1"
-                            data-ai-hint="aesthetic laser device"
+                            data-ai-hint="aesthetic laser treatment"
                             className="aspect-video w-full overflow-hidden rounded-xl object-cover"
                         />
                     </CarouselItem>
@@ -125,7 +125,7 @@ export default function LandingPage() {
                             width="1200"
                             height="600"
                             alt="Hero Image 2"
-                            data-ai-hint="modern clinic interior"
+                            data-ai-hint="modern clinic reception"
                             className="aspect-video w-full overflow-hidden rounded-xl object-cover"
                         />
                     </CarouselItem>
@@ -135,7 +135,7 @@ export default function LandingPage() {
                             width="1200"
                             height="600"
                             alt="Hero Image 3"
-                            data-ai-hint="professional technician working"
+                            data-ai-hint="professional technician smiling"
                             className="aspect-video w-full overflow-hidden rounded-xl object-cover"
                         />
                     </CarouselItem>
