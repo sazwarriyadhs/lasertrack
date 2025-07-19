@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { devices, maintenanceHistory, technicianLocations, distributorLocations } from '@/lib/data';
-import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation } from '@/lib/types';
+import { devices, maintenanceHistory, technicianLocations, distributorLocations, purchaseHistory } from '@/lib/data';
+import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2 } from 'lucide-react';
+import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -198,6 +198,7 @@ export default function ClinicDashboard() {
     const clinicId = 'clinic-1'; // Static for demo
     const clinicDevices = devices.filter(d => d.clinicId === clinicId);
     const clinicMaintenanceHistory = maintenanceHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
+    const clinicPurchaseHistory = purchaseHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
     
     const activeMaintenanceDevice = clinicDevices.find(d => d.status === 'Under Maintenance' || d.status === 'Needs Attention');
     const assignedTechnician = activeMaintenanceDevice ? technicianLocations.find(t => t.handledDeviceId === activeMaintenanceDevice.id) : undefined;
@@ -267,6 +268,39 @@ export default function ClinicDashboard() {
                                         </TableRow>
                                     )
                                 })}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Riwayat Pembelian Perangkat</CardTitle>
+                        <CardDescription>Informasi pembelian dan garansi untuk perangkat Anda.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                       <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Tgl. Pembelian</TableHead>
+                                    <TableHead>Nama Perangkat</TableHead>
+                                    <TableHead>Distributor</TableHead>
+                                    <TableHead>Garansi Berakhir</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {clinicPurchaseHistory.map((record: PurchaseHistoryRecord) => (
+                                    <TableRow key={record.id}>
+                                        <TableCell>{record.purchaseDate}</TableCell>
+                                        <TableCell className="font-medium">{record.deviceName}</TableCell>
+                                        <TableCell>{record.distributorName}</TableCell>
+                                        <TableCell>
+                                            <div className='flex items-center gap-2'>
+                                                <Calendar className='w-4 h-4 text-muted-foreground' />
+                                                <span>{record.warrantyEndDate}</span>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     </CardContent>

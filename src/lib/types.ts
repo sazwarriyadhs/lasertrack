@@ -88,3 +88,12 @@ export interface MaintenanceRecord {
     technicianName: string;
     description: string;
 }
+
+export interface PurchaseHistoryRecord {
+    id: string;
+    deviceId: string;
+    deviceName: string;
+    purchaseDate: string;
+    distributorName: string;
+    warrantyEndDate: string;
+}

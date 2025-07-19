@@ -1,7 +1,7 @@
-import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity, ClinicLocation, TechnicianLocation, MaintenanceRecord } from '@/lib/types';
+import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity, ClinicLocation, TechnicianLocation, MaintenanceRecord, PurchaseHistoryRecord } from '@/lib/types';
 
 export const users: User[] = [
-  { id: 'user-1', name: 'Admin User', email: 'admin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100' },
+  { id: 'user-1', name: 'Admin User', email: 'superadmin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100' },
   { id: 'user-2', name: 'Distributor User', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100', distributorId: 'dist-1' },
   { id: 'user-3', name: 'Clinic User', email: 'clinic@lasertrack.com', role: 'Clinic', avatarUrl: 'https://placehold.co/100x100' },
   { id: 'user-4', name: 'Technician User', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100' },
@@ -80,4 +80,11 @@ export const maintenanceHistory: MaintenanceRecord[] = [
     { id: 'hist-3', deviceId: 'dev-3', date: '2024-03-20', technicianName: 'Tech John', description: 'Power supply diagnostics. Needs replacement.' },
     { id: 'hist-4', deviceId: 'dev-1', date: '2023-11-10', technicianName: 'Tech Maria', description: 'Emergency shutoff test and general cleaning.' },
     { id: 'hist-5', deviceId: 'dev-7', date: '2024-06-18', technicianName: 'Tech David', description: 'Software glitch resolved.' },
+];
+
+export const purchaseHistory: PurchaseHistoryRecord[] = [
+    { id: 'pur-1', deviceId: 'dev-1', deviceName: 'LightSheer Desire', purchaseDate: '2023-01-15', distributorName: 'West Coast Distribution', warrantyEndDate: '2025-01-15' },
+    { id: 'pur-2', deviceId: 'dev-2', deviceName: 'Lumenis M22', purchaseDate: '2022-11-20', distributorName: 'West Coast Distribution', warrantyEndDate: '2024-11-20' },
+    { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cynosure PicoSure', purchaseDate: '2023-03-10', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-03-10' },
+    { id: 'pur-4', deviceId: 'dev-4', deviceName: 'Candela GentleMax Pro', purchaseDate: '2023-06-01', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-06-01' },
 ];
