@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { UserPlus, Pencil, Trash2, Search } from 'lucide-react';
+import { UserPlus, Pencil, Trash2, Search, ExternalLink } from 'lucide-react';
 import { devices, technicianLocations as allTechnicians } from '@/lib/data';
 import type { TechnicianLocation } from '@/lib/types';
 import {
@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Link from 'next/link';
 
 
 export default function TechnicianManagementPage() {
@@ -160,7 +161,11 @@ export default function TechnicianManagementPage() {
                         <TableBody>
                             {filteredTechnicians.map((tech) => (
                                 <TableRow key={tech.id}>
-                                    <TableCell className="font-medium">{tech.name}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <Link href={`/distributor/${distributorId}/technician/${tech.id}`} className="hover:underline flex items-center gap-2">
+                                            {tech.name} <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>
                                         <Badge variant={tech.dutyStatus === 'On Duty' ? 'default' : 'secondary'}>{tech.dutyStatus === 'On Duty' ? tech.handlingStatus : 'Off Duty'}</Badge>
                                     </TableCell>
