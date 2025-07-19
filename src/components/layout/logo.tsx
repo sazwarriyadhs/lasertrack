@@ -1,7 +1,21 @@
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
-export const Logo = () => (
-    <div className="flex items-center gap-2 h-16">
-        <Image src="/logo.png" alt="SERENITY LaserTrack Logo" width={180} height={40} priority />
-    </div>
-);
+interface LogoProps {
+    variant?: 'default' | 'small';
+}
+
+export const Logo = ({ variant = 'default' }: LogoProps) => {
+    const isSmall = variant === 'small';
+    return (
+        <div className={cn("flex items-center gap-2", isSmall ? 'h-auto' : 'h-16')}>
+            <Image 
+                src="/logo.png" 
+                alt="SERENITY LaserTrack Logo" 
+                width={isSmall ? 120 : 180} 
+                height={isSmall ? 27 : 40} 
+                priority 
+            />
+        </div>
+    );
+};
