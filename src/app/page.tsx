@@ -5,9 +5,8 @@ import SuperAdminDashboard from '@/components/dashboards/super-admin-dashboard';
 import DistributorDashboard from '@/components/dashboards/distributor-dashboard';
 import ClinicDashboard from '@/components/dashboards/clinic-dashboard';
 import TechnicianDashboard from '@/components/dashboards/technician-dashboard';
-import { AppSidebar } from '@/components/layout/app-sidebar';
+import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
-import { SuperAdminSidebar } from '@/components/layout/super-admin-sidebar';
 
 export default function Home() {
   const { user } = useApp();
@@ -26,17 +25,10 @@ export default function Home() {
         return <div>Invalid Role</div>;
     }
   };
-  
-  const getSidebar = () => {
-    if (user.role === 'Super Admin') {
-      return <SuperAdminSidebar />;
-    }
-    return <AppSidebar />;
-  }
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      {getSidebar()}
+      <Sidebar />
       <div className="flex flex-1 flex-col">
         <Header />
         <main className="flex-1 p-4 sm:p-6">
