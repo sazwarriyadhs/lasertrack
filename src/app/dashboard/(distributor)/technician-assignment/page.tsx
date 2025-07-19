@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useTransition } from 'react';
@@ -28,6 +29,8 @@ const assignmentFormSchema = z.object({
     deviceId: z.string().min(1, { message: 'Perangkat harus dipilih.' }),
     technicianId: z.string().min(1, { message: 'Teknisi harus dipilih.' }),
     deadline: z.string().min(1, { message: 'Deadline harus diisi.' }),
+    complexity: z.enum(['Rendah', 'Sedang', 'Tinggi'], { required_error: 'Tingkat kerumitan harus dipilih.'}),
+    estimatedDuration: z.string().min(1, { message: 'Estimasi durasi harus diisi.' }),
     description: z.string().min(10, { message: 'Deskripsi masalah harus diisi (minimal 10 karakter).' }),
 });
 
@@ -49,6 +52,7 @@ export default function TechnicianAssignmentPage() {
             deviceId: '',
             technicianId: '',
             deadline: '',
+            estimatedDuration: '',
             description: '',
         }
     });
@@ -74,11 +78,13 @@ export default function TechnicianAssignmentPage() {
                      distributorName: distributor.name,
                      technicianName: technician.name,
                      clinicName: clinic.name,
-                     clinicAddress: `Jl. Klinik No. 1, ${clinic.name}`, // Placeholder address
+                     clinicAddress: clinic.address,
                      deviceName: device.name,
                      deviceSerial: device.serialNumber,
                      taskDescription: values.description,
                      deadline: values.deadline,
+                     complexity: values.complexity,
+                     estimatedDuration: values.estimatedDuration,
                 });
  
                  if (result && result.workOrder) {
@@ -125,7 +131,7 @@ export default function TechnicianAssignmentPage() {
             <CardContent>
                  <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmitAssignment)} className="space-y-6">
-                        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+                        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
                             <FormField
                                 control={form.control}
                                 name="clinicId"
@@ -194,6 +200,41 @@ export default function TechnicianAssignmentPage() {
                                         <FormLabel>Deadline</FormLabel>
                                         <FormControl>
                                             <Input type="date" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="complexity"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Tingkat Kerumitan</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                        <SelectValue placeholder="Pilih tingkat kerumitan" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Rendah">Rendah</SelectItem>
+                                        <SelectItem value="Sedang">Sedang</SelectItem>
+                                        <SelectItem value="Tinggi">Tinggi</SelectItem>
+                                    </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="estimatedDuration"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Estimasi Durasi</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Contoh: 2 Jam, 1 Hari" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
