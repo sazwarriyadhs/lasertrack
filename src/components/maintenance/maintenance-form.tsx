@@ -17,9 +17,17 @@ import { generateReportAction } from '@/app/actions';
 import { Loader2, FileUp, X, FileText } from 'lucide-react';
 import Image from 'next/image';
 import { useApp } from '@/context/app-context';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const formSchema = z.object({
-    statusUpdates: z.string().min(10, { message: 'Please provide a detailed status update.' }),
+    statusUpdates: z.string().min(10, { message: 'Harap berikan pembaruan status yang terperinci.' }),
+    handlingStatus: z.enum(["Dalam Perjalanan", "Menangani", "Selesai"]),
     additionalNotes: z.string().optional(),
 });
 
@@ -32,7 +40,7 @@ export function MaintenanceForm({ device }: { device: Device }) {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: { statusUpdates: '', additionalNotes: '' },
+        defaultValues: { statusUpdates: '', additionalNotes: '', handlingStatus: 'Menangani' },
     });
 
     const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +72,7 @@ export function MaintenanceForm({ device }: { device: Device }) {
                 const result = await generateReportAction({
                     technicianName: user.name,
                     deviceName: device.name,
-                    statusUpdates: values.statusUpdates,
+                    statusUpdates: `Status Penanganan: ${values.handlingStatus}\n\nPembaruan: ${values.statusUpdates}`,
                     checklistResults,
                     photosDataUri: photos,
                     additionalNotes: values.additionalNotes,
@@ -81,26 +89,26 @@ export function MaintenanceForm({ device }: { device: Device }) {
                     
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = `Maintenance_Report_${device.name.replace(/ /g, '_')}.pdf`;
+                    link.download = `Laporan_Maintenance_${device.name.replace(/ /g, '_')}.pdf`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                     
                     toast({
-                        title: 'Report Generated',
-                        description: 'Your maintenance report has been successfully generated and downloaded.',
+                        title: 'Laporan Dibuat',
+                        description: 'Laporan maintenance Anda telah berhasil dibuat dan diunduh.',
                     });
                     form.reset();
                     setPhotos([]);
                     setChecklist(initialChecklist.map(item => ({...item})));
                 } else {
-                    throw new Error('Failed to generate report.');
+                    throw new Error('Gagal membuat laporan.');
                 }
             } catch (error) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
-                    description: 'Something went wrong while generating the report. Please try again.',
+                    description: 'Terjadi kesalahan saat membuat laporan. Silakan coba lagi.',
                 });
                 console.error(error);
             }
@@ -112,8 +120,8 @@ export function MaintenanceForm({ device }: { device: Device }) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Maintenance Checklist</CardTitle>
-                        <CardDescription>Complete the checklist for the device.</CardDescription>
+                        <CardTitle>Checklist Maintenance</CardTitle>
+                        <CardDescription>Lengkapi checklist untuk perangkat.</CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4 md:grid-cols-2">
                         {checklist.map(item => (
@@ -129,17 +137,40 @@ export function MaintenanceForm({ device }: { device: Device }) {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Status & Notes</CardTitle>
+                        <CardTitle>Status & Catatan</CardTitle>
+                        <CardDescription>Perbarui status penanganan dan berikan catatan.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="handlingStatus"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Status Penanganan</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Pilih status penanganan" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="Dalam Perjalanan">Dalam Perjalanan</SelectItem>
+                                    <SelectItem value="Menangani">Menangani</SelectItem>
+                                    <SelectItem value="Selesai">Selesai</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="statusUpdates"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Status Updates</FormLabel>
+                                    <FormLabel>Pembaruan Status</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Describe the current status, work performed, and any issues found..." {...field} rows={5} />
+                                        <Textarea placeholder="Jelaskan status saat ini, pekerjaan yang dilakukan, dan masalah yang ditemukan..." {...field} rows={5} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -150,9 +181,9 @@ export function MaintenanceForm({ device }: { device: Device }) {
                             name="additionalNotes"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Additional Notes (Optional)</FormLabel>
+                                    <FormLabel>Catatan Tambahan (Opsional)</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Any other relevant information..." {...field} rows={3} />
+                                        <Textarea placeholder="Informasi relevan lainnya..." {...field} rows={3} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -163,15 +194,15 @@ export function MaintenanceForm({ device }: { device: Device }) {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Upload Photos</CardTitle>
-                        <CardDescription>Add photos of the device or specific components.</CardDescription>
+                        <CardTitle>Unggah Foto</CardTitle>
+                        <CardDescription>Tambahkan foto perangkat atau komponen tertentu.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="grid gap-4">
                             <div className="relative flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:border-primary">
                                 <div className='text-center text-muted-foreground'>
                                     <FileUp className="w-8 h-8 mx-auto mb-2" />
-                                    <p>Click to upload images</p>
+                                    <p>Klik untuk mengunggah gambar</p>
                                 </div>
                                 <Input type="file" className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" multiple onChange={handlePhotoUpload} />
                             </div>
@@ -194,7 +225,7 @@ export function MaintenanceForm({ device }: { device: Device }) {
                 <div className="flex justify-end">
                     <Button type="submit" disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileText className="mr-2 h-4 w-4" />}
-                        Generate & Download Report
+                        Buat & Unduh Laporan
                     </Button>
                 </div>
             </form>

@@ -23,14 +23,14 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
                     <Button asChild variant="outline">
                         <Link href="/">
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Dashboard
+                            Kembali ke Dashboard
                         </Link>
                     </Button>
                 </nav>
             </header>
             <main className="flex-1 p-4 sm:p-6 md:p-10">
                 <div className="mx-auto grid w-full max-w-4xl gap-2 mb-6">
-                    <h1 className="text-3xl font-semibold">Maintenance for {device.name}</h1>
+                    <h1 className="text-3xl font-semibold">Maintenance untuk {device.name}</h1>
                     <p className="text-muted-foreground">SN: {device.serialNumber}</p>
                 </div>
                 <div className="mx-auto grid w-full max-w-4xl items-start gap-6">

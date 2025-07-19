@@ -21,17 +21,17 @@ export default function TechnicianDashboard() {
     return (
          <Card>
             <CardHeader>
-                <CardTitle>Maintenance Assignments</CardTitle>
-                <CardDescription>Devices that require your attention.</CardDescription>
+                <CardTitle>Tugas Maintenance</CardTitle>
+                <CardDescription>Perangkat yang membutuhkan penanganan Anda.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Device</TableHead>
+                            <TableHead>Perangkat</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead>Last Maintenance</TableHead>
-                            <TableHead className="text-right">Action</TableHead>
+                            <TableHead>Maintenance Terakhir</TableHead>
+                            <TableHead className="text-right">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -48,7 +48,7 @@ export default function TechnicianDashboard() {
                                 <TableCell className="text-right">
                                     <Button asChild variant="outline" size="sm">
                                         <Link href={`/maintenance/${device.id}`}>
-                                            Start Maintenance <ArrowRight className="ml-2 h-4 w-4" />
+                                            Mulai Maintenance <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
                                     </Button>
                                 </TableCell>
