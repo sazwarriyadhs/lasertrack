@@ -11,6 +11,9 @@ import { Logo } from './logo';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { SidebarNav } from './sidebar-nav';
@@ -37,6 +40,12 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0 pt-10 w-64">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Menu Navigasi</SheetTitle>
+                  <SheetDescription>
+                    Pilih tautan untuk menavigasi ke halaman lain di dalam dasbor.
+                  </SheetDescription>
+                </SheetHeader>
                <div className='px-4 mb-4'><Logo /></div>
                <SidebarNav />
             </SheetContent>
