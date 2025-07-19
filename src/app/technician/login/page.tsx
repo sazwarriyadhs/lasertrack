@@ -12,7 +12,7 @@ import { useApp } from '@/context/app-context';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
-import Image from 'next/image';
+import { ArrowLeft } from 'lucide-react';
 
 export default function TechnicianLoginPage() {
   const router = useRouter();
@@ -47,6 +47,12 @@ export default function TechnicianLoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/30 p-4 relative">
+       <Button variant="outline" asChild className="absolute top-4 left-4">
+            <Link href="/">
+                <ArrowLeft className="mr-2" />
+                Kembali ke Landing Page
+            </Link>
+        </Button>
       <div className="w-full max-w-sm">
         <div className="mb-6 flex justify-center">
           <Logo />
@@ -102,7 +108,7 @@ export default function TechnicianLoginPage() {
                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary hover:underline">
                     Butuh Bantuan? Hubungi Admin
                 </Link>
-                <p className="text-xs text-muted-foreground pt-4">© 2025 LaserTrack Lite</p>
+                <p className="text-xs text-muted-foreground pt-4">© 2024 LaserTrack Lite</p>
             </CardFooter>
         </Card>
       </div>
