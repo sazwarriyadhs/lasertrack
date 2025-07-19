@@ -23,6 +23,7 @@ const formSchema = z.object({
         email: z.string().email({ message: 'Format email tidak valid.' }),
         phone: z.string().min(10, { message: 'Nomor telepon minimal 10 digit.' }),
     }),
+    address: z.string().min(10, { message: 'Alamat harus diisi minimal 10 karakter.'}),
     avatarUrl: z.string().url({ message: 'URL avatar tidak valid.' }).optional().or(z.literal('')),
     applicationStatus: z.enum(['Active', 'Inactive', 'Expired']),
     licenseDuration: z.string().min(1, { message: 'Durasi lisensi harus diisi.' }),
@@ -45,6 +46,7 @@ export function DistributorForm({ onSubmit, onCancel, defaultValues }: Distribut
                 email: defaultValues?.contact.email || '',
                 phone: defaultValues?.contact.phone || '',
             },
+            address: defaultValues?.address || '',
             avatarUrl: defaultValues?.avatarUrl || '',
             applicationStatus: defaultValues?.applicationStatus || 'Active',
             licenseDuration: defaultValues?.licenseDuration || '',
@@ -62,6 +64,19 @@ export function DistributorForm({ onSubmit, onCancel, defaultValues }: Distribut
                             <FormLabel>Nama Distributor</FormLabel>
                             <FormControl>
                                 <Input placeholder="Contoh: PT. Jaya Abadi" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Alamat</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Alamat lengkap distributor" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

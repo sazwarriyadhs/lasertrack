@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useRef, useEffect } from 'react';
@@ -40,7 +41,7 @@ const handlingStatusBadge: Record<TechnicianLocation['handlingStatus'] | string,
 };
 
 
-export function MapView({ locations }: { locations: (Location & { devices?: Device[] })[] }) {
+export function MapView({ locations, initialZoom = 5 }: { locations: (Location & { devices?: Device[] })[], initialZoom?: number }) {
     const mapRef = useRef<HTMLDivElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +70,7 @@ export function MapView({ locations }: { locations: (Location & { devices?: Devi
 
         const centerCoordinates = locations.length > 0
             ? [locations[0].position.lng, locations[0].position.lat]
-            : [-95, 38];
+            : [113.9213, -0.7893]; // Default to Indonesia
         const center = fromLonLat(centerCoordinates);
 
         const features = locations.map(loc => {
@@ -121,7 +122,7 @@ export function MapView({ locations }: { locations: (Location & { devices?: Devi
             overlays: [overlay],
             view: new View({
                 center: center,
-                zoom: locations.length > 1 ? 4 : 10,
+                zoom: initialZoom,
             }),
             controls: [],
         });
@@ -221,7 +222,7 @@ export function MapView({ locations }: { locations: (Location & { devices?: Devi
 
         return () => map.setTarget(undefined);
 
-    }, [locations]);
+    }, [locations, initialZoom]);
 
     return (
         <div style={{ height: '100%', width: '100%' }} className="rounded-b-lg overflow-hidden relative">

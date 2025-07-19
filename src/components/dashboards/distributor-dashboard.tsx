@@ -22,7 +22,7 @@ export default function DistributorDashboard() {
                 <CardDescription>Lokasi klinik yang Anda kelola. Klik marker untuk detail perangkat.</CardDescription>
             </CardHeader>
             <CardContent className="h-[calc(100%-8rem)] p-0">
-                <MapView locations={clinicsWithDevices} />
+                <MapView locations={clinicsWithDevices} initialZoom={5} />
             </CardContent>
         </Card>
     );

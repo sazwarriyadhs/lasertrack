@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -68,7 +69,7 @@ export default function SuperAdminDashboard() {
                 id: `dist-${Date.now()}`,
                 ...data,
                 type: 'Distributor',
-                position: { lat: 40.7128, lng: -74.0060 }, // Default position for new distributors
+                position: { lat: -6.2088, lng: 106.8456 }, // Default position Jakarta
                 clinicCount: 0,
                 lastLogin: new Date().toISOString().split('T')[0],
             };
@@ -104,7 +105,7 @@ export default function SuperAdminDashboard() {
                         <CardDescription>Lokasi distributor. Klik marker untuk melihat jumlah klinik yang dikelola.</CardDescription>
                     </CardHeader>
                     <CardContent className="h-[calc(100%-6rem)] p-0">
-                    <MapView locations={distributors} />
+                    <MapView locations={distributors} initialZoom={5} />
                     </CardContent>
                 </Card>
             </section>
