@@ -7,7 +7,7 @@ import { Logo } from '@/components/layout/logo';
 import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CheckCircle } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 
 const newsItems = [
@@ -37,14 +37,12 @@ const newsItems = [
     },
 ]
 
-const featuredProducts = [
-    "Laser PicoWay® untuk pigmentasi & tato",
-    "Vbeam Perfecta® (pulsed-dye laser)",
-    "BiAxis QS™ dan IPL Cellec V",
-    "BeautiFill by LipoLife",
-    "Teknologi anti-aging & pencerahan kulit",
-    "Perawatan jerawat & bekas luka",
-    "Contouring tubuh dan wajah",
+const featuredProductsData = [
+  { product: 'Laser PicoWay®', brand: 'Candela PicoWay®', indication: 'Pigmentasi, penghapusan tato, melasma, peremajaan kulit.' },
+  { product: 'Vbeam Perfecta®', brand: 'Candela Vbeam', indication: 'Kemerahan, rosacea, lesi vaskular, flek hitam, bekas jerawat.' },
+  { product: 'BiAxis QS™', brand: 'BiAxis QS', indication: 'Pigmentasi, tato, stimulasi kolagen, penghapusan noda.' },
+  { product: 'IPL Cellec V', brand: 'Cellec V IPL', indication: 'Pencerahan, jerawat, pigmentasi, kulit tidak merata.' },
+  { product: 'BeautiFill', brand: 'LipoLife / Alma Lasers', indication: 'Body contouring & tightening melalui diode laser 1470 nm.' },
 ];
 
 const valueAddedServices = [
@@ -139,30 +137,42 @@ export default function LandingPage() {
                     </div>
                 </div>
                 <div className="mx-auto grid max-w-5xl gap-8 mt-12 md:grid-cols-2">
-                    <Card>
+                    <Card className="md:col-span-2">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><Award className="text-primary"/>Produk & Alat Medis Unggulan</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-3">
-                           {featuredProducts.map((product, index) => (
-                               <div key={index} className="flex items-center gap-3">
-                                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                                   <p className="text-muted-foreground">{product}</p>
-                               </div>
-                           ))}
+                        <CardContent>
+                           <Table>
+                               <TableHeader>
+                                   <TableRow>
+                                       <TableHead>Produk / Teknologi</TableHead>
+                                       <TableHead>Merk / Brand</TableHead>
+                                       <TableHead>Indikasi Utama</TableHead>
+                                   </TableRow>
+                               </TableHeader>
+                               <TableBody>
+                                   {featuredProductsData.map((product, index) => (
+                                       <TableRow key={index}>
+                                           <TableCell className="font-medium">{product.product}</TableCell>
+                                           <TableCell>{product.brand}</TableCell>
+                                           <TableCell className="text-muted-foreground">{product.indication}</TableCell>
+                                       </TableRow>
+                                   ))}
+                               </TableBody>
+                           </Table>
                         </CardContent>
                     </Card>
-                    <div className="space-y-6">
+                     <div className="md:col-span-2 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {valueAddedServices.map((service, index) => (
                              <Card key={index}>
                                 <CardHeader className="p-4">
-                                     <div className="flex items-start gap-4">
-                                        <div className="bg-primary/10 p-2 rounded-full">
+                                     <div className="flex flex-col items-start gap-4">
+                                        <div className="bg-primary/10 p-2 rounded-full self-start">
                                             <service.icon className="w-6 h-6 text-primary" />
                                         </div>
                                         <div>
-                                            <CardTitle className="text-lg">{service.title}</CardTitle>
-                                            <CardDescription>{service.description}</CardDescription>
+                                            <CardTitle className="text-lg leading-tight">{service.title}</CardTitle>
+                                            <CardDescription className="mt-1">{service.description}</CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
