@@ -112,8 +112,8 @@ export default function SuperAdminDashboard() {
                 <TabsContent value="monitoring">
                     <Card className="mt-4">
                         <CardHeader>
-                            <CardTitle>Manajemen Aplikasi Monitoring</CardTitle>
-                            <CardDescription>Kelola pengaturan dan fitur aplikasi monitoring.</CardDescription>
+                            <CardTitle>Monitoring Aplikasi SERENITY LaserTrack</CardTitle>
+                            <CardDescription>Monitoring aplikasi yang digunakan oleh distributor untuk mengelola klinik mereka.</CardDescription>
                         </CardHeader>
                         <CardContent>
                              <p className="text-muted-foreground"> (Fitur sedang dalam pengembangan)</p>
