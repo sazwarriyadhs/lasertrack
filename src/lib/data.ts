@@ -16,6 +16,11 @@ export const devices: Device[] = [
   { id: 'dev-5', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-3', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
   { id: 'dev-6', name: 'Alma Soprano', model: 'Soprano-ICE', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-4', status: 'Operational', lastMaintenance: '2024-07-01' },
   { id: 'dev-7', name: 'BTL Emsculpt', model: 'Emsculpt-Neo', serialNumber: 'SN-Z5A6B7C8', clinicId: 'clinic-5', status: 'Needs Attention', lastMaintenance: '2024-06-18' },
+  { id: 'dev-8', name: 'LightSheer Desire', model: 'LS-2000', serialNumber: 'SN-J4K5L6M7', clinicId: 'clinic-6', status: 'Operational', lastMaintenance: '2024-07-10' },
+  { id: 'dev-9', name: 'Lumenis M22', model: 'M22-ResurFX', serialNumber: 'SN-N8O9P0Q1', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-07-12' },
+  { id: 'dev-10', name: 'Cynosure PicoSure', model: 'PS-300', serialNumber: 'SN-R2S3T4U5', clinicId: 'clinic-8', status: 'Under Maintenance', lastMaintenance: '2024-07-15' },
+  { id: 'dev-11', name: 'Candela GentleMax Pro', model: 'GMP-500', serialNumber: 'SN-V6W7X8Y9', clinicId: 'clinic-9', status: 'Operational', lastMaintenance: '2024-07-18' },
+  { id: 'dev-12', name: 'Solta Fraxel', model: 'Fraxel-Dual', serialNumber: 'SN-Z0A1B2C3', clinicId: 'clinic-10', status: 'Needs Attention', lastMaintenance: '2024-07-20' },
 ];
 
 export const distributorLocations: DistributorLocation[] = [
@@ -23,7 +28,7 @@ export const distributorLocations: DistributorLocation[] = [
   { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 2, lastLogin: '2024-07-21', contact: { email: 'support@eastcoast.com', phone: '987-654-3210' }, avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', address: "456 Supply St, New York, NY" },
   { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15', contact: { email: 'info@southern.com', phone: '555-123-4567' }, avatarUrl: 'https://placehold.co/100x100/EF4444/FFFFFF', address: "789 Southern Blvd, Houston, TX" },
   { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19', contact: { email: 'sales@midwest.com', phone: '222-333-4444' }, avatarUrl: 'https://placehold.co/100x100/6366F1/FFFFFF', address: "101 Midwest Ave, Chicago, IL" },
-  { id: 'dist-5', name: 'PT Regenesis Indonesia', type: 'Distributor', position: { lat: -6.2088, lng: 106.8456 }, applicationStatus: 'Active', licenseDuration: '365 days remaining', clinicCount: 1000, lastLogin: '2024-07-22', contact: { email: 'info@regenesis.co.id', phone: '021-1234-5678' }, avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia' },
+  { id: 'dist-5', name: 'PT Regenesis Indonesia', type: 'Distributor', position: { lat: -6.2088, lng: 106.8456 }, applicationStatus: 'Active', licenseDuration: '365 days remaining', clinicCount: 5, lastLogin: '2024-07-22', contact: { email: 'info@regenesis.co.id', phone: '021-1234-5678' }, avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia' },
 ];
 
 export const distributorClinics: ClinicLocation[] = [
@@ -32,6 +37,11 @@ export const distributorClinics: ClinicLocation[] = [
     { id: 'clinic-3', name: 'Downtown MedSpa', type: 'Clinic', distributorId: 'dist-1', position: { lat: 29.75, lng: -95.37 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@downtown.com', phone: '123-333-4444'}, address: "3 Downtown St, Houston, TX" },
     { id: 'clinic-4', name: 'Windy City Wellness', type: 'Clinic', distributorId: 'dist-2', position: { lat: 41.89, lng: -87.63 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@windy.com', phone: '123-444-5555'}, address: "4 Michigan Ave, Chicago, IL" },
     { id: 'clinic-5', name: 'Golden Gate Health', type: 'Clinic', distributorId: 'dist-1', position: { lat: 37.7749, lng: -122.4194 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@gg.com', phone: '123-555-6666'}, address: "5 Lombard St, San Francisco, CA" },
+    { id: 'clinic-6', name: 'Klinik Dr. Ananda Depok', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.4025, lng: 106.7942 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'}, address: 'Jl. Margonda Raya No. 5, Depok'},
+    { id: 'clinic-7', name: 'Klinik Pratama Divine', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.1751, lng: 106.8650 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'contact@divineclinic.com', phone: '021-888-2222'}, address: 'Jl. Gatot Subroto No. 12, Jakarta'},
+    { id: 'clinic-8', name: 'Klinik Surya Medika', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.1783, lng: 106.6319 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'cs@suryamedika.co.id', phone: '021-999-3333'}, address: 'Jl. Daan Mogot No. 8, Tangerang'},
+    { id: 'clinic-9', name: 'Klinik Meiril Medical Center', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.2383, lng: 106.9756 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'support@meiril.com', phone: '021-111-4444'}, address: 'Jl. Patriot No. 1, Bekasi'},
+    { id: 'clinic-10', name: 'Klinik Baruna', type: 'Clinic', distributorId: 'dist-5', position: { lat: -6.5950, lng: 106.8062 }, avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'}, address: 'Jl. Pajajaran No. 9, Bogor'},
 ];
 
 export const technicianLocations: TechnicianLocation[] = [
@@ -82,6 +92,8 @@ export const maintenanceHistory: MaintenanceRecord[] = [
     { id: 'hist-3', deviceId: 'dev-3', date: '2024-03-20', technicianName: 'Tech John', description: 'Power supply diagnostics. Needs replacement.' },
     { id: 'hist-4', deviceId: 'dev-1', date: '2023-11-10', technicianName: 'Tech Maria', description: 'Emergency shutoff test and general cleaning.' },
     { id: 'hist-5', deviceId: 'dev-7', date: '2024-06-18', technicianName: 'Tech David', description: 'Software glitch resolved.' },
+    { id: 'hist-6', deviceId: 'dev-10', date: '2024-07-15', technicianName: 'Tech Budi', description: 'Initial setup and calibration.' },
+    { id: 'hist-7', deviceId: 'dev-12', date: '2024-07-20', technicianName: 'Tech Citra', description: 'Diagnostic check for error code 501.' },
 ];
 
 export const purchaseHistory: PurchaseHistoryRecord[] = [
@@ -89,6 +101,11 @@ export const purchaseHistory: PurchaseHistoryRecord[] = [
     { id: 'pur-2', deviceId: 'dev-2', deviceName: 'Lumenis M22', purchaseDate: '2022-11-20', distributorName: 'West Coast Distribution', warrantyEndDate: '2024-11-20' },
     { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cynosure PicoSure', purchaseDate: '2023-03-10', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-03-10' },
     { id: 'pur-4', deviceId: 'dev-4', deviceName: 'Candela GentleMax Pro', purchaseDate: '2023-06-01', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-06-01' },
+    { id: 'pur-5', deviceId: 'dev-8', deviceName: 'LightSheer Desire', purchaseDate: '2023-08-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-01' },
+    { id: 'pur-6', deviceId: 'dev-9', deviceName: 'Lumenis M22', purchaseDate: '2023-08-05', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-05' },
+    { id: 'pur-7', deviceId: 'dev-10', deviceName: 'Cynosure PicoSure', purchaseDate: '2023-09-10', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-09-10' },
 ];
+
+    
 
     
