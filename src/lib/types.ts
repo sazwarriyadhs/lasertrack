@@ -48,7 +48,7 @@ export interface ClinicLocation extends Location {
     distributorId: string;
 }
 
-export type HandlingStatus = 'Dalam Perjalanan' | 'Menangani' | 'Selesai';
+export type HandlingStatus = 'Dalam Perjalanan' | 'Menangani' | 'Selesai' | 'Standby';
 
 export interface TechnicianLocation extends Location {
     type: 'Technician';

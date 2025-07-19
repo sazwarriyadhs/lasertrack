@@ -24,12 +24,12 @@ export const distributorLocations: DistributorLocation[] = [
   { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19', contact: { email: 'sales@midwest.com', phone: '222-333-4444' }, avatarUrl: 'https://placehold.co/100x100/6366F1/FFFFFF' },
 ];
 
-const clinicLocations: ClinicLocation[] = [
-    { id: 'clinic-1', name: 'Sunset Aesthetics Clinic', type: 'Clinic', distributorId: 'dist-1', position: { lat: 34.0904, lng: -118.3618 } },
-    { id: 'clinic-2', name: 'Metropolis Laser Center', type: 'Clinic', distributorId: 'dist-2', position: { lat: 40.758, lng: -73.9855 } },
-    { id: 'clinic-3', name: 'Downtown MedSpa', type: 'Clinic', distributorId: 'dist-1', position: { lat: 29.75, lng: -95.37 } },
-    { id: 'clinic-4', name: 'Windy City Wellness', type: 'Clinic', distributorId: 'dist-2', position: { lat: 41.89, lng: -87.63 } },
-    { id: 'clinic-5', name: 'Golden Gate Health', type: 'Clinic', distributorId: 'dist-1', position: { lat: 37.7749, lng: -122.4194 } },
+export const distributorClinics: ClinicLocation[] = [
+    { id: 'clinic-1', name: 'Sunset Aesthetics Clinic', type: 'Clinic', distributorId: 'dist-1', position: { lat: 34.0904, lng: -118.3618 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@sunset.com', phone: '123-111-2222'} },
+    { id: 'clinic-2', name: 'Metropolis Laser Center', type: 'Clinic', distributorId: 'dist-2', position: { lat: 40.758, lng: -73.9855 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@metropolis.com', phone: '123-222-3333'} },
+    { id: 'clinic-3', name: 'Downtown MedSpa', type: 'Clinic', distributorId: 'dist-1', position: { lat: 29.75, lng: -95.37 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@downtown.com', phone: '123-333-4444'} },
+    { id: 'clinic-4', name: 'Windy City Wellness', type: 'Clinic', distributorId: 'dist-2', position: { lat: 41.89, lng: -87.63 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@windy.com', phone: '123-444-5555'} },
+    { id: 'clinic-5', name: 'Golden Gate Health', type: 'Clinic', distributorId: 'dist-1', position: { lat: 37.7749, lng: -122.4194 }, avatarUrl: "https://placehold.co/100x100/16A34A/FFFFFF", contact: { email: 'info@gg.com', phone: '123-555-6666'} },
 ];
 
 export const technicianLocations: TechnicianLocation[] = [
@@ -37,11 +37,12 @@ export const technicianLocations: TechnicianLocation[] = [
     { id: 'tech-2', name: 'Tech John', type: 'Technician', distributorId: 'dist-2', position: { lat: 40.6127, lng: -73.9059 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-2', handledDeviceId: 'dev-3', contact: { email: 'john.d@tech.com', phone: '444-555-6666' }, avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF' },
     { id: 'tech-3', name: 'Tech David', type: 'Technician', distributorId: 'dist-1', position: { lat: 37.8044, lng: -122.2711 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-5', handledDeviceId: 'dev-7', contact: { email: 'dave.s@tech.com', phone: '777-888-9999' }, avatarUrl: 'https://placehold.co/100x100/0EA5E9/FFFFFF' },
     { id: 'tech-4', name: 'Tech Sarah', type: 'Technician', distributorId: 'dist-1', position: { lat: 33.9522, lng: -118.3436 }, dutyStatus: 'Off Duty', contact: { email: 'sarah.w@tech.com', phone: '121-212-3232' }, avatarUrl: 'https://placehold.co/100x100/EC4899/FFFFFF' },
+    { id: 'tech-5', name: 'Tech Mike', type: 'Technician', distributorId: 'dist-1', position: { lat: 34.05, lng: -118.24 }, dutyStatus: 'On Duty', handlingStatus: 'Standby', contact: { email: 'mike.p@tech.com', phone: '321-654-9870' }, avatarUrl: 'https://placehold.co/100x100/14B8A6/FFFFFF' }
 ];
 
 export const locations: Location[] = [
   ...distributorLocations,
-  ...clinicLocations,
+  ...distributorClinics,
   ...technicianLocations,
 ];
 
@@ -60,7 +61,7 @@ export const activityLogs: ActivityLog[] = [
     { id: 'log-3', timestamp: '2024-07-20 09:15 AM', user: 'tech@lasertrack.com', action: 'Started maintenance on device SN-E5F6G7H8' },
     { id: 'log-4', timestamp: '2024-07-20 08:00 AM', user: 'admin@lasertrack.com', action: 'Viewed distributor map' },
     { id: 'log-5', timestamp: '2024-07-19 02:30 PM', user: 'clinic@lasertrack.com', action: 'Viewed device list' },
-    { id: 'log-6', timestamp: '2024-07-19 11:00 AM', user: 'distributor@lasertrack.com', action: 'Added new technician' },
+    { id: 'log-6', timestamp: '2024-07-19 11:00 AM', user: 'distributor@lasertrack.com', action: 'Assigned Tech John to Clinic-2' },
 ];
 
 export const userActivityData: UserActivity[] = [
@@ -78,4 +79,5 @@ export const maintenanceHistory: MaintenanceRecord[] = [
     { id: 'hist-2', deviceId: 'dev-2', date: '2024-04-15', technicianName: 'Tech John', description: 'Replaced optical filter and firmware update.' },
     { id: 'hist-3', deviceId: 'dev-3', date: '2024-03-20', technicianName: 'Tech John', description: 'Power supply diagnostics. Needs replacement.' },
     { id: 'hist-4', deviceId: 'dev-1', date: '2023-11-10', technicianName: 'Tech Maria', description: 'Emergency shutoff test and general cleaning.' },
+    { id: 'hist-5', deviceId: 'dev-7', date: '2024-06-18', technicianName: 'Tech David', description: 'Software glitch resolved.' },
 ];

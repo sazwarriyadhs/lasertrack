@@ -3,16 +3,25 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { MapView } from '@/components/map-view';
-import { locations, devices, distributorLocations } from '@/lib/data';
+import { locations, devices, distributorLocations, technicianLocations as allTechnicians, maintenanceHistory, distributorClinics } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import type { DeviceStatus, DistributorLocation } from '@/lib/types';
+import type { Device, DeviceStatus, DistributorLocation, TechnicianLocation } from '@/lib/types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from '@/components/ui/chart';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { useApp } from '@/context/app-context';
-import { CheckCircle, Clock, XCircle, FileText } from 'lucide-react';
-
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { Button } from '@/components/ui/button';
+import { FileText, PlusCircle, UserPlus, Send } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const statusColors: Record<DeviceStatus, string> = {
     Operational: 'bg-green-500/80',
@@ -20,13 +29,6 @@ const statusColors: Record<DeviceStatus, string> = {
     'Needs Attention': 'bg-orange-500/80',
     Decommissioned: 'bg-gray-500/80',
 };
-
-const licenseStatusInfo: Record<DistributorLocation['applicationStatus'], { icon: React.ElementType, color: string, label: string }> = {
-    'Active': { icon: CheckCircle, color: 'text-green-500', label: 'Lisensi Aktif' },
-    'Inactive': { icon: XCircle, color: 'text-gray-500', label: 'Lisensi Tidak Aktif' },
-    'Expired': { icon: Clock, color: 'text-red-500', label: 'Lisensi Kedaluwarsa' },
-};
-
 
 const clinicUsageData = [
   { name: 'Sunset Aesthetics', usage: 85 },
@@ -43,69 +45,154 @@ const chartConfig = {
   },
 } satisfies import('@/components/ui/chart').ChartConfig;
 
-const LicenseStatusCard = ({ distributor }: { distributor: DistributorLocation }) => {
-    const status = licenseStatusInfo[distributor.applicationStatus];
-    const StatusIcon = status.icon;
-
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-6 w-6" />
-                    <span>Status Lisensi Aplikasi</span>
-                </CardTitle>
-                <CardDescription>Status lisensi SERENITY LaserTrack Anda.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted">
-                    <StatusIcon className={cn("h-10 w-10", status.color)} />
-                    <div>
-                        <p className={cn("font-bold text-lg", status.color)}>{status.label}</p>
-                        <p className="text-sm text-muted-foreground">{distributor.licenseDuration}</p>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-    );
-};
-
 
 export default function DistributorDashboard() {
-    const { user } = useApp();
     const distributorId = 'dist-1'; // Static for now
     const distributorDetails = distributorLocations.find(d => d.id === distributorId);
-    const distributorClinics = locations.filter(loc => loc.type === 'Clinic' && loc.distributorId === distributorId);
-    const distributorTechnicians = locations.filter(loc => loc.type === 'Technician' && loc.distributorId === distributorId);
-    const distributorDevices = devices.filter(device => distributorClinics.some(c => c.id === device.clinicId));
+    const myClinics = distributorClinics.filter(loc => loc.distributorId === distributorId);
+    const myTechnicians = allTechnicians.filter(loc => loc.distributorId === distributorId);
+    const myDevices = devices.filter(device => myClinics.some(c => c.id === device.clinicId));
     
-    const mapLocations = [...distributorClinics, ...distributorTechnicians];
+    const onDutyTechnicians = myTechnicians.filter(t => t.dutyStatus === 'On Duty');
     
     return (
-       <Tabs defaultValue="map" className="space-y-4">
-            <TabsList>
-                <TabsTrigger value="map">Peta & Monitoring</TabsTrigger>
-                <TabsTrigger value="devices">Monitoring Perangkat</TabsTrigger>
-                <TabsTrigger value="reports">Laporan Penggunaan</TabsTrigger>
-                <TabsTrigger value="license">Status Lisensi</TabsTrigger>
+       <Tabs defaultValue="map-technician" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
+                <TabsTrigger value="map-technician">Peta Tim Teknisi</TabsTrigger>
+                <TabsTrigger value="technician-management">Manajemen Tim</TabsTrigger>
+                <TabsTrigger value="technician-assignment">Penugasan Teknisi</TabsTrigger>
+                <TabsTrigger value="device-monitoring">Monitoring Device</TabsTrigger>
+                <TabsTrigger value="reports">Laporan Aktivitas</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="map">
+            <TabsContent value="map-technician">
                  <Card className="h-[75vh]">
                     <CardHeader>
-                        <CardTitle>Peta Klinik & Teknisi</CardTitle>
-                        <CardDescription>Lokasi klinik dan status teknisi Anda. Klik marker teknisi untuk detail.</CardDescription>
+                        <CardTitle>Peta Tim Teknisi</CardTitle>
+                        <CardDescription>Lokasi realtime teknisi yang sedang bertugas. Klik marker untuk detail.</CardDescription>
                     </CardHeader>
                     <CardContent className="h-[calc(100%-6rem)] p-0">
-                        <MapView locations={mapLocations} />
+                        <MapView locations={onDutyTechnicians} />
                     </CardContent>
                 </Card>
             </TabsContent>
 
-            <TabsContent value="devices">
+            <TabsContent value="technician-management">
+                <Card>
+                    <CardHeader className='flex-row items-center justify-between'>
+                        <div>
+                            <CardTitle>Manajemen Tim Teknisi</CardTitle>
+                            <CardDescription>Daftar teknisi, jadwal, dan riwayat pekerjaan.</CardDescription>
+                        </div>
+                        <Button>
+                            <UserPlus className='mr-2' />
+                            Tambah Teknisi
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Nama Teknisi</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead>Tugas Aktif</TableHead>
+                                    <TableHead>Kontak</TableHead>
+                                    <TableHead className="text-right">Riwayat</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {myTechnicians.map((tech) => (
+                                    <TableRow key={tech.id}>
+                                        <TableCell className="font-medium">{tech.name}</TableCell>
+                                        <TableCell>
+                                            <Badge variant={tech.dutyStatus === 'On Duty' ? 'default' : 'secondary'}>{tech.dutyStatus === 'On Duty' ? tech.handlingStatus : 'Off Duty'}</Badge>
+                                        </TableCell>
+                                        <TableCell>{tech.handledDeviceId ? devices.find(d => d.id === tech.handledDeviceId)?.name : 'Standby'}</TableCell>
+                                        <TableCell>{tech.contact.phone}</TableCell>
+                                        <TableCell className="text-right">
+                                             <Button variant="outline" size="sm">Lihat Laporan</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+
+             <TabsContent value="technician-assignment">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Monitoring Perangkat</CardTitle>
-                        <CardDescription>Status semua perangkat di klinik yang Anda kelola.</CardDescription>
+                        <CardTitle>Form Penugasan Teknisi Baru</CardTitle>
+                        <CardDescription>Buat dan kirim tugas baru untuk tim teknisi Anda.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <div className='grid md:grid-cols-2 gap-4'>
+                            <div className="space-y-2">
+                                <Label htmlFor="clinic">Pilih Klinik</Label>
+                                <Select>
+                                    <SelectTrigger id="clinic">
+                                        <SelectValue placeholder="Pilih klinik yang membutuhkan bantuan" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {myClinics.map(clinic => <SelectItem key={clinic.id} value={clinic.id}>{clinic.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="device">Pilih Perangkat</Label>
+                                <Select>
+                                    <SelectTrigger id="device">
+                                        <SelectValue placeholder="Pilih perangkat yang bermasalah" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {myDevices.map(device => <SelectItem key={device.id} value={device.id}>{device.name} - {device.serialNumber}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="technician">Pilih Teknisi</Label>
+                                <Select>
+                                    <SelectTrigger id="technician">
+                                        <SelectValue placeholder="Pilih teknisi yang akan ditugaskan" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {myTechnicians.map(tech => <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="deadline">Deadline</Label>
+                                <Input id="deadline" type="date" />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="description">Deskripsi Masalah</Label>
+                            <Textarea id="description" placeholder="Jelaskan masalah yang terjadi secara singkat..." rows={4}/>
+                        </div>
+
+                        <div className="flex justify-end">
+                            <Button>
+                                <Send className='mr-2' />
+                                Kirim Tugas & Notifikasi
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+
+            <TabsContent value="device-monitoring">
+                <Card>
+                    <CardHeader className='flex-row items-center justify-between'>
+                       <div>
+                            <CardTitle>Monitoring Perangkat</CardTitle>
+                            <CardDescription>Status semua perangkat di klinik yang Anda kelola.</CardDescription>
+                       </div>
+                       <Button>
+                           <PlusCircle className='mr-2' />
+                           Jadwalkan Maintenance
+                       </Button>
                     </CardHeader>
                     <CardContent>
                         <Table>
@@ -113,20 +200,18 @@ export default function DistributorDashboard() {
                                 <TableRow>
                                     <TableHead>Klinik</TableHead>
                                     <TableHead>Device</TableHead>
-                                    <TableHead>Model</TableHead>
                                     <TableHead>Serial No.</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead>Maintenance Terakhir</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {distributorDevices.map((device) => {
-                                    const clinic = distributorClinics.find(c => c.id === device.clinicId);
+                                {myDevices.map((device) => {
+                                    const clinic = myClinics.find(c => c.id === device.clinicId);
                                     return (
                                         <TableRow key={device.id}>
                                             <TableCell className="font-medium">{clinic?.name || 'N/A'}</TableCell>
                                             <TableCell>{device.name}</TableCell>
-                                            <TableCell>{device.model}</TableCell>
                                             <TableCell>{device.serialNumber}</TableCell>
                                             <TableCell>
                                                 <Badge variant="secondary" className="font-normal">
@@ -145,39 +230,69 @@ export default function DistributorDashboard() {
             </TabsContent>
 
             <TabsContent value="reports">
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Laporan Penggunaan Aplikasi oleh Klinik</CardTitle>
-                        <CardDescription>Tingkat aktivitas penggunaan aplikasi oleh masing-masing klinik.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="h-[400px] w-full">
-                         <ChartContainer config={chartConfig} className="w-full h-full">
-                            <BarChart accessibilityLayer data={clinicUsageData} layout="vertical" margin={{ left: 20, right: 20 }}>
-                                <CartesianGrid horizontal={false} />
-                                <YAxis 
-                                    dataKey="name" 
-                                    type="category" 
-                                    tickLine={false}
-                                    axisLine={false}
-                                    tickMargin={10}
-                                    width={120}
-                                />
-                                <XAxis dataKey="usage" type="number" hide />
-                                <ChartTooltip
-                                    cursor={false}
-                                    content={<ChartTooltipContent indicator="dot" />}
-                                />
-                                <Bar dataKey="usage" fill="var(--color-usage)" radius={4}>
-                                </Bar>
-                            </BarChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
+                <div className="grid gap-4 md:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Laporan Penggunaan Aplikasi Klinik</CardTitle>
+                            <CardDescription>Aktivitas penggunaan aplikasi oleh masing-masing klinik.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="h-[400px] w-full">
+                             <ChartContainer config={chartConfig} className="w-full h-full">
+                                <BarChart accessibilityLayer data={clinicUsageData} layout="vertical" margin={{ left: 20, right: 20 }}>
+                                    <CartesianGrid horizontal={false} />
+                                    <YAxis 
+                                        dataKey="name" 
+                                        type="category" 
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickMargin={10}
+                                        width={120}
+                                    />
+                                    <XAxis dataKey="usage" type="number" hide />
+                                    <ChartTooltip
+                                        cursor={false}
+                                        content={<ChartTooltipContent indicator="dot" />}
+                                    />
+                                    <Bar dataKey="usage" fill="var(--color-usage)" radius={4} />
+                                </BarChart>
+                            </ChartContainer>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Laporan Aktivitas Tim Teknisi</CardTitle>
+                            <CardDescription>Rekapitulasi pekerjaan yang diselesaikan oleh teknisi.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                             <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Teknisi</TableHead>
+                                        <TableHead>Tanggal</TableHead>
+                                        <TableHead>Deskripsi</TableHead>
+                                        <TableHead className="text-right">Laporan</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {maintenanceHistory.map((item) => (
+                                        <TableRow key={item.id}>
+                                            <TableCell>{item.technicianName}</TableCell>
+                                            <TableCell>{item.date}</TableCell>
+                                            <TableCell>{item.description}</TableCell>
+                                            <TableCell className="text-right">
+                                                <Button variant="ghost" size="icon">
+                                                    <FileText className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </div>
             </TabsContent>
 
-            <TabsContent value="license">
-                {distributorDetails && <LicenseStatusCard distributor={distributorDetails} />}
-            </TabsContent>
         </Tabs>
     );
 }
