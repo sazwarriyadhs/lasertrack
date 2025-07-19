@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/layout/logo';
-import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound, Building2, UserCheck, Hospital } from 'lucide-react';
+import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound, Building2, UserCheck, Hospital, HardHat } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -81,8 +81,9 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-card px-4 md:px-6">
         <Logo />
         <div className='flex items-center gap-2'>
-             <Button variant="outline" asChild><Link href="/clinic/login">Clinic Login</Link></Button>
-            <Button asChild><Link href="/partner/login">Distributor Login</Link></Button>
+             <Button variant="outline" asChild><Link href="/clinic/login">Clinic</Link></Button>
+             <Button variant="outline" asChild><Link href="/technician/login">Technician</Link></Button>
+            <Button asChild><Link href="/partner/login">Distributor</Link></Button>
         </div>
       </header>
 
@@ -127,21 +128,21 @@ export default function LandingPage() {
                         </p>
                     </div>
                 </div>
-                <div className="mx-auto grid max-w-5xl items-start gap-8 mt-12 sm:grid-cols-2">
+                <div className="mx-auto grid max-w-5xl items-start gap-8 mt-12 sm:grid-cols-2 md:grid-cols-3">
                      <Card className="flex flex-col">
                         <CardHeader>
                            <div className='flex items-center gap-4'>
                                 <Briefcase className='w-8 h-8 text-primary' />
-                                <CardTitle className='text-2xl'>Untuk Distributor</CardTitle>
+                                <CardTitle className='text-2xl'>Distributor</CardTitle>
                            </div>
                             <CardDescription>Optimalkan layanan dan dukungan untuk klinik Anda.</CardDescription>
                         </CardHeader>
                         <CardContent className='flex-1'>
-                             <p>Monitor status perangkat di semua klinik Anda, kelola tim teknisi, dan jadwalkan tugas maintenance dengan mudah. Pastikan klien Anda mendapatkan layanan terbaik.</p>
+                             <p>Monitor status perangkat, kelola tim teknisi, dan jadwalkan tugas maintenance dengan mudah.</p>
                         </CardContent>
                          <div className="p-6 pt-0">
                             <Button asChild className="w-full">
-                                <Link href="/partner/login">Login sebagai Distributor <ArrowRight className='ml-2' /></Link>
+                                <Link href="/partner/login">Login <ArrowRight className='ml-2' /></Link>
                             </Button>
                         </div>
                     </Card>
@@ -149,16 +150,33 @@ export default function LandingPage() {
                         <CardHeader>
                            <div className='flex items-center gap-4'>
                                 <Hospital className='w-8 h-8 text-primary' />
-                                <CardTitle className='text-2xl'>Untuk Klinik</CardTitle>
+                                <CardTitle className='text-2xl'>Klinik</CardTitle>
                            </div>
-                            <CardDescription>Fokus pada perawatan pasien, bukan manajemen alat.</CardDescription>
+                            <CardDescription>Fokus pada pasien, bukan manajemen alat.</CardDescription>
                         </CardHeader>
                         <CardContent className='flex-1'>
-                             <p>Lihat status semua perangkat Anda, minta jadwal perbaikan atau laporkan masalah dengan cepat, dan lacak riwayat maintenance dengan mudah melalui satu portal.</p>
+                             <p>Lihat status perangkat, minta jadwal perbaikan, dan lacak riwayat maintenance dengan mudah.</p>
                         </CardContent>
                          <div className="p-6 pt-0">
                             <Button asChild className="w-full">
-                                <Link href="/clinic/login">Login sebagai Klinik <ArrowRight className='ml-2' /></Link>
+                                <Link href="/clinic/login">Login <ArrowRight className='ml-2' /></Link>
+                            </Button>
+                        </div>
+                    </Card>
+                     <Card className="flex flex-col">
+                        <CardHeader>
+                           <div className='flex items-center gap-4'>
+                                <HardHat className='w-8 h-8 text-primary' />
+                                <CardTitle className='text-2xl'>Teknisi</CardTitle>
+                           </div>
+                            <CardDescription>Akses tugas Anda dan laporkan progres di lapangan.</CardDescription>
+                        </CardHeader>
+                        <CardContent className='flex-1'>
+                             <p>Lihat tugas maintenance yang ditugaskan, isi checklist, dan buat laporan langsung dari perangkat mobile.</p>
+                        </CardContent>
+                         <div className="p-6 pt-0">
+                            <Button asChild className="w-full">
+                                <Link href="/technician/login">Login <ArrowRight className='ml-2' /></Link>
                             </Button>
                         </div>
                     </Card>
