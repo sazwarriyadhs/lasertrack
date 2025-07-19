@@ -4,14 +4,14 @@ import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocat
 export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'superadmin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100', address: '123 Admin Plaza, Suite 100, Capital City', contact: {email: 'superadmin@lasertrack.com', phone: '555-0101'} },
   { id: 'user-2', name: 'PT Regenesis Indonesia', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', distributorId: 'dist-5', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia', contact: {email: 'info@regenesis.co.id', phone: '021-1234-5678'} },
-  { id: 'user-3', name: 'Klinik Baruna', email: 'clinic@lasertrack.com', role: 'Clinic', clinicId: 'clinic-10', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Pajajaran No. 9, Bogor', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'} },
+  { id: 'user-3', name: 'Klinik Baruna', email: 'clinic@lasertrack.com', role: 'Clinic', clinicId: 'clinic-10', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Pajajaran No. 9, Bogor', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'} },
   { id: 'user-4', name: 'Budi Teknisi', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: 'Jl. Teknisi No. 1, Jakarta', contact: {email: 'budi.t@tech.com', phone: '0812-1111-2222'} },
 ];
 
 export const devices: Device[] = [
   { id: 'dev-1', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-A1B2C3D4', clinicId: 'clinic-6', status: 'Operational', lastMaintenance: '2024-05-01' },
   { id: 'dev-2', name: 'Vbeam Perfecta®', model: 'Candela-VB', serialNumber: 'SN-E5F6G7H8', clinicId: 'clinic-6', status: 'Under Maintenance', lastMaintenance: '2024-04-15' },
-  { id: 'dev-3', name: 'Cellec V', model: 'Jeisys-CV', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-7', status: 'Needs Attention', lastMaintenance: '2024-03-20' },
+  { id: 'dev-3', name: 'Cellec V', model: 'Jeisys-CV', serialNumber: 'SN-I9J0K1L2', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-03-20' },
   { id: 'dev-4', name: 'BeautiFill', model: 'Alma-BF', serialNumber: 'SN-M3N4O5P6', clinicId: 'clinic-7', status: 'Operational', lastMaintenance: '2024-06-10' },
   { id: 'dev-5', name: 'BiAxis QS™', model: 'BiAxis-QS', serialNumber: 'SN-Q7R8S9T0', clinicId: 'clinic-8', status: 'Decommissioned', lastMaintenance: '2023-12-01' },
   { id: 'dev-6', name: 'PicoWay®', model: 'Candela-PW', serialNumber: 'SN-V1W2X3Y4', clinicId: 'clinic-9', status: 'Operational', lastMaintenance: '2024-07-01' },
@@ -35,8 +35,8 @@ export const distributorClinics: ClinicLocation[] = [
 
 export const technicianLocations: TechnicianLocation[] = [
     { id: 'tech-1', name: 'Budi Teknisi', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.36, lng: 106.82 }, dutyStatus: 'On Duty', handlingStatus: 'Dalam Perjalanan', destinationClinicId: 'clinic-6', handledDeviceId: 'dev-2', contact: { email: 'budi.t@tech.com', phone: '0812-1111-2222' }, avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: "Jl. Teknisi No. 1, Jakarta" },
-    { id: 'tech-2', name: 'Citra Ayu', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.17, lng: 106.80 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-7', handledDeviceId: 'dev-3', contact: { email: 'citra.a@tech.com', phone: '0812-3333-4444' }, avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: "Jl. Teknisi No. 2, Jakarta" },
-    { id: 'tech-3', name: 'Agus Setiawan', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.24, lng: 106.99 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-10', handledDeviceId: 'dev-7', contact: { email: 'agus.s@tech.com', phone: '0812-5555-6666' }, avatarUrl: 'https://placehold.co/100x100/0EA5E9/FFFFFF', address: "Jl. Teknisi No. 3, Bekasi" },
+    { id: 'tech-2', name: 'Citra Ayu', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.17, lng: 106.80 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-10', handledDeviceId: 'dev-7', contact: { email: 'citra.a@tech.com', phone: '0812-3333-4444' }, avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: "Jl. Teknisi No. 2, Jakarta" },
+    { id: 'tech-3', name: 'Agus Setiawan', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.24, lng: 106.99 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-7', handledDeviceId: 'dev-3', contact: { email: 'agus.s@tech.com', phone: '0812-5555-6666' }, avatarUrl: 'https://placehold.co/100x100/0EA5E9/FFFFFF', address: "Jl. Teknisi No. 3, Bekasi" },
     { id: 'tech-4', name: 'Dewi Lestari', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.59, lng: 106.81 }, dutyStatus: 'Off Duty', contact: { email: 'dewi.l@tech.com', phone: '0812-7777-8888' }, avatarUrl: 'https://placehold.co/100x100/EC4899/FFFFFF', address: "Jl. Teknisi No. 4, Bogor" },
     { id: 'tech-5', name: 'Eko Nugroho', type: 'Technician', distributorId: 'dist-5', position: { lat: -6.18, lng: 106.63 }, dutyStatus: 'On Duty', handlingStatus: 'Standby', contact: { email: 'eko.n@tech.com', phone: '0812-9999-0000' }, avatarUrl: 'https://placehold.co/100x100/14B8A6/FFFFFF', address: "Jl. Teknisi No. 5, Tangerang" }
 ];
@@ -91,9 +91,13 @@ export const purchaseHistory: PurchaseHistoryRecord[] = [
     { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cellec V', purchaseDate: '2023-03-10', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-03-10' },
     { id: 'pur-4', deviceId: 'dev-4', deviceName: 'BeautiFill', purchaseDate: '2023-06-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-06-01' },
     { id: 'pur-5', deviceId: 'dev-6', deviceName: 'PicoWay®', purchaseDate: '2023-08-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-01' },
+    { id: 'pur-6', deviceId: 'dev-7', deviceName: 'Vbeam Perfecta®', purchaseDate: '2023-09-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-09-01' },
 ];
 
     
 
     
 
+
+
+    

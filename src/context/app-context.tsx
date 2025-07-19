@@ -26,14 +26,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
         const savedUserRole = sessionStorage.getItem('userRole');
         if (savedUserRole) {
-            const userToSet = users.find(u => u.role === savedUserRole) || users[0];
-            const savedUserData = sessionStorage.getItem(`user_data_${userToSet.id}`);
-            if (savedUserData) {
-                setCurrentUser(JSON.parse(savedUserData));
-            } else {
-                setCurrentUser(userToSet);
+            const userToSet = users.find(u => u.role === savedUserRole);
+            if(userToSet) {
+              const savedUserData = sessionStorage.getItem(`user_data_${userToSet.id}`);
+              if (savedUserData) {
+                  setCurrentUser(JSON.parse(savedUserData));
+              } else {
+                  setCurrentUser(userToSet);
+              }
+              setIsAuthenticated(true);
             }
-            setIsAuthenticated(true);
         }
     } catch (e) {
         console.warn('Session storage is not available. User state will not be persisted.');
@@ -110,3 +112,5 @@ export function useApp() {
   }
   return context;
 }
+
+    

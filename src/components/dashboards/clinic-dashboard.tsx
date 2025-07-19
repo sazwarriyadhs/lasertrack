@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { devices, maintenanceHistory, technicianLocations, distributorLocations, purchaseHistory } from '@/lib/data';
-import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord } from '@/lib/types';
+import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord, DistributorLocation } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar } from 'lucide-react';
@@ -35,11 +35,16 @@ const handlingStatusInfo = {
     'Dalam Perjalanan': { icon: Route, color: 'text-blue-500' },
     'Menangani': { icon: Wrench, color: 'text-yellow-500' },
     'Selesai': { icon: CheckCircle, color: 'text-green-500' },
+    'Standby': { icon: CheckCircle, color: 'text-gray-500' },
 };
 
 const TechnicianStatusCard = ({ technician, device }: { technician: TechnicianLocation, device: Device }) => {
-    const StatusIcon = handlingStatusInfo[technician.handlingStatus!].icon;
-    const statusColor = handlingStatusInfo[technician.handlingStatus!].color;
+    const statusInfo = technician.handlingStatus ? handlingStatusInfo[technician.handlingStatus] : null;
+
+    if (!statusInfo) return null;
+
+    const StatusIcon = statusInfo.icon;
+    const statusColor = statusInfo.color;
 
     return (
         <Card>
@@ -67,36 +72,35 @@ const TechnicianStatusCard = ({ technician, device }: { technician: TechnicianLo
     )
 }
 
-const ContactCard = () => {
-    const distributor = distributorLocations.find(d => d.id === 'dist-5');
-    const technicians = technicianLocations.filter(t => t.distributorId === 'dist-5');
-
+const ContactCard = ({distributor, technicians}: {distributor: DistributorLocation | undefined, technicians: TechnicianLocation[]}) => {
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Informasi Kontak</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div>
-                    <h3 className="font-semibold mb-2">Distributor Anda</h3>
-                    <div className="flex items-center gap-4">
-                         <Avatar>
-                            <AvatarImage src={distributor?.avatarUrl} alt={distributor?.name} data-ai-hint="company logo" />
-                            <AvatarFallback>{distributor?.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                             <p className="font-medium">{distributor?.name}</p>
-                             <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
-                                <Mail className="h-4 w-4" />
-                                <span>{distributor?.contact.email}</span>
-                             </div>
-                             <div className="text-sm text-muted-foreground flex items-center gap-2">
-                                <Phone className="h-4 w-4" />
-                                <span>{distributor?.contact.phone}</span>
-                             </div>
+                 {distributor && (
+                    <div>
+                        <h3 className="font-semibold mb-2">Distributor Anda</h3>
+                        <div className="flex items-center gap-4">
+                            <Avatar>
+                                <AvatarImage src={distributor.avatarUrl} alt={distributor.name} data-ai-hint="company logo" />
+                                <AvatarFallback>{distributor.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-medium">{distributor.name}</p>
+                                <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                                    <Mail className="h-4 w-4" />
+                                    <span>{distributor.contact.email}</span>
+                                </div>
+                                <div className="text-sm text-muted-foreground flex items-center gap-2">
+                                    <Phone className="h-4 w-4" />
+                                    <span>{distributor.contact.phone}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                 )}
                  <div>
                     <h3 className="font-semibold mb-2">Teknisi Tersedia</h3>
                      {technicians.map(technician => (
@@ -118,6 +122,7 @@ const ContactCard = () => {
                             </div>
                         </div>
                     ))}
+                    {technicians.length === 0 && <p className="text-sm text-muted-foreground">Tidak ada teknisi yang tersedia saat ini.</p>}
                 </div>
             </CardContent>
         </Card>
@@ -201,11 +206,13 @@ export default function ClinicDashboard() {
     const { user } = useApp();
     const clinicId = user.clinicId; 
     const clinicDevices = devices.filter(d => d.clinicId === clinicId);
+    const myDistributor = distributorLocations.find(d => d.id === user.distributorId);
+    const myTechnicians = technicianLocations.filter(t => t.distributorId === user.distributorId);
     const clinicMaintenanceHistory = maintenanceHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
     const clinicPurchaseHistory = purchaseHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
     
     const activeMaintenanceDevice = clinicDevices.find(d => d.status === 'Under Maintenance' || d.status === 'Needs Attention');
-    const assignedTechnician = activeMaintenanceDevice ? technicianLocations.find(t => t.handledDeviceId === activeMaintenanceDevice.id) : undefined;
+    const assignedTechnician = activeMaintenanceDevice ? myTechnicians.find(t => t.handledDeviceId === activeMaintenanceDevice.id) : undefined;
 
     return (
         <div className="grid gap-6 lg:grid-cols-3">
@@ -241,6 +248,13 @@ export default function ClinicDashboard() {
                                         <TableCell>{device.lastMaintenance}</TableCell>
                                     </TableRow>
                                 ))}
+                                {clinicDevices.length === 0 && (
+                                     <TableRow>
+                                        <TableCell colSpan={5} className="text-center">
+                                            Belum ada perangkat terdaftar.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>
@@ -272,13 +286,20 @@ export default function ClinicDashboard() {
                                         </TableRow>
                                     )
                                 })}
+                                 {clinicMaintenanceHistory.length === 0 && (
+                                     <TableRow>
+                                        <TableCell colSpan={4} className="text-center">
+                                            Tidak ada riwayat maintenance.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>
                 </Card>
                  <Card>
                     <CardHeader>
-                        <CardTitle>Riwayat Pembelian Perangkat</CardTitle>
+                        <CardTitle>Riwayat Pembelian & Garansi</CardTitle>
                         <CardDescription>Informasi pembelian dan garansi untuk perangkat Anda.</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -305,6 +326,13 @@ export default function ClinicDashboard() {
                                         </TableCell>
                                     </TableRow>
                                 ))}
+                                {clinicPurchaseHistory.length === 0 && (
+                                     <TableRow>
+                                        <TableCell colSpan={4} className="text-center">
+                                            Tidak ada riwayat pembelian.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>
@@ -315,8 +343,10 @@ export default function ClinicDashboard() {
                     <TechnicianStatusCard technician={assignedTechnician} device={activeMaintenanceDevice} />
                 )}
                 <MaintenanceRequestForm devices={clinicDevices} />
-                <ContactCard />
+                <ContactCard distributor={myDistributor} technicians={myTechnicians} />
             </div>
         </div>
     );
 }
+
+    
