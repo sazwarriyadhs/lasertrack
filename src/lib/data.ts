@@ -23,6 +23,7 @@ export const distributorLocations: DistributorLocation[] = [
   { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 2, lastLogin: '2024-07-21', contact: { email: 'support@eastcoast.com', phone: '987-654-3210' }, avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', address: "456 Supply St, New York, NY" },
   { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15', contact: { email: 'info@southern.com', phone: '555-123-4567' }, avatarUrl: 'https://placehold.co/100x100/EF4444/FFFFFF', address: "789 Southern Blvd, Houston, TX" },
   { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19', contact: { email: 'sales@midwest.com', phone: '222-333-4444' }, avatarUrl: 'https://placehold.co/100x100/6366F1/FFFFFF', address: "101 Midwest Ave, Chicago, IL" },
+  { id: 'dist-5', name: 'PT Regenesis Indonesia', type: 'Distributor', position: { lat: -6.2088, lng: 106.8456 }, applicationStatus: 'Active', licenseDuration: '365 days remaining', clinicCount: 1000, lastLogin: '2024-07-22', contact: { email: 'info@regenesis.co.id', phone: '021-1234-5678' }, avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia' },
 ];
 
 export const distributorClinics: ClinicLocation[] = [
@@ -89,3 +90,5 @@ export const purchaseHistory: PurchaseHistoryRecord[] = [
     { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cynosure PicoSure', purchaseDate: '2023-03-10', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-03-10' },
     { id: 'pur-4', deviceId: 'dev-4', deviceName: 'Candela GentleMax Pro', purchaseDate: '2023-06-01', distributorName: 'East Coast Supplies', warrantyEndDate: '2025-06-01' },
 ];
+
+    
