@@ -116,7 +116,17 @@ export default function SuperAdminDashboard() {
                             <CardDescription>Monitoring aplikasi yang digunakan oleh distributor untuk mengelola klinik mereka.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                             <p className="text-muted-foreground"> (Fitur sedang dalam pengembangan)</p>
+                             <div className="space-y-4 text-sm">
+                                <div>
+                                    <h3 className="font-semibold text-card-foreground">Lisensi Aplikasi Tahunan</h3>
+                                    <p className="text-muted-foreground">Setiap distributor harus memperpanjang lisensi penggunaan aplikasi SERENITY LaserTrack setiap satu tahun sekali untuk tetap mendapatkan akses penuh.</p>
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-card-foreground">Layanan Dukungan Distributor</h3>
+                                    <p className="text-muted-foreground">Layanan mencakup servis maintenance dan troubleshooting untuk memastikan kelancaran operasional aplikasi di tingkat distributor.</p>
+                                </div>
+                                <p className="text-muted-foreground pt-4"> (Fitur monitoring terperinci sedang dalam pengembangan)</p>
+                             </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
