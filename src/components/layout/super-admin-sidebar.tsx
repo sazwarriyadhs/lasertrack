@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bot, Map, Users, Settings } from 'lucide-react';
+import { Bot, Map, BarChart2, Users, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -13,9 +13,10 @@ const Logo = () => (
 );
 
 const navItems = [
-    { href: '#map', label: 'Peta Distributor', icon: Map },
-    { href: '#management', label: 'Manajemen Distributor', icon: Users },
-    { href: '#monitoring', label: 'Monitoring Aplikasi', icon: Settings },
+    { href: '#map-section', label: 'Peta', icon: Map },
+    { href: '#stats-section', label: 'Statistik', icon: BarChart2 },
+    { href: '#distributor-management-section', label: 'Manajemen Distributor', icon: Users },
+    { href: '#activity-logs-section', label: 'Log Aktivitas', icon: FileText },
 ]
 
 export function SuperAdminSidebar() {
@@ -26,6 +27,7 @@ export function SuperAdminSidebar() {
             <div className="flex h-full flex-col">
                 <Logo />
                 <nav className="flex-1 px-4 py-4">
+                    <p className="px-2 py-1 text-xs font-semibold text-muted-foreground">Dashboard</p>
                     <ul className="space-y-1">
                         {navItems.map((item) => (
                             <li key={item.href}>

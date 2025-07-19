@@ -10,14 +10,12 @@ import { fromLonLat } from 'ol/proj';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { Style, Circle, Fill, Stroke } from 'ol/style';
-import type { DistributorLocation } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { Hospital, CalendarDays } from 'lucide-react';
+import type { Location, DistributorLocation } from '@/lib/types';
 
-const COLORS = {
+const COLORS: Record<Location['type'], string> = {
     Distributor: 'rgba(59, 130, 246, 0.9)', // blue-500
+    Clinic: 'rgba(16, 185, 129, 0.9)', // emerald-500
+    Technician: 'rgba(249, 115, 22, 0.9)', // orange-500
 };
 
 const statusBadge: Record<DistributorLocation['applicationStatus'], string> = {
@@ -26,7 +24,7 @@ const statusBadge: Record<DistributorLocation['applicationStatus'], string> = {
     'Expired': 'bg-red-500/80',
 }
 
-export function MapView({ locations }: { locations: DistributorLocation[] }) {
+export function MapView({ locations }: { locations: Location[] }) {
     const mapRef = useRef<HTMLDivElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +63,7 @@ export function MapView({ locations }: { locations: DistributorLocation[] }) {
             });
             feature.setStyle(new Style({
                 image: new Circle({
-                    radius: 8,
+                    radius: loc.type === 'Distributor' ? 8 : 6,
                     fill: new Fill({ color: COLORS[loc.type] }),
                     stroke: new Stroke({ color: '#fff', width: 2 })
                 })
@@ -79,7 +77,6 @@ export function MapView({ locations }: { locations: DistributorLocation[] }) {
 
         const vectorLayer = new VectorLayer({
             source: vectorSource,
-            
         });
 
         const map = new Map({
@@ -104,34 +101,37 @@ export function MapView({ locations }: { locations: DistributorLocation[] }) {
             });
             const content = popupContainer.querySelector('.popup-content') as HTMLElement;
             if (feature) {
-                const props = feature.getProperties() as DistributorLocation;
+                const props = feature.getProperties();
                 const coordinates = (feature.getGeometry() as Point).getCoordinates();
                 
-                let statusColor = statusBadge[props.applicationStatus];
+                let popupContent = `<h3 class="font-bold text-lg">${props.name}</h3>`;
+                popupContent += `<p class="text-sm text-muted-foreground">${props.type}</p>`;
 
-                content.innerHTML = `
-                    <div class="p-1">
-                        <h3 class="font-bold text-lg">${props.name}</h3>
+                if (props.type === 'Distributor') {
+                    const distProps = props as DistributorLocation;
+                    let statusColor = statusBadge[distProps.applicationStatus];
+                    popupContent += `
                         <div class="text-sm mt-2 space-y-2">
                              <div class="flex items-center gap-2">
                                 <p class="font-semibold">Status:</p>
                                 <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
                                     <span class="h-2 w-2 rounded-full mr-2 ${statusColor}"></span>
-                                    ${props.applicationStatus}
+                                    ${distProps.applicationStatus}
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
-                                <span>${props.licenseDuration}</span>
+                                <span>${distProps.licenseDuration}</span>
                             </div>
                              <div class="flex items-center gap-2 text-muted-foreground">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hospital"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 10h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/><path d="M10 6h4"/></svg>
-                                <span>Manages ${props.clinicCount} clinics</span>
+                                <span>Manages ${distProps.clinicCount} clinics</span>
                             </div>
                         </div>
-                    </div>
-                `;
-
+                    `;
+                }
+                
+                content.innerHTML = `<div class="p-1">${popupContent}</div>`;
                 overlay.setPosition(coordinates);
             } else {
                 overlay.setPosition(undefined);

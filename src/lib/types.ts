@@ -12,7 +12,7 @@ export type DeviceStatus = 'Operational' | 'Under Maintenance' | 'Decommissioned
 
 export interface Device {
   id: string;
-  name: string;
+  name:string;
   model: string;
   serialNumber: string;
   clinicId: string;
@@ -32,10 +32,24 @@ export interface DistributorLocation extends Location {
   applicationStatus: 'Active' | 'Inactive' | 'Expired';
   licenseDuration: string;
   clinicCount: number;
+  lastLogin: string;
 }
 
 export interface MaintenanceChecklistItem {
   id: string;
   label: string;
   checked: boolean;
+}
+
+export interface ActivityLog {
+    id: string;
+    timestamp: string;
+    user: string;
+    action: string;
+}
+
+export interface UserActivity {
+    date: string;
+    logins: number;
+    activities: number;
 }
