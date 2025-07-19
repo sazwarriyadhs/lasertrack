@@ -37,7 +37,7 @@ const newsItems = [
     },
 ]
 
-const featuredProductsData = [
+const featuredProductsRegenesis = [
   { product: 'Laser PicoWay®', brand: 'Candela PicoWay®', indication: 'Pigmentasi, penghapusan tato, melasma, peremajaan kulit.' },
   { product: 'Vbeam Perfecta®', brand: 'Candela Vbeam', indication: 'Kemerahan, rosacea, lesi vaskular, flek hitam, bekas jerawat.' },
   { product: 'BiAxis QS™', brand: 'BiAxis QS', indication: 'Pigmentasi, tato, stimulasi kolagen, penghapusan noda.' },
@@ -45,12 +45,20 @@ const featuredProductsData = [
   { product: 'BeautiFill', brand: 'LipoLife / Alma Lasers', indication: 'Body contouring & tightening melalui diode laser 1470 nm.' },
 ];
 
-const valueAddedServices = [
+const valueAddedServicesRegenesis = [
     { icon: BrainCircuit, title: "Pelatihan & Edukasi", description: "Pelatihan teknis dan product knowledge dari tingkat dasar hingga mahir." },
     { icon: UsersRound, title: "Webinar & Training", description: "Sesi bersama Key Opinion Leader (KOL) nasional dan internasional." },
     { icon: Wrench, title: "Servis & Pemeliharaan", description: "Dukungan teknis, suku cadang asli, dan garansi resmi." },
     { icon: Package, title: "Program Second-Life", description: "Revitalisasi perangkat bekas dengan kualitas terjamin seperti baru." },
 ];
+
+const featuredProductsInnomed = [
+    { product: 'Transcranial Pulse Stimulation (TPS®)', brand: 'STORZ Medical – Neurolith®', indication: 'Terapi non-invasif untuk Alzheimer & demensia; stimulasi neuroplastisitas.' },
+    { product: 'Phototherapy & Photobiomodulation', brand: 'Daavlin – Series 3 Neolux', indication: 'Terapi fototerapi untuk vitiligo, eczema, dan kondisi kulit lainnya.' },
+    { product: 'Skin Analysis & Imaging System', brand: 'Canfield – VISIA®', indication: 'Analisis kulit profesional untuk pigmentasi, pori, dan tekstur.' },
+    { product: 'CO₂ Fractional Laser', brand: 'Lasering – Slim Evolution II', indication: 'Resurfacing kulit, reduksi kerutan dan bekas luka.' },
+];
+
 
 export default function LandingPage() {
   return (
@@ -125,7 +133,7 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section id="featured-partner" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+        <section id="featured-partner-1" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
             <div className="container px-4 md:px-6">
                  <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">
@@ -139,7 +147,7 @@ export default function LandingPage() {
                 <div className="mx-auto grid max-w-5xl gap-8 mt-12 md:grid-cols-2">
                     <Card className="md:col-span-2">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Award className="text-primary"/>Produk & Alat Medis Unggulan</CardTitle>
+                            <CardTitle className="flex items-center gap-2"><Award className="text-primary"/>Produk & Alat Medis</CardTitle>
                         </CardHeader>
                         <CardContent>
                            <Table>
@@ -151,7 +159,7 @@ export default function LandingPage() {
                                    </TableRow>
                                </TableHeader>
                                <TableBody>
-                                   {featuredProductsData.map((product, index) => (
+                                   {featuredProductsRegenesis.map((product, index) => (
                                        <TableRow key={index}>
                                            <TableCell className="font-medium">{product.product}</TableCell>
                                            <TableCell>{product.brand}</TableCell>
@@ -163,7 +171,7 @@ export default function LandingPage() {
                         </CardContent>
                     </Card>
                      <div className="md:col-span-2 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {valueAddedServices.map((service, index) => (
+                        {valueAddedServicesRegenesis.map((service, index) => (
                              <Card key={index}>
                                 <CardHeader className="p-4">
                                      <div className="flex flex-col items-start gap-4">
@@ -183,7 +191,48 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section id="news" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="featured-partner-2" className="w-full py-12 md:py-24 lg:py-32">
+            <div className="container px-4 md:px-6">
+                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div className="space-y-2">
+                        <span className="text-primary font-semibold">Mitra Unggulan</span>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">PT Innomed Jaya Utama</h2>
+                        <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                          Distributor terkemuka untuk peralatan estetika dan medis canggih di Asia.
+                        </p>
+                    </div>
+                </div>
+                <div className="mx-auto grid max-w-5xl gap-8 mt-12">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Award className="text-primary"/>Perangkat & Teknologi Unggulan</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                           <Table>
+                               <TableHeader>
+                                   <TableRow>
+                                       <TableHead>Produk / Teknologi</TableHead>
+                                       <TableHead>Merk / Brand</TableHead>
+                                       <TableHead>Indikasi Utama</TableHead>
+                                   </TableRow>
+                               </TableHeader>
+                               <TableBody>
+                                   {featuredProductsInnomed.map((product, index) => (
+                                       <TableRow key={index}>
+                                           <TableCell className="font-medium">{product.product}</TableCell>
+                                           <TableCell>{product.brand}</TableCell>
+                                           <TableCell className="text-muted-foreground">{product.indication}</TableCell>
+                                       </TableRow>
+                                   ))}
+                               </TableBody>
+                           </Table>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Berita &amp; Pembaruan Teknologi</h2>
@@ -222,3 +271,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
