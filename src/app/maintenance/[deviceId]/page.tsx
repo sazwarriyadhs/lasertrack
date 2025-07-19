@@ -3,7 +3,8 @@ import { devices } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Bot } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { Logo } from '@/components/layout/logo';
 
 export default function MaintenancePage({ params }: { params: { deviceId: string } }) {
     const device = devices.find(d => d.id === params.deviceId);
@@ -15,10 +16,7 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
     return (
         <div className="flex min-h-screen w-full flex-col bg-background">
             <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
-                <div className="flex items-center gap-2">
-                    <Bot className="h-8 w-8 text-primary" />
-                    <h1 className="text-xl font-bold">LaserTrack Lite</h1>
-                </div>
+                <Logo />
                 <nav className="flex-1">
                     <Button asChild variant="outline">
                         <Link href="/">

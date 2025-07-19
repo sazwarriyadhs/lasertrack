@@ -1,16 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { Bot, LayoutDashboard, Map, BarChart2, BadgeCheck, FileText, Wrench, Hospital, Users, AreaChart, Settings, LifeBuoy } from 'lucide-react';
+import { LayoutDashboard, Map, BarChart2, BadgeCheck, FileText, Wrench, Users, AreaChart, Settings, LifeBuoy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
+import { Logo } from '@/components/layout/logo';
 
-const Logo = () => (
-    <div className="flex items-center gap-2 px-4 h-16 border-b">
-        <Bot className="h-8 w-8 text-primary" />
-        <h1 className="text-xl font-bold">LaserTrack Lite</h1>
-    </div>
-);
 
 const superAdminNavItems = [
     { href: '#map-section', label: 'Peta', icon: Map },
@@ -62,7 +57,9 @@ export function Sidebar() {
     return (
         <aside className="hidden lg:block w-64 flex-shrink-0 border-r bg-card">
             <div className="flex h-full flex-col">
-                <Logo />
+                <div className="border-b">
+                    <Logo />
+                </div>
                 <nav className="flex-1 px-4 py-4">
                      <p className="px-2 py-1 text-xs font-semibold text-muted-foreground">{user.role} Menu</p>
                     <ul className="space-y-1">
