@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, HardHat, Activity, BadgeCheck, Users } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -13,17 +13,15 @@ const superAdminNavItems = [
 
 const distributorNavItems = [
     { 
-        label: 'Monitoring', 
-        icon: LayoutDashboard,
-        subItems: [
-            { href: '/dashboard', label: 'Peta Teknisi' },
-            { href: '/dashboard/device-monitoring', label: 'Monitoring Perangkat' },
-        ]
+        href: '/dashboard',
+        label: 'Peta Klinik', 
+        icon: Map,
     },
     { 
-        label: 'Manajemen Tim', 
+        label: 'Manajemen', 
         icon: HardHat,
         subItems: [
+            { href: '/dashboard/device-monitoring', label: 'Monitoring Perangkat' },
             { href: '/dashboard/technician-management', label: 'Daftar Teknisi' },
             { href: '/dashboard/technician-assignment', label: 'Penugasan Baru' },
         ]

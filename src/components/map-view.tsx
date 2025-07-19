@@ -10,7 +10,7 @@ import { fromLonLat } from 'ol/proj';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { Style, Circle, Fill, Stroke } from 'ol/style';
-import type { Location, DistributorLocation, TechnicianLocation } from '@/lib/types';
+import type { Location, DistributorLocation, TechnicianLocation, ClinicLocation, Device } from '@/lib/types';
 import { locations as allLocations, devices as allDevices } from '@/lib/data';
 
 const COLORS: Record<Location['type'], string> = {
@@ -25,14 +25,22 @@ const statusBadge: Record<DistributorLocation['applicationStatus'], string> = {
     'Expired': 'bg-red-500/80',
 }
 
+const deviceStatusColors: Record<Device['status'], string> = {
+    Operational: 'text-green-600',
+    'Under Maintenance': 'text-yellow-600',
+    'Needs Attention': 'text-orange-600',
+    Decommissioned: 'text-gray-500',
+};
+
 const handlingStatusBadge: Record<TechnicianLocation['handlingStatus'] | string, string> = {
     'Dalam Perjalanan': 'bg-blue-500/80',
     'Menangani': 'bg-yellow-500/80',
     'Selesai': 'bg-green-500/80',
+    'Standby': 'bg-gray-500/80'
 };
 
 
-export function MapView({ locations }: { locations: Location[] }) {
+export function MapView({ locations }: { locations: (Location & { devices?: Device[] })[] }) {
     const mapRef = useRef<HTMLDivElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
@@ -113,7 +121,7 @@ export function MapView({ locations }: { locations: Location[] }) {
             overlays: [overlay],
             view: new View({
                 center: center,
-                zoom: 4,
+                zoom: locations.length > 1 ? 4 : 10,
             }),
             controls: [],
         });
@@ -123,7 +131,7 @@ export function MapView({ locations }: { locations: Location[] }) {
                 return feature;
             });
             const content = popupContainer.querySelector('.popup-content') as HTMLElement;
-            if (feature) {
+            if (feature && content) {
                 const props = feature.getProperties();
                 const coordinates = (feature.getGeometry() as Point).getCoordinates();
                 
@@ -152,6 +160,24 @@ export function MapView({ locations }: { locations: Location[] }) {
                             </div>
                         </div>
                     `;
+                } else if (props.type === 'Clinic') {
+                    const clinicProps = props as (ClinicLocation & { devices: Device[] });
+                    popupContent += `<hr class="my-2">`;
+                    popupContent += `<h4 class="font-semibold text-sm mb-1">Perangkat (${clinicProps.devices.length})</h4>`;
+                    if (clinicProps.devices.length > 0) {
+                        popupContent += `<ul class="text-xs space-y-1">`;
+                        clinicProps.devices.forEach(device => {
+                            const statusColor = deviceStatusColors[device.status];
+                            popupContent += `
+                                <li>
+                                    <p class="font-medium">${device.name} <span class="text-muted-foreground">(SN: ${device.serialNumber})</span></p>
+                                    <p class="${statusColor}">${device.status}</p>
+                                </li>`;
+                        });
+                        popupContent += `</ul>`;
+                    } else {
+                        popupContent += `<p class="text-xs text-muted-foreground">Belum ada perangkat terdaftar.</p>`;
+                    }
                 } else if (props.type === 'Technician') {
                     const techProps = props as TechnicianLocation;
                     const destinationClinic = allLocations.find(l => l.id === techProps.destinationClinicId);
