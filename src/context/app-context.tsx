@@ -17,7 +17,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User>(users[0]);
+  const [currentUser, setCurrentUser] = useState<User>(users.find(u => u.role === 'Technician')!); // Default non-auth user
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -64,9 +64,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     setLoading(true);
+    const nonAuthUser = users.find(u => u.role === 'Technician')!;
+    setCurrentUser(nonAuthUser);
     setIsAuthenticated(false);
     try {
         sessionStorage.removeItem('userRole');
+        // also remove specific user data
+        users.forEach(user => sessionStorage.removeItem(`user_data_${user.id}`));
     } catch (e) {
          console.warn('Session storage is not available.');
     }
