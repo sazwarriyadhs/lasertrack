@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -21,6 +21,7 @@ const distributorNavItems = [
         label: 'Manajemen', 
         icon: HardHat,
         subItems: [
+            { href: '/dashboard/clinic-management', label: 'Daftar Klinik' },
             { href: '/dashboard/device-monitoring', label: 'Monitoring Perangkat' },
             { href: '/dashboard/technician-management', label: 'Daftar Teknisi' },
             { href: '/dashboard/technician-assignment', label: 'Penugasan Baru' },
