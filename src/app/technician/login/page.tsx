@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function TechnicianLoginPage() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function TechnicianLoginPage() {
         <div className="mb-6 flex justify-center">
           <Logo />
         </div>
-        <Card className="shadow-lg">
+        <Card>
             <CardHeader className="text-center pb-4">
                 <CardTitle className="text-2xl">Portal Teknisi</CardTitle>
                 <CardDescription>Masuk untuk mengakses jadwal dan laporan Anda.</CardDescription>
@@ -88,12 +89,9 @@ export default function TechnicianLoginPage() {
                     <div className="flex items-center justify-between">
                          <div className="flex items-center space-x-2">
                             <Checkbox id="remember-me" />
-                            <label
-                                htmlFor="remember-me"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
+                            <Label htmlFor="remember-me" className="font-normal">
                                 Ingat saya
-                            </label>
+                            </Label>
                         </div>
                         <Link href="#" className="text-sm text-primary hover:underline">
                             Lupa Password?
@@ -104,11 +102,12 @@ export default function TechnicianLoginPage() {
                     </Button>
                 </form>
             </CardContent>
-            <CardFooter className="flex-col gap-4 pt-4">
+            <Separator className="my-2" />
+            <CardFooter className="flex-col gap-3 pt-4">
                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary hover:underline">
                     Butuh Bantuan? Hubungi Admin
                 </Link>
-                <p className="text-xs text-muted-foreground pt-4">© 2024 LaserTrack Lite</p>
+                <p className="text-xs text-muted-foreground pt-2">© 2024 LaserTrack Lite</p>
             </CardFooter>
         </Card>
       </div>
