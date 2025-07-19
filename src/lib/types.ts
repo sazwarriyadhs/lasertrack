@@ -103,3 +103,16 @@ export interface PurchaseHistoryRecord {
     distributorName: string;
     warrantyEndDate: string;
 }
+
+export interface ChatConversation {
+    id: string;
+    participantIds: string[];
+}
+
+export interface ChatMessage {
+    id: string;
+    conversationId: string;
+    senderId: string;
+    timestamp: string;
+    text: string;
+}

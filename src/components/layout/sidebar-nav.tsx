@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route, Wrench, FileText, Send } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route, Wrench, FileText, Send, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 const superAdminNavItems = [
     { href: '/dashboard', label: 'Peta Distributor', icon: Map },
     { href: '/dashboard#distributor-management-section', label: 'Manajemen Distributor', icon: Users },
+    { href: '/dashboard/chat', label: 'Pesan', icon: MessageSquare },
 ];
 
 const distributorNavItems = [
@@ -30,6 +31,7 @@ const distributorNavItems = [
         ]
     },
     { href: '/dashboard/reports', label: 'Laporan', icon: Activity },
+    { href: '/dashboard/chat', label: 'Pesan', icon: MessageSquare },
 ];
 
 const clinicNavItems = [
