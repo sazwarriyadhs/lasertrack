@@ -181,7 +181,7 @@ export default function TechnicianManagementPage() {
                                                 <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                                                 <AlertDialogDescription>
                                                     Tindakan ini tidak dapat diurungkan. Ini akan menghapus data teknisi secara permanen.
-                                                </Description>
+                                                </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                 <AlertDialogCancel>Batal</AlertDialogCancel>
