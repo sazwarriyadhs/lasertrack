@@ -1,14 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { useApp } from '@/context/app-context';
-import { LayoutDashboard, Map, HardHat, Activity, BadgeCheck } from 'lucide-react';
+import { LayoutDashboard, Map, HardHat, Activity, BadgeCheck, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const superAdminNavItems = [
     { href: '/dashboard', label: 'Peta Distributor', icon: Map },
-    { href: '/dashboard#distributor-management-section', label: 'Manajemen Distributor', icon: BadgeCheck },
+    { href: '/dashboard#distributor-management-section', label: 'Manajemen Distributor', icon: Users },
 ];
 
 const distributorNavItems = [
@@ -44,7 +44,7 @@ export function SidebarNav() {
     const pathname = usePathname();
 
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        if (pathname === '/dashboard' && href.includes('#')) {
+        if (href.includes('#')) {
             e.preventDefault();
             const targetId = href.split('#')[1];
             const targetElement = document.getElementById(targetId);
@@ -67,7 +67,7 @@ export function SidebarNav() {
                      <ul className="space-y-1">
                         {navItems.map((item) => (
                             <li key={item.label}>
-                                <Button asChild variant={pathname === item.href ? 'secondary' : 'ghost'} className="w-full justify-start gap-2">
+                                <Button asChild variant={pathname === item.href || (item.href.includes('#') && pathname==='/dashboard') ? 'secondary' : 'ghost'} className="w-full justify-start gap-2">
                                     <Link href={item.href} onClick={(e) => handleNavClick(e, item.href)}>
                                         <item.icon className="h-5 w-5" />
                                         {item.label}
@@ -155,5 +155,5 @@ export function SidebarNav() {
         }
     }
 
-    return <>{renderNavItems()}</>;
+    return <nav className='px-2'>{renderNavItems()}</nav>;
 }
