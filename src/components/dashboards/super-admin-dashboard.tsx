@@ -197,7 +197,7 @@ export default function SuperAdminDashboard() {
                                                     <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                                                     <AlertDialogDescription>
                                                         Tindakan ini tidak dapat diurungkan. Ini akan menghapus data distributor secara permanen.
-                                                    </Description>
+                                                    </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
                                                     <AlertDialogCancel>Batal</AlertDialogCancel>
