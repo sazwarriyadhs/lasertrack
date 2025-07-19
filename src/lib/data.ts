@@ -2,7 +2,7 @@ import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocat
 
 export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'admin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100' },
-  { id: 'user-2', name: 'Distributor User', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100' },
+  { id: 'user-2', name: 'Distributor User', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100', distributorId: 'dist-1' },
   { id: 'user-3', name: 'Clinic User', email: 'clinic@lasertrack.com', role: 'Clinic', avatarUrl: 'https://placehold.co/100x100' },
   { id: 'user-4', name: 'Technician User', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100' },
 ];

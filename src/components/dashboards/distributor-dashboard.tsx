@@ -1,5 +1,13 @@
 'use client';
 
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useToast } from '@/hooks/use-toast';
+import { useApp } from '@/context/app-context';
+import { generateWorkOrderAction } from '@/app/actions';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { MapView } from '@/components/map-view';
@@ -11,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { Button } from '@/components/ui/button';
-import { FileText, PlusCircle, UserPlus, Send } from 'lucide-react';
+import { FileText, PlusCircle, UserPlus, Send, Loader2 } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -22,6 +30,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const statusColors: Record<DeviceStatus, string> = {
     Operational: 'bg-green-500/80',
@@ -45,8 +54,20 @@ const chartConfig = {
   },
 } satisfies import('@/components/ui/chart').ChartConfig;
 
+const assignmentFormSchema = z.object({
+    clinicId: z.string().min(1, { message: 'Klinik harus dipilih.' }),
+    deviceId: z.string().min(1, { message: 'Perangkat harus dipilih.' }),
+    technicianId: z.string().min(1, { message: 'Teknisi harus dipilih.' }),
+    deadline: z.string().min(1, { message: 'Deadline harus diisi.' }),
+    description: z.string().min(10, { message: 'Deskripsi masalah harus diisi (minimal 10 karakter).' }),
+});
+
 
 export default function DistributorDashboard() {
+    const { user } = useApp();
+    const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
+
     const distributorId = 'dist-1'; // Static for now
     const distributorDetails = distributorLocations.find(d => d.id === distributorId);
     const myClinics = distributorClinics.filter(loc => loc.distributorId === distributorId);
@@ -54,7 +75,81 @@ export default function DistributorDashboard() {
     const myDevices = devices.filter(device => myClinics.some(c => c.id === device.clinicId));
     
     const onDutyTechnicians = myTechnicians.filter(t => t.dutyStatus === 'On Duty');
-    
+
+    const form = useForm<z.infer<typeof assignmentFormSchema>>({
+        resolver: zodResolver(assignmentFormSchema),
+        defaultValues: {
+            clinicId: '',
+            deviceId: '',
+            technicianId: '',
+            deadline: '',
+            description: '',
+        }
+    });
+
+    const onSubmitAssignment = (values: z.infer<typeof assignmentFormSchema>) => {
+        startTransition(async () => {
+             const clinic = myClinics.find(c => c.id === values.clinicId);
+             const device = myDevices.find(d => d.id === values.deviceId);
+             const technician = myTechnicians.find(t => t.id === values.technicianId);
+             const distributor = distributorLocations.find(d => d.id === user.distributorId);
+ 
+             if (!clinic || !device || !technician || !distributor) {
+                 toast({
+                     variant: 'destructive',
+                     title: 'Error',
+                     description: 'Data tidak lengkap untuk membuat surat perintah kerja.',
+                 });
+                 return;
+             }
+ 
+             try {
+                const result = await generateWorkOrderAction({
+                     distributorName: distributor.name,
+                     technicianName: technician.name,
+                     clinicName: clinic.name,
+                     clinicAddress: `Jl. Klinik No. 1, ${clinic.name}`, // Placeholder address
+                     deviceName: device.name,
+                     deviceSerial: device.serialNumber,
+                     taskDescription: values.description,
+                     deadline: values.deadline,
+                });
+ 
+                 if (result && result.workOrder) {
+                    const byteCharacters = atob(result.workOrder);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'application/pdf' });
+                    
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `SPK_${technician.name.replace(/ /g, '_')}_${device.name.replace(/ /g, '_')}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                     
+                     toast({
+                         title: 'Surat Perintah Kerja Dibuat',
+                         description: 'SPK telah berhasil dibuat dan diunduh.',
+                     });
+                     form.reset();
+                 } else {
+                     throw new Error('Gagal membuat SPK.');
+                 }
+             } catch (error) {
+                 toast({
+                     variant: 'destructive',
+                     title: 'Error',
+                     description: 'Terjadi kesalahan saat membuat SPK. Silakan coba lagi.',
+                 });
+                 console.error(error);
+             }
+        });
+     };
+
     return (
        <Tabs defaultValue="map-technician" className="space-y-4">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
@@ -124,60 +219,109 @@ export default function DistributorDashboard() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Form Penugasan Teknisi Baru</CardTitle>
-                        <CardDescription>Buat dan kirim tugas baru untuk tim teknisi Anda.</CardDescription>
+                        <CardDescription>Isi form untuk membuat Surat Perintah Kerja (SPK) untuk teknisi.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className='grid md:grid-cols-2 gap-4'>
-                            <div className="space-y-2">
-                                <Label htmlFor="clinic">Pilih Klinik</Label>
-                                <Select>
-                                    <SelectTrigger id="clinic">
-                                        <SelectValue placeholder="Pilih klinik yang membutuhkan bantuan" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {myClinics.map(clinic => <SelectItem key={clinic.id} value={clinic.id}>{clinic.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="device">Pilih Perangkat</Label>
-                                <Select>
-                                    <SelectTrigger id="device">
-                                        <SelectValue placeholder="Pilih perangkat yang bermasalah" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {myDevices.map(device => <SelectItem key={device.id} value={device.id}>{device.name} - {device.serialNumber}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="technician">Pilih Teknisi</Label>
-                                <Select>
-                                    <SelectTrigger id="technician">
-                                        <SelectValue placeholder="Pilih teknisi yang akan ditugaskan" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {myTechnicians.map(tech => <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                             <div className="space-y-2">
-                                <Label htmlFor="deadline">Deadline</Label>
-                                <Input id="deadline" type="date" />
-                            </div>
-                        </div>
+                    <CardContent>
+                         <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmitAssignment)} className="space-y-6">
+                                <div className='grid md:grid-cols-2 gap-4'>
+                                    <FormField
+                                        control={form.control}
+                                        name="clinicId"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Pilih Klinik</FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Pilih klinik yang membutuhkan bantuan" />
+                                                    </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {myClinics.map(clinic => <SelectItem key={clinic.id} value={clinic.id}>{clinic.name}</SelectItem>)}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="deviceId"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Pilih Perangkat</FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Pilih perangkat yang bermasalah" />
+                                                    </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                         {myDevices.filter(d => d.clinicId === form.watch('clinicId')).map(device => <SelectItem key={device.id} value={device.id}>{device.name} - {device.serialNumber}</SelectItem>)}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="technicianId"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Pilih Teknisi</FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Pilih teknisi yang akan ditugaskan" />
+                                                    </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {myTechnicians.map(tech => <SelectItem key={tech.id} value={tech.id}>{tech.name}</SelectItem>)}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="deadline"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Deadline</FormLabel>
+                                                <FormControl>
+                                                    <Input type="date" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="description">Deskripsi Masalah</Label>
-                            <Textarea id="description" placeholder="Jelaskan masalah yang terjadi secara singkat..." rows={4}/>
-                        </div>
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Deskripsi Masalah</FormLabel>
+                                            <FormControl>
+                                                <Textarea placeholder="Jelaskan masalah yang terjadi secara singkat..." rows={4} {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                        <div className="flex justify-end">
-                            <Button>
-                                <Send className='mr-2' />
-                                Kirim Tugas & Notifikasi
-                            </Button>
-                        </div>
+                                <div className="flex justify-end">
+                                    <Button type="submit" disabled={isPending}>
+                                        {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className='mr-2' />}
+                                        Buat & Unduh SPK
+                                    </Button>
+                                </div>
+                            </form>
+                        </Form>
                     </CardContent>
                 </Card>
             </TabsContent>

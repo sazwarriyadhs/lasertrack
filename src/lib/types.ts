@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: Role;
   avatarUrl: string;
+  distributorId?: string; // Add this
 }
 
 export type DeviceStatus = 'Operational' | 'Under Maintenance' | 'Decommissioned' | 'Needs Attention';
