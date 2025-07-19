@@ -1,3 +1,7 @@
+
+'use client';
+
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -5,7 +9,19 @@ import { devices, maintenanceHistory, technicianLocations, distributorLocations 
 import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Phone, Mail, User, CheckCircle, Wrench, Route } from 'lucide-react';
+import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+
 
 const statusColors: Record<DeviceStatus, string> = {
     Operational: 'bg-green-500/80',
@@ -105,6 +121,78 @@ const ContactCard = () => {
     );
 };
 
+const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedDevice, setSelectedDevice] = useState('');
+    const [description, setDescription] = useState('');
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedDevice || !description) {
+            toast({
+                variant: 'destructive',
+                title: 'Form Tidak Lengkap',
+                description: 'Harap pilih perangkat dan isi deskripsi masalah.',
+            });
+            return;
+        }
+        setIsLoading(true);
+        // Simulate API call
+        setTimeout(() => {
+            toast({
+                title: 'Laporan Terkirim',
+                description: 'Permintaan maintenance Anda telah dikirim ke distributor.',
+            });
+            setIsLoading(false);
+            setSelectedDevice('');
+            setDescription('');
+        }, 1500);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Permintaan Maintenance & Laporan</CardTitle>
+                <CardDescription>Laporkan masalah perangkat atau minta jadwal maintenance.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="device-select">Pilih Perangkat</Label>
+                        <Select value={selectedDevice} onValueChange={setSelectedDevice}>
+                            <SelectTrigger id="device-select">
+                                <SelectValue placeholder="Pilih perangkat yang bermasalah" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {devices.map(device => (
+                                    <SelectItem key={device.id} value={device.id}>
+                                        {device.name} (SN: {device.serialNumber})
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="description">Deskripsi Masalah</Label>
+                        <Textarea
+                            id="description"
+                            placeholder="Jelaskan masalah yang Anda alami..."
+                            rows={4}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2" />}
+                        Kirim Laporan
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
+    );
+};
+
 
 export default function ClinicDashboard() {
     const clinicId = 'clinic-1'; // Static for demo
@@ -188,6 +276,7 @@ export default function ClinicDashboard() {
                 {assignedTechnician && activeMaintenanceDevice && (
                     <TechnicianStatusCard technician={assignedTechnician} device={activeMaintenanceDevice} />
                 )}
+                <MaintenanceRequestForm devices={clinicDevices} />
                 <ContactCard />
             </div>
         </div>
