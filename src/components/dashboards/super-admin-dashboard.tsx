@@ -1,13 +1,13 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { MapView } from '@/components/map-view';
 import { distributorLocations as initialDistributorLocations } from '@/lib/data';
-import { Pencil, Trash2, PlusCircle } from 'lucide-react';
+import { Pencil, Trash2, PlusCircle, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import type { DistributorLocation } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -17,9 +17,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogClose
 } from '@/components/ui/dialog';
 import {
   AlertDialog,
@@ -33,6 +30,14 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { DistributorForm } from '@/components/distributor-form';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const statusBadge: Record<DistributorLocation['applicationStatus'], string> = {
     'Active': 'bg-green-500/80',
@@ -44,6 +49,16 @@ export default function SuperAdminDashboard() {
     const [distributors, setDistributors] = useState<DistributorLocation[]>(initialDistributorLocations);
     const [selectedDistributor, setSelectedDistributor] = useState<DistributorLocation | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('All');
+
+    const filteredDistributors = useMemo(() => {
+        return distributors.filter(distributor => {
+            const matchesSearch = distributor.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesStatus = statusFilter === 'All' || distributor.applicationStatus === statusFilter;
+            return matchesSearch && matchesStatus;
+        });
+    }, [distributors, searchTerm, statusFilter]);
 
     const handleAdd = () => {
         setSelectedDistributor(null);
@@ -102,10 +117,10 @@ export default function SuperAdminDashboard() {
                 <Card className="h-[60vh]">
                     <CardHeader>
                         <CardTitle>Peta Distributor</CardTitle>
-                        <CardDescription>Lokasi distributor. Klik marker untuk melihat jumlah klinik yang dikelola.</CardDescription>
+                        <CardDescription>Lokasi distributor. Gunakan filter di bawah untuk menampilkan data spesifik.</CardDescription>
                     </CardHeader>
                     <CardContent className="h-[calc(100%-6rem)] p-0">
-                    <MapView locations={distributors} initialZoom={5} />
+                    <MapView locations={filteredDistributors} initialZoom={5} />
                     </CardContent>
                 </Card>
             </section>
@@ -123,6 +138,28 @@ export default function SuperAdminDashboard() {
                         </Button>
                     </CardHeader>
                     <CardContent>
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="relative w-full max-w-sm">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    placeholder="Cari nama distributor..."
+                                    className="pl-10"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Filter Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="All">Semua Status</SelectItem>
+                                    <SelectItem value="Active">Aktif</SelectItem>
+                                    <SelectItem value="Inactive">Tidak Aktif</SelectItem>
+                                    <SelectItem value="Expired">Kadaluarsa</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -134,7 +171,7 @@ export default function SuperAdminDashboard() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {distributors.map((distributor) => (
+                                {filteredDistributors.map((distributor) => (
                                     <TableRow key={distributor.id}>
                                         <TableCell className="font-medium">{distributor.name}</TableCell>
                                         <TableCell>
@@ -160,7 +197,7 @@ export default function SuperAdminDashboard() {
                                                     <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                                                     <AlertDialogDescription>
                                                         Tindakan ini tidak dapat diurungkan. Ini akan menghapus data distributor secara permanen.
-                                                    </AlertDialogDescription>
+                                                    </Description>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
                                                     <AlertDialogCancel>Batal</AlertDialogCancel>
@@ -171,6 +208,13 @@ export default function SuperAdminDashboard() {
                                         </TableCell>
                                     </TableRow>
                                 ))}
+                                 {filteredDistributors.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center">
+                                            Tidak ada distributor yang cocok dengan kriteria pencarian.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>
