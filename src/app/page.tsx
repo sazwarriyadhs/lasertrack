@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/layout/logo';
-import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound } from 'lucide-react';
+import { ArrowRight, Briefcase, Users, Award, Wrench, Package, BrainCircuit, UsersRound, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -57,6 +57,16 @@ const featuredProductsInnomed = [
     { product: 'Phototherapy & Photobiomodulation', brand: 'Daavlin – Series 3 Neolux', indication: 'Terapi fototerapi untuk vitiligo, eczema, dan kondisi kulit lainnya.' },
     { product: 'Skin Analysis & Imaging System', brand: 'Canfield – VISIA®', indication: 'Analisis kulit profesional untuk pigmentasi, pori, dan tekstur.' },
     { product: 'CO₂ Fractional Laser', brand: 'Lasering – Slim Evolution II', indication: 'Resurfacing kulit, reduksi kerutan dan bekas luka.' },
+];
+
+const distributorNetwork = [
+  { company: 'PT Regenesis Indonesia', brands: 'Candela (PicoWay®, Vbeam), Alma BeautiFill', services: 'Picosecond laser, pulsed-dye, diode laser untuk pigmentation, tattoo removal, acne, rejuvenation, body contouring', website: 'https://regenesis.co.id' },
+  { company: 'PT Innomed Jaya Utama', brands: 'Lasering (MiXto Pro), Canfield, STORZ', services: 'CO₂ fractional, skin resurfacing, laser tightening, skin analysis', website: 'https://innomed.asia' },
+  { company: 'PT Redo Marketing Indonesia', brands: 'EndyMed, Deka, Sciton (kemungkinan melalui mitra)', services: 'RF microneedling, fractional laser, long-pulse Nd:YAG, resurfacing laser', website: 'https://redo.co.id' },
+  { company: 'PT Estetika Pro International (Espro)', brands: 'Espro Laser (OEM), Korea laser brands (Q-Switched, Diode, CO₂)', services: 'Q-Switched Nd:YAG, Diode Hair Removal, Fractional CO₂', website: 'https://espro.co.id' },
+  { company: 'PT I-Tech Lafacos', brands: 'Quanta System, Jeisys, Apyx', services: 'Q-Switched Nd:YAG, Pico laser, CO₂ fractional, LIPO laser', website: 'https://itechlafacos.com' },
+  { company: 'ASAA Medical Indonesia', brands: 'Alma Lasers (exklusif Indonesia)', services: 'Harmony XL Pro, Soprano Titanium, Accent Prime, BeautiFill', website: 'https://asaamedical.com' },
+  { company: 'PT Optima Derma Tech (Optiderm)', brands: 'OZONOVA, CFU ELIFE, dan laser OEM Korea', services: 'Laser untuk skin rejuvenation, whitening, pigmentation', website: 'https://optiderm.co.id' },
 ];
 
 
@@ -232,7 +242,56 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section id="news" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+        <section id="distributor-network" className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Jaringan Distributor Terkemuka di Indonesia</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  LaserTrack Lite bekerja sama dengan para pemimpin industri untuk menyediakan teknologi dan layanan terbaik.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto max-w-6xl mt-12">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="text-primary" />
+                    Mitra Distributor
+                  </CardTitle>
+                  <CardDescription>Daftar beberapa distributor alat kesehatan dan estetika terkemuka di Indonesia.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Perusahaan</TableHead>
+                        <TableHead>Merek Laser Utama</TableHead>
+                        <TableHead>Jenis Laser & Indikasi</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {distributorNetwork.map((distributor, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">
+                            <a href={distributor.website} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
+                              {distributor.company}
+                            </a>
+                          </TableCell>
+                          <TableCell>{distributor.brands}</TableCell>
+                          <TableCell className="text-muted-foreground">{distributor.services}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+
+        <section id="news" className="w-full py-12 md:py-24 lg:py-32">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Berita &amp; Pembaruan Teknologi</h2>
@@ -271,5 +330,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
