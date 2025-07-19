@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -52,6 +53,7 @@ export default function ClinicManagementPage() {
 
     const getClinicDeviceStatus = (clinicId: string): Device['status'] | null => {
         const clinicDevices = devices.filter(d => d.clinicId === clinicId);
+        if (clinicDevices.length === 0) return null;
         if (clinicDevices.some(d => d.status === 'Needs Attention')) return 'Needs Attention';
         if (clinicDevices.some(d => d.status === 'Under Maintenance')) return 'Under Maintenance';
         if (clinicDevices.every(d => d.status === 'Operational')) return 'Operational';
@@ -176,7 +178,7 @@ export default function ClinicManagementPage() {
                             {filteredClinics.map((clinic) => {
                                 const clinicDevices = devices.filter(d => d.clinicId === clinic.id);
                                 const clinicStatus = getClinicDeviceStatus(clinic.id);
-                                return(
+                                return (
                                 <TableRow key={clinic.id}>
                                     <TableCell className="font-medium">{clinic.name}</TableCell>
                                     <TableCell>
@@ -205,7 +207,7 @@ export default function ClinicManagementPage() {
                                                 <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                                                 <AlertDialogDescription>
                                                     Tindakan ini tidak dapat diurungkan. Ini akan menghapus data klinik secara permanen dari daftar Anda.
-                                                </Description>
+                                                </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                 <AlertDialogCancel>Batal</AlertDialogCancel>
@@ -215,7 +217,8 @@ export default function ClinicManagementPage() {
                                         </AlertDialog>
                                     </TableCell>
                                 </TableRow>
-                            )})}
+                                );
+                            })}
                              {filteredClinics.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={5} className="text-center">
