@@ -5,74 +5,121 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { devices, distributorClinics } from '@/lib/data';
+import { devices, distributorClinics, maintenanceHistory } from '@/lib/data';
 import type { Device, DeviceStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { ArrowRight, HardHat, ShieldCheck, ShieldAlert, Bell, List } from 'lucide-react';
+import { ArrowRight, HardHat, ShieldCheck, ShieldAlert, Bell, List, Calendar, Wrench, Plus, FileText, FileClock, ClipboardList, Briefcase } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { useMemo } from 'react';
-
-const statusColors: Record<DeviceStatus, string> = {
-    Operational: 'bg-green-500/80 text-green-50',
-    'Under Maintenance': 'bg-yellow-500/80 text-yellow-50',
-    'Needs Attention': 'bg-orange-500/80 text-orange-50',
-    Decommissioned: 'bg-gray-500/80 text-gray-50',
-};
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
-const StatsCard = ({ title, value, icon, color }: { title: string, value: number, icon: React.ElementType, color: string }) => {
+const NavCard = ({ title, description, icon, href }: { title: string, description: string, icon: React.ElementType, href: string }) => {
     const Icon = icon;
     return (
-        <Card className={cn("border-l-4", color)}>
-            <CardContent className="p-4 flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-muted-foreground">{title}</p>
-                    <p className="text-2xl font-bold">{value}</p>
-                </div>
-                <Icon className="h-8 w-8 text-muted-foreground" />
-            </CardContent>
-        </Card>
-    )
+        <Link href={href}>
+            <Card className="hover:bg-muted/50 hover:border-primary/50 transition-colors h-full">
+                <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-2">
+                    <div className="bg-primary/10 p-3 rounded-full">
+                        <Icon className="h-7 w-7 text-primary" />
+                    </div>
+                    <p className="font-semibold text-sm mt-2">{title}</p>
+                    <p className="text-xs text-muted-foreground">{description}</p>
+                </CardContent>
+            </Card>
+        </Link>
+    );
 };
 
 
 export default function TechnicianDashboard() {
     const { user } = useApp();
 
-    const { assignedDevices, myDevices } = useMemo(() => {
-        if (!user.id) return { assignedDevices: [], myDevices: [] };
+    const { assignedDevices, myDevices, myHistory } = useMemo(() => {
+        if (!user.id) return { assignedDevices: [], myDevices: [], myHistory: [] };
 
         const myDevs = devices.filter(d => d.assignedTechnicianId === user.id);
         
         const myClinicIds = distributorClinics.filter(c => c.distributorId === user.distributorId).map(c => c.id);
         const allMyDistributorDevices = devices.filter(d => myClinicIds.includes(d.clinicId));
+        const hist = maintenanceHistory.filter(h => h.technicianName === user.name);
 
-        return { assignedDevices: myDevs, myDevices: allMyDistributorDevices };
-    }, [user.id, user.distributorId]);
-
-    const operationalCount = myDevices.filter(d => d.status === 'Operational').length;
-    const needsAttentionCount = myDevices.filter(d => d.status === 'Needs Attention' || d.status === 'Under Maintenance').length;
-
+        return { assignedDevices: myDevs, myDevices: allMyDistributorDevices, myHistory: hist };
+    }, [user.id, user.name, user.distributorId]);
+    
+    const lastSPK = maintenanceHistory.find(h => h.technicianName === user.name);
 
     return (
          <div className="space-y-6">
-             <div className="p-4 bg-card rounded-lg border">
-                <h1 className="text-2xl font-bold">Selamat Datang, {user.name}!</h1>
-                <p className="text-muted-foreground">Ini adalah ringkasan tugas dan status perangkat harian Anda.</p>
-             </div>
+             <Card className="border-none shadow-none bg-transparent">
+                <CardHeader className="p-0 flex-row items-center gap-4">
+                     <Avatar className="h-16 w-16 border">
+                        <AvatarImage src={user.avatarUrl} alt={user.name} />
+                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className='flex-1'>
+                        <h1 className="text-2xl font-bold">Halo, {user.name}!</h1>
+                        <p className="text-muted-foreground">Selamat datang di dasbor Anda.</p>
+                    </div>
+                     <Button variant="ghost" size="icon" className="rounded-full">
+                        <Bell className="h-5 w-5" />
+                        <span className="sr-only">Notifikasi</span>
+                    </Button>
+                </CardHeader>
+            </Card>
+            
+            <Card>
+                <CardHeader className='pb-2'>
+                    <CardTitle className='text-base flex items-center gap-2'>
+                        <Briefcase className='w-5 h-5'/>
+                        Surat Perintah Kerja (SPK) Terbaru
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className='flex items-center justify-between'>
+                    <div>
+                        <p className='font-semibold'>{lastSPK?.description || "Tidak ada SPK aktif"}</p>
+                        <p className='text-sm text-muted-foreground'>
+                            {lastSPK ? `Untuk perangkat ${devices.find(d => d.id === lastSPK.deviceId)?.name}` : 'Semua pekerjaan telah selesai.'}
+                        </p>
+                    </div>
+                    <Button variant="secondary" size="sm">Lihat Detail</Button>
+                </CardContent>
+            </Card>
 
-             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                 <StatsCard title="Tugas Ditugaskan" value={assignedDevices.length} icon={HardHat} color="border-primary" />
-                 <StatsCard title="Perangkat Operasional" value={operationalCount} icon={ShieldCheck} color="border-green-500" />
-                 <StatsCard title="Butuh Perhatian" value={needsAttentionCount} icon={ShieldAlert} color="border-orange-500" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                 <NavCard 
+                    title="Kunjungan Hari Ini"
+                    description={`${assignedDevices.length} tugas`}
+                    icon={ClipboardList}
+                    href="/dashboard/device-list"
+                 />
+                 <NavCard 
+                    title="Alat Butuh Perawatan"
+                    description={`${myDevices.filter(d => d.status === 'Needs Attention').length} alat`}
+                    icon={Wrench}
+                    href="/dashboard/device-list"
+                 />
+                 <NavCard 
+                    title="Tambah Laporan"
+                    description="Laporkan pekerjaan baru"
+                    icon={Plus}
+                    href="/dashboard/device-list"
+                 />
+                 <NavCard 
+                    title="Riwayat Servis"
+                    description={`${myHistory.length} laporan`}
+                    icon={FileClock}
+                    href="#"
+                 />
             </div>
+
 
             <Card>
                 <CardHeader className="flex-row items-center justify-between">
                     <div>
                         <CardTitle className="flex items-center gap-2">
                             <HardHat className="text-primary"/>
-                            Tugas Kunjungan Hari Ini
+                            Tugas yang Ditugaskan
                         </CardTitle>
                         <CardDescription>Perangkat yang membutuhkan penanganan langsung dari Anda.</CardDescription>
                     </div>
@@ -86,13 +133,13 @@ export default function TechnicianDashboard() {
                 <CardContent>
                     <div className="space-y-4">
                         {assignedDevices.length > 0 ? (
-                            assignedDevices.map((device) => {
+                            assignedDevices.slice(0, 3).map((device) => {
                                 const clinic = distributorClinics.find(c => c.id === device.clinicId);
                                 return (
-                                <Card key={device.id}>
+                                <Card key={device.id} className="bg-muted/30">
                                     <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                         <div className="flex-1">
-                                            <Badge variant="secondary" className={cn("font-normal mb-2", statusColors[device.status])}>
+                                            <Badge variant={device.status === 'Needs Attention' ? 'destructive' : 'secondary'} className="font-normal mb-2">
                                                 {device.status}
                                             </Badge>
                                             <h3 className="font-semibold">{device.name}</h3>
@@ -110,7 +157,9 @@ export default function TechnicianDashboard() {
                             )})
                         ) : (
                             <div className="text-center py-10 text-muted-foreground">
-                                <p>Tidak ada tugas aktif yang ditugaskan untuk Anda saat ini.</p>
+                                <ShieldCheck className="mx-auto h-12 w-12 text-green-500 mb-2" />
+                                <p className="font-semibold">Tidak ada tugas aktif.</p>
+                                <p className="text-sm">Semua perangkat dalam kondisi baik.</p>
                             </div>
                         )}
                     </div>
