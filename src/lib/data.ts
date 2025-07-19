@@ -1,4 +1,4 @@
-import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity, ClinicLocation, TechnicianLocation } from '@/lib/types';
+import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity, ClinicLocation, TechnicianLocation, MaintenanceRecord } from '@/lib/types';
 
 export const users: User[] = [
   { id: 'user-1', name: 'Admin User', email: 'admin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100' },
@@ -18,10 +18,10 @@ export const devices: Device[] = [
 ];
 
 export const distributorLocations: DistributorLocation[] = [
-  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 }, applicationStatus: 'Active', licenseDuration: '280 days remaining', clinicCount: 3, lastLogin: '2024-07-20' },
-  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 2, lastLogin: '2024-07-21' },
-  { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15' },
-  { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19' },
+  { id: 'dist-1', name: 'West Coast Distribution', type: 'Distributor', position: { lat: 34.052235, lng: -118.243683 }, applicationStatus: 'Active', licenseDuration: '280 days remaining', clinicCount: 3, lastLogin: '2024-07-20', contact: { email: 'contact@westcoast.com', phone: '123-456-7890' }, avatarUrl: 'https://placehold.co/100x100/3B82F6/FFFFFF' },
+  { id: 'dist-2', name: 'East Coast Supplies', type: 'Distributor', position: { lat: 40.712776, lng: -74.005974 }, applicationStatus: 'Active', licenseDuration: '150 days remaining', clinicCount: 2, lastLogin: '2024-07-21', contact: { email: 'support@eastcoast.com', phone: '987-654-3210' }, avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF' },
+  { id: 'dist-3', name: 'Southern Distribution', type: 'Distributor', position: { lat: 29.7604, lng: -95.3698 }, applicationStatus: 'Expired', licenseDuration: 'Expired 15 days ago', clinicCount: 0, lastLogin: '2024-06-15', contact: { email: 'info@southern.com', phone: '555-123-4567' }, avatarUrl: 'https://placehold.co/100x100/EF4444/FFFFFF' },
+  { id: 'dist-4', name: 'Midwest Medical', type: 'Distributor', position: { lat: 41.8781, lng: -87.6298 }, applicationStatus: 'Active', licenseDuration: '320 days remaining', clinicCount: 0, lastLogin: '2024-07-19', contact: { email: 'sales@midwest.com', phone: '222-333-4444' }, avatarUrl: 'https://placehold.co/100x100/6366F1/FFFFFF' },
 ];
 
 const clinicLocations: ClinicLocation[] = [
@@ -32,11 +32,11 @@ const clinicLocations: ClinicLocation[] = [
     { id: 'clinic-5', name: 'Golden Gate Health', type: 'Clinic', distributorId: 'dist-1', position: { lat: 37.7749, lng: -122.4194 } },
 ];
 
-const technicianLocations: TechnicianLocation[] = [
-    { id: 'tech-1', name: 'Tech Maria', type: 'Technician', distributorId: 'dist-1', position: { lat: 34.1522, lng: -118.4436 }, dutyStatus: 'On Duty', handlingStatus: 'Dalam Perjalanan', destinationClinicId: 'clinic-1', handledDeviceId: 'dev-2' },
-    { id: 'tech-2', name: 'Tech John', type: 'Technician', distributorId: 'dist-2', position: { lat: 40.6127, lng: -73.9059 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-2', handledDeviceId: 'dev-3' },
-    { id: 'tech-3', name: 'Tech David', type: 'Technician', distributorId: 'dist-1', position: { lat: 37.8044, lng: -122.2711 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-5', handledDeviceId: 'dev-7' },
-    { id: 'tech-4', name: 'Tech Sarah', type: 'Technician', distributorId: 'dist-1', position: { lat: 33.9522, lng: -118.3436 }, dutyStatus: 'Off Duty' },
+export const technicianLocations: TechnicianLocation[] = [
+    { id: 'tech-1', name: 'Tech Maria', type: 'Technician', distributorId: 'dist-1', position: { lat: 34.1522, lng: -118.4436 }, dutyStatus: 'On Duty', handlingStatus: 'Dalam Perjalanan', destinationClinicId: 'clinic-1', handledDeviceId: 'dev-2', contact: { email: 'maria.t@tech.com', phone: '111-222-3333' }, avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF' },
+    { id: 'tech-2', name: 'Tech John', type: 'Technician', distributorId: 'dist-2', position: { lat: 40.6127, lng: -73.9059 }, dutyStatus: 'On Duty', handlingStatus: 'Menangani', destinationClinicId: 'clinic-2', handledDeviceId: 'dev-3', contact: { email: 'john.d@tech.com', phone: '444-555-6666' }, avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF' },
+    { id: 'tech-3', name: 'Tech David', type: 'Technician', distributorId: 'dist-1', position: { lat: 37.8044, lng: -122.2711 }, dutyStatus: 'On Duty', handlingStatus: 'Selesai', destinationClinicId: 'clinic-5', handledDeviceId: 'dev-7', contact: { email: 'dave.s@tech.com', phone: '777-888-9999' }, avatarUrl: 'https://placehold.co/100x100/0EA5E9/FFFFFF' },
+    { id: 'tech-4', name: 'Tech Sarah', type: 'Technician', distributorId: 'dist-1', position: { lat: 33.9522, lng: -118.3436 }, dutyStatus: 'Off Duty', contact: { email: 'sarah.w@tech.com', phone: '121-212-3232' }, avatarUrl: 'https://placehold.co/100x100/EC4899/FFFFFF' },
 ];
 
 export const locations: Location[] = [
@@ -71,4 +71,11 @@ export const userActivityData: UserActivity[] = [
   { date: '2024-07-19', logins: 40, activities: 200 },
   { date: '2024-07-20', logins: 38, activities: 190 },
   { date: '2024-07-21', logins: 45, activities: 220 },
+];
+
+export const maintenanceHistory: MaintenanceRecord[] = [
+    { id: 'hist-1', deviceId: 'dev-1', date: '2024-05-01', technicianName: 'Tech Maria', description: 'Annual calibration and cooling system check.' },
+    { id: 'hist-2', deviceId: 'dev-2', date: '2024-04-15', technicianName: 'Tech John', description: 'Replaced optical filter and firmware update.' },
+    { id: 'hist-3', deviceId: 'dev-3', date: '2024-03-20', technicianName: 'Tech John', description: 'Power supply diagnostics. Needs replacement.' },
+    { id: 'hist-4', deviceId: 'dev-1', date: '2023-11-10', technicianName: 'Tech Maria', description: 'Emergency shutoff test and general cleaning.' },
 ];

@@ -20,12 +20,19 @@ export interface Device {
   lastMaintenance: string;
 }
 
+interface ContactInfo {
+    email: string;
+    phone: string;
+}
+
 export interface Location {
   id: string;
   name: string;
   type: 'Distributor' | 'Clinic' | 'Technician';
   position: { lat: number; lng: number };
   distributorId?: string;
+  contact: ContactInfo;
+  avatarUrl: string;
 }
 
 export interface DistributorLocation extends Location {
@@ -70,4 +77,12 @@ export interface UserActivity {
     date: string;
     logins: number;
     activities: number;
+}
+
+export interface MaintenanceRecord {
+    id: string;
+    deviceId: string;
+    date: string;
+    technicianName: string;
+    description: string;
 }
