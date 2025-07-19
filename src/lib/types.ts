@@ -1,4 +1,5 @@
 
+
 export type Role = 'Super Admin' | 'Distributor' | 'Clinic' | 'Technician';
 
 interface ContactInfo {
@@ -13,6 +14,7 @@ export interface User {
   role: Role;
   avatarUrl: string;
   distributorId?: string; 
+  clinicId?: string;
   contact?: ContactInfo;
   address?: string;
 }

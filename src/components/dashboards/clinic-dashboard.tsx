@@ -199,7 +199,7 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
 
 export default function ClinicDashboard() {
     const { user } = useApp();
-    const clinicId = 'clinic-6'; // Static for demo - assuming logged in user is from this clinic
+    const clinicId = user.clinicId; 
     const clinicDevices = devices.filter(d => d.clinicId === clinicId);
     const clinicMaintenanceHistory = maintenanceHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
     const clinicPurchaseHistory = purchaseHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
