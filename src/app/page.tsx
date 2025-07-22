@@ -113,7 +113,6 @@ export default function LandingPage() {
                             width="1200"
                             height="600"
                             alt="Hero Image 1"
-                            data-ai-hint="aesthetic laser treatment"
                             className="aspect-video w-full overflow-hidden rounded-xl object-cover"
                         />
                     </CarouselItem>
@@ -123,7 +122,6 @@ export default function LandingPage() {
                             width="1200"
                             height="600"
                             alt="Hero Image 2"
-                            data-ai-hint="modern clinic reception"
                             className="aspect-video w-full overflow-hidden rounded-xl object-cover"
                         />
                     </CarouselItem>
@@ -133,7 +131,6 @@ export default function LandingPage() {
                             width="1200"
                             height="600"
                             alt="Hero Image 3"
-                            data-ai-hint="professional technician smiling"
                             className="aspect-video w-full overflow-hidden rounded-xl object-cover"
                         />
                     </CarouselItem>
@@ -419,12 +416,11 @@ export default function LandingPage() {
             </div>
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
                <Image
-                    src="https://placehold.co/800x600.png"
+                    src="/logodigi.png"
                     width="800"
                     height="600"
-                    alt="Developer Team"
-                    data-ai-hint="software developers meeting"
-                    className="aspect-video w-full overflow-hidden rounded-xl object-cover"
+                    alt="PT Digi Media Komunika"
+                    className="aspect-video w-full overflow-hidden rounded-xl object-contain"
                 />
               <div className="flex flex-col justify-center space-y-4">
                  <div className="space-y-4">
