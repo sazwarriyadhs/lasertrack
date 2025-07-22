@@ -61,17 +61,15 @@ const featuredProductsInnomed = [
 ];
 
 const distributorNetwork = [
-  { company: 'PT Regenesis Indonesia', brands: 'Candela (PicoWay®, Vbeam), Alma BeautiFill', services: 'Picosecond laser, pulsed-dye, diode laser untuk pigmentation, tattoo removal, acne, rejuvenation, body contouring', website: 'https://regenesis.co.id' },
-  { company: 'PT Innomed Jaya Utama', brands: 'Lasering (MiXto Pro), Canfield, STORZ', services: 'CO₂ fractional, skin resurfacing, laser tightening, skin analysis', website: 'https://innomed.asia' },
-  { company: 'PT Redo Marketing Indonesia', brands: 'EndyMed, Deka, Sciton (kemungkinan melalui mitra)', services: 'RF microneedling, fractional laser, long-pulse Nd:YAG, resurfacing laser', website: 'https://redo.co.id' },
-  { company: 'PT Estetika Pro International (Espro)', brands: 'Espro Laser (OEM), Korea laser brands (Q-Switched, Diode, CO₂)', services: 'Q-Switched Nd:YAG, Diode Hair Removal, Fractional CO₂. Memiliki 3 beauty clinic & 1 beauty school; melayani puluhan klinik & RS di Indonesia.', website: 'https://espro.co.id' },
-  { company: 'PT I-Tech Lafacos', brands: 'Quanta System, Jeisys, Apyx', services: 'Q-Switched Nd:YAG, Pico laser, CO₂ fractional, LIPO laser', website: 'https://itechlafacos.com' },
-  { company: 'ASAA Medical Indonesia', brands: 'Alma Lasers (exklusif Indonesia)', services: 'Harmony XL Pro, Soprano Titanium, Accent Prime, BeautiFill', website: 'https://asaamedical.com' },
-  { company: 'PT Optima Derma Tech (Optiderm)', brands: 'OZONOVA, CFU ELIFE, dan laser OEM Korea', services: 'Laser untuk skin rejuvenation, whitening, pigmentation', website: 'https://optiderm.co.id' },
+  { company: 'Distributor Alpha', brands: 'Candela (PicoWay®, Vbeam), Alma BeautiFill', services: 'Picosecond laser, pulsed-dye, diode laser untuk pigmentation, tattoo removal, acne, rejuvenation, body contouring' },
+  { company: 'Mitra Medika Beta', brands: 'Lasering (MiXto Pro), Canfield, STORZ', services: 'CO₂ fractional, skin resurfacing, laser tightening, skin analysis' },
+  { company: 'Solusi Estetika Gamma', brands: 'EndyMed, Deka, Sciton', services: 'RF microneedling, fractional laser, long-pulse Nd:YAG, resurfacing laser' },
+  { company: 'Aesthetic Pro Delta', brands: 'Espro Laser (OEM), Merek Laser Korea', services: 'Q-Switched Nd:YAG, Diode Hair Removal, Fractional CO₂' },
+  { company: 'Tekno Medika Epsilon', brands: 'Quanta System, Jeisys, Apyx', services: 'Q-Switched Nd:YAG, Pico laser, CO₂ fractional, LIPO laser' },
 ];
 
 const regenesisPartnerClinics = [
-    { name: 'Arayu Aesthetic Clinic', city: 'Makassar', focus: 'Produk ISISPHARMA, pelatihan & dukungan Regenesis' },
+    { name: 'Arayu Aesthetic Clinic', city: 'Makassar', focus: 'Produk ISISPHARMA, pelatihan & dukungan dari distributor' },
     { name: 'Dermalogia Aesthetic Clinic', city: 'Jakarta', focus: 'Alat-alat laser seperti PicoWay, Vbeam, Cellec V' },
 ];
 
@@ -98,7 +96,7 @@ export default function LandingPage() {
                     Platform Manajemen Terpadu untuk Industri Estetika
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    LaserTrack Lite memberdayakan Super Admin untuk mengelola jaringan distributor dan memungkinkan distributor untuk mengoptimalkan layanan ke klinik mereka.
+                    LaserTrack Lite memberdayakan Super Admin untuk mengelola jaringan distributor dan memungkinkan distributor untuk mengoptimalkan layanan ke klinik mereka. Data yang ditampilkan adalah data dummy untuk simulasi real-time.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -111,7 +109,7 @@ export default function LandingPage() {
                   <CarouselContent>
                     <CarouselItem>
                        <Image
-                            src="/slide1.jpeg"
+                            src="https://placehold.co/1200x600.png"
                             width="1200"
                             height="600"
                             alt="Hero Image 1"
@@ -121,7 +119,7 @@ export default function LandingPage() {
                     </CarouselItem>
                     <CarouselItem>
                        <Image
-                            src="/slide2.jpeg"
+                            src="https://placehold.co/1200x600.png"
                             width="1200"
                             height="600"
                             alt="Hero Image 2"
@@ -131,7 +129,7 @@ export default function LandingPage() {
                     </CarouselItem>
                     <CarouselItem>
                         <Image
-                            src="/slide3.jpeg"
+                            src="https://placehold.co/1200x600.png"
                             width="1200"
                             height="600"
                             alt="Hero Image 3"
@@ -218,9 +216,9 @@ export default function LandingPage() {
                  <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">
                         <span className="text-primary font-semibold">Mitra Unggulan</span>
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">PT Regenesis Indonesia</h2>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Distributor Alat Estetika Terkemuka</h2>
                         <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                          Menyediakan layanan komprehensif dan produk alat estetik medis terdepan untuk lebih dari 1.000 klinik kecantikan di seluruh Indonesia.
+                          Menyediakan layanan komprehensif dan produk alat estetik medis terdepan untuk ratusan klinik kecantikan.
                         </p>
                     </div>
                 </div>
@@ -302,9 +300,9 @@ export default function LandingPage() {
                  <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">
                         <span className="text-primary font-semibold">Mitra Unggulan</span>
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">PT Innomed Jaya Utama</h2>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Penyedia Teknologi Medis Canggih</h2>
                         <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                          Distributor terkemuka untuk peralatan estetika dan medis canggih di Asia.
+                          Distributor terkemuka untuk peralatan estetika dan medis inovatif di Asia.
                         </p>
                     </div>
                 </div>
@@ -353,9 +351,9 @@ export default function LandingPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Building2 className="text-primary" />
-                    Mitra Distributor
+                    Mitra Distributor (Contoh)
                   </CardTitle>
-                  <CardDescription>Daftar beberapa distributor alat kesehatan dan estetika terkemuka di Indonesia.</CardDescription>
+                  <CardDescription>Daftar berikut adalah contoh data dummy untuk tujuan demonstrasi.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -370,9 +368,7 @@ export default function LandingPage() {
                       {distributorNetwork.map((distributor, index) => (
                         <TableRow key={index}>
                           <TableCell className="font-medium">
-                            <a href={distributor.website} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
                               {distributor.company}
-                            </a>
                           </TableCell>
                           <TableCell>{distributor.brands}</TableCell>
                           <TableCell className="text-muted-foreground">{distributor.services}</TableCell>
