@@ -15,7 +15,6 @@ export const Logo = ({ variant = 'default' }: LogoProps) => {
                 width={isSmall ? 120 : 180} 
                 height={isSmall ? 27 : 40} 
                 priority 
-                className="dark:brightness-0 dark:invert"
             />
         </div>
     );
