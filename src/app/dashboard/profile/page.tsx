@@ -1,8 +1,8 @@
 
 'use client';
 
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useApp } from '@/context/app-context';
@@ -10,7 +10,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Loader2, Upload } from 'lucide-react';
@@ -21,7 +20,7 @@ const profileFormSchema = z.object({
   email: z.string().email({ message: "Format email tidak valid." }),
   phone: z.string().min(10, { message: "Nomor telepon harus memiliki setidaknya 10 digit." }),
   address: z.string().min(10, { message: "Alamat harus memiliki setidaknya 10 karakter." }),
-  avatarUrl: z.string().url().or(z.string().startsWith('data:image')).or(z.literal('')),
+  avatarUrl: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -29,12 +28,12 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 export default function ProfilePage() {
   const { user, updateUser, loading } = useApp();
   const { toast } = useToast();
-  const [isPending, setIsPending] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [photoPreview, setPhotoPreview] = useState<string | null>(user?.avatarUrl || null);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    values: {
+    defaultValues: {
       name: user?.name || '',
       email: user?.contact?.email || user.email,
       phone: user?.contact?.phone || '',
@@ -51,7 +50,7 @@ export default function ProfilePage() {
       reader.onloadend = () => {
         const result = reader.result as string;
         setPhotoPreview(result);
-        form.setValue('avatarUrl', result, { shouldValidate: true });
+        form.setValue('avatarUrl', result, { shouldValidate: true, shouldDirty: true });
       };
       reader.readAsDataURL(file);
     }
@@ -59,26 +58,23 @@ export default function ProfilePage() {
 
 
   const onSubmit = (data: ProfileFormValues) => {
-    setIsPending(true);
-    const updatedData = {
-        name: data.name,
-        contact: {
-            email: data.email,
-            phone: data.phone,
-        },
-        address: data.address,
-        avatarUrl: data.avatarUrl,
-    };
+    startTransition(() => {
+        const updatedData = {
+            name: data.name,
+            contact: {
+                email: data.email,
+                phone: data.phone,
+            },
+            address: data.address,
+            avatarUrl: data.avatarUrl,
+        };
 
-    setTimeout(() => {
         updateUser(updatedData);
         toast({
             title: "Profil Diperbarui",
             description: "Informasi profil Anda telah berhasil disimpan.",
         });
-        setPhotoPreview(null);
-        setIsPending(false);
-    }, 1000);
+    });
   };
   
   if (loading) {
@@ -96,7 +92,7 @@ export default function ProfilePage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-1 flex flex-col items-center gap-4">
                      <Avatar className="h-32 w-32">
-                        <AvatarImage src={photoPreview || user.avatarUrl} alt={user.name} />
+                        <AvatarImage src={photoPreview || undefined} alt={user.name} />
                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <Button asChild variant="outline">
@@ -165,7 +161,7 @@ export default function ProfilePage() {
                         )}
                     />
                     <div className="flex justify-end">
-                        <Button type="submit" disabled={isPending || !form.formState.isValid}>
+                        <Button type="submit" disabled={isPending || !form.formState.isDirty}>
                            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Simpan Perubahan
                         </Button>

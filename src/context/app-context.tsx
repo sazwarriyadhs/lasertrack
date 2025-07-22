@@ -32,7 +32,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             if (savedUserId) {
                 userToSet = users.find(u => u.id === savedUserId);
             } else {
-                 userToSet = users.find(u => u.role === savedUserRole);
+                 userToSet = users.find(u => u.role === savedUserRole as Role);
             }
             
             if(userToSet) {
@@ -54,11 +54,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = (role: Role) => {
-    // This is a simplified login. In a real app, you'd have user selection.
-    // For now, we find the first user with that role.
     let newUser;
     if (role === 'Technician') {
         newUser = users.find(u => u.id === 'tech-1');
+    } else if (role === 'Distributor') {
+        newUser = users.find(u => u.id === 'user-2')
+    } else if (role === 'Clinic') {
+        newUser = users.find(u => u.id === 'user-3')
     } else {
         newUser = users.find(u => u.role === role);
     }
@@ -73,7 +75,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 setCurrentUser(newUser);
             }
             sessionStorage.setItem('userRole', role);
-            sessionStorage.setItem('userId', newUser.id); // Store specific user ID
+            sessionStorage.setItem('userId', newUser.id);
         } catch (e) {
             console.warn('Session storage is not available. User state will not be persisted.');
         }
@@ -90,7 +92,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
         sessionStorage.removeItem('userRole');
         sessionStorage.removeItem('userId');
-        // also remove specific user data
         users.forEach(user => sessionStorage.removeItem(`user_data_${user.id}`));
     } catch (e) {
          console.warn('Session storage is not available.');
@@ -99,13 +100,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
   
   const updateUser = (updatedData: Partial<User>) => {
-    const updatedUser = { ...currentUser, ...updatedData };
-    setCurrentUser(updatedUser);
-     try {
-        sessionStorage.setItem(`user_data_${currentUser.id}`, JSON.stringify(updatedUser));
-    } catch (e) {
-         console.warn('Session storage is not available.');
-    }
+    setCurrentUser(prevUser => {
+        const updatedUser = { ...prevUser, ...updatedData };
+        try {
+           sessionStorage.setItem(`user_data_${updatedUser.id}`, JSON.stringify(updatedUser));
+       } catch (e) {
+            console.warn('Session storage is not available.');
+       }
+       return updatedUser;
+    });
   };
 
   const contextValue = useMemo(() => ({
