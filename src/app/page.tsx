@@ -109,7 +109,7 @@ export default function LandingPage() {
                   <CarouselContent>
                     <CarouselItem>
                        <Image
-                            src="https://placehold.co/1200x600.png"
+                            src="/slide1.jpeg"
                             width="1200"
                             height="600"
                             alt="Hero Image 1"
@@ -119,7 +119,7 @@ export default function LandingPage() {
                     </CarouselItem>
                     <CarouselItem>
                        <Image
-                            src="https://placehold.co/1200x600.png"
+                            src="/slide2.jpeg"
                             width="1200"
                             height="600"
                             alt="Hero Image 2"
@@ -129,7 +129,7 @@ export default function LandingPage() {
                     </CarouselItem>
                     <CarouselItem>
                         <Image
-                            src="https://placehold.co/1200x600.png"
+                            src="/slide3.jpeg"
                             width="1200"
                             height="600"
                             alt="Hero Image 3"
