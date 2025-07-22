@@ -104,7 +104,7 @@ export default function DistributorLoginPage() {
                                 Remember Me
                             </Label>
                         </div>
-                        <Button type="submit" className="w-full h-11 bg-[#00A99D] hover:bg-[#00897D]">
+                        <Button type="submit" className="w-full h-11">
                             Login
                         </Button>
                     </form>
@@ -114,7 +114,7 @@ export default function DistributorLoginPage() {
                         </Link>
                         <p className="text-muted-foreground">
                             Not a member?{' '}
-                            <Link href="/partner/register" className="font-semibold text-[#00A99D] hover:underline">
+                            <Link href="/partner/register" className="font-semibold text-primary hover:underline">
                                 Sign up now
                             </Link>
                         </p>

@@ -10,11 +10,12 @@ export const Logo = ({ variant = 'default' }: LogoProps) => {
     return (
         <div className={cn("flex items-center gap-2", isSmall ? 'h-auto' : 'h-16')}>
             <Image 
-                src="/logo.png" 
-                alt="SERENITY LaserTrack Logo" 
+                src="/lashead.png" 
+                alt="Serenity LaserTrack Logo" 
                 width={isSmall ? 120 : 180} 
                 height={isSmall ? 27 : 40} 
                 priority 
+                className="dark:brightness-0 dark:invert"
             />
         </div>
     );
