@@ -6,8 +6,8 @@ import { LanguageProvider } from '@/context/language-context';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'LaserTrack Lite',
-  description: 'Manage and track your laser devices with ease.',
+  title: 'LaserTrack Lite - Platform Manajemen Industri Estetika',
+  description: 'Optimalkan operasional, lacak perangkat, dan kelola tim Anda dengan LaserTrack Lite. Solusi terpadu untuk distributor, klinik, dan teknisi. Coba sekarang!',
 };
 
 export default function RootLayout({
