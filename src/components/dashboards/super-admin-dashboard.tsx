@@ -96,7 +96,7 @@ export default function SuperAdminDashboard() {
 
 
     return (
-        <div className="grid gap-6 p-4 sm:p-6" id="dashboard-content">
+        <div className="grid gap-6 p-4 sm:p-6 lg:grid-cols-3" id="dashboard-content">
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
                  <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -113,7 +113,7 @@ export default function SuperAdminDashboard() {
                 </DialogContent>
             </Dialog>
 
-            <section id="map-section">
+            <section id="map-section" className="lg:col-span-3">
                 <Card className="h-[60vh]">
                     <CardHeader>
                         <CardTitle>Peta Distributor</CardTitle>
@@ -125,7 +125,7 @@ export default function SuperAdminDashboard() {
                 </Card>
             </section>
 
-            <section id="distributor-management-section">
+            <section id="distributor-management-section" className="lg:col-span-3">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>

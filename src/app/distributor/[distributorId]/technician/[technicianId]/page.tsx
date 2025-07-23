@@ -13,6 +13,7 @@ import { Logo } from '@/components/layout/logo';
 import { cn } from '@/lib/utils';
 import type { TechnicianLocation, HandlingStatus } from '@/lib/types';
 import React from 'react';
+import { MapView } from '@/components/map-view';
 
 
 const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, label: string, color: string }> = {
@@ -49,8 +50,8 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                  <div className="flex-1" />
             </header>
             <main className="flex-1 p-4 sm:p-6 md:p-10">
-                <div className="mx-auto w-full max-w-4xl">
-                     <Card>
+                <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-2">
+                     <Card className="lg:col-span-1">
                         <CardHeader className="flex flex-col items-center text-center p-6 bg-muted/50 rounded-t-lg">
                             <Avatar className="h-24 w-24 mb-4 border-4 border-background">
                                 <AvatarImage src={technician.avatarUrl} alt={technician.name} data-ai-hint="person portrait" />
@@ -116,6 +117,15 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                                     </Card>
                                 ) : null}
                             </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="lg:col-span-1 h-[400px] lg:h-auto">
+                        <CardHeader>
+                            <CardTitle>Lokasi Teknisi (GPS)</CardTitle>
+                            <CardDescription>Posisi terakhir teknisi yang tercatat.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="h-[calc(100%-8rem)] p-0">
+                            <MapView locations={[technician]} initialZoom={15} />
                         </CardContent>
                     </Card>
                 </div>

@@ -224,24 +224,11 @@ export function MapView({ locations, initialZoom = 5 }: { locations: (Location &
 
         if (locations.length === 1) {
             const singleLocation = locations[0];
-            const feature = vectorSource.getFeatureById(singleLocation.id);
-            if (feature) {
-                const coordinates = (feature.getGeometry() as Point).getCoordinates();
-                map.getView().animate({
-                    center: coordinates,
-                    zoom: 14,
-                    duration: 1000
-                });
-
-                // Show popup after a short delay to allow zoom animation
-                setTimeout(() => {
-                    const content = popupRef.current?.querySelector('.popup-content') as HTMLElement;
-                    if(content) {
-                        content.innerHTML = generatePopupContent(singleLocation);
-                        overlay.setPosition(coordinates);
-                    }
-                }, 1000);
-            }
+            map.getView().animate({
+                center: fromLonLat([singleLocation.position.lng, singleLocation.position.lat]),
+                zoom: 14,
+                duration: 1000
+            });
         } else if (locations.length > 1) {
              const extent = vectorSource.getExtent();
              if (extent[0] !== Infinity) {

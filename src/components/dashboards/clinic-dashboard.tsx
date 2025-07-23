@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { devices, maintenanceHistory, technicianLocations, distributorLocations, purchaseHistory } from '@/lib/data';
-import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord, DistributorLocation } from '@/lib/types';
+import { devices, maintenanceHistory, technicianLocations, distributorLocations, purchaseHistory, distributorClinics } from '@/lib/data';
+import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord, DistributorLocation, ClinicLocation } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar, FileText } from 'lucide-react';
+import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar, FileText, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -22,6 +22,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
+import { MapView } from '../map-view';
 
 
 const statusColors: Record<DeviceStatus, string> = {
@@ -205,6 +206,7 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
 export default function ClinicDashboard() {
     const { user } = useApp();
     const clinicId = user.clinicId; 
+    const myClinic = distributorClinics.find(c => c.id === clinicId);
     const clinicDevices = devices.filter(d => d.clinicId === clinicId);
     const myDistributor = distributorLocations.find(d => d.id === user.distributorId);
     const myTechnicians = technicianLocations.filter(t => t.distributorId === user.distributorId);
@@ -214,9 +216,25 @@ export default function ClinicDashboard() {
     const activeMaintenanceDevice = clinicDevices.find(d => d.status === 'Under Maintenance' || d.status === 'Needs Attention');
     const assignedTechnician = activeMaintenanceDevice ? myTechnicians.find(t => t.handledDeviceId === activeMaintenanceDevice.id) : undefined;
 
+    const mapLocations = [myClinic, myDistributor].filter(Boolean) as (ClinicLocation | DistributorLocation)[];
+
     return (
         <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2 space-y-6">
+                 {myClinic && myDistributor && (
+                    <Card>
+                        <CardHeader>
+                             <CardTitle className="flex items-center gap-2">
+                                <MapPin className="text-primary"/>
+                                Peta Lokasi
+                            </CardTitle>
+                            <CardDescription>Posisi klinik Anda dan distributor yang melayani.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="h-64 p-0">
+                            <MapView locations={mapLocations} initialZoom={10} />
+                        </CardContent>
+                    </Card>
+                )}
                 <Card id="my-devices-section">
                     <CardHeader>
                         <CardTitle>Perangkat Saya</CardTitle>
