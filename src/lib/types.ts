@@ -97,6 +97,7 @@ export interface MaintenanceRecord {
     date: string;
     technicianName: string;
     description: string;
+    fileUrl?: string;
 }
 
 export interface PurchaseHistoryRecord {
