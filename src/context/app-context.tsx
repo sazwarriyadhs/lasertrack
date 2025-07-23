@@ -3,12 +3,13 @@
 
 import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
 import type { User, Role } from '@/lib/types';
-import { users } from '@/lib/data';
+import { users, chatConversations, chatMessages } from '@/lib/data';
 
 interface AppContextType {
   user: User;
   isAuthenticated: boolean;
   loading: boolean;
+  unreadMessages: number;
   login: (email: string, password: string) => User | null;
   logout: () => void;
   updateUser: (updatedData: Partial<User>) => void;
@@ -20,6 +21,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User>(users[0]); // Default non-auth user
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
 
 
   useEffect(() => {
@@ -43,6 +45,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      const myConversations = chatConversations.filter(c => c.participantIds.includes(currentUser.id));
+      const myConversationIds = myConversations.map(c => c.id);
+      
+      const unreadCount = chatMessages.filter(
+        msg => myConversationIds.includes(msg.conversationId) && msg.senderId !== currentUser.id
+      ).length;
+
+      // This is a simple simulation. In a real app, you'd check a `read` status.
+      setUnreadMessages(unreadCount);
+    } else {
+      setUnreadMessages(0);
+    }
+  }, [currentUser, isAuthenticated]);
 
   const login = (email: string, password: string): User | null => {
     const userToLogin = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
@@ -97,10 +115,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     user: currentUser,
     isAuthenticated,
     loading,
+    unreadMessages,
     login,
     logout,
     updateUser,
-  }), [currentUser, isAuthenticated, loading]);
+  }), [currentUser, isAuthenticated, loading, unreadMessages]);
 
   return (
     <AppContext.Provider value={contextValue}>
