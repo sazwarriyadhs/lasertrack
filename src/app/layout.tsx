@@ -10,10 +10,13 @@ export const metadata: Metadata = {
   title: 'LaserTrack Lite - Platform Manajemen Industri Estetika',
   description: 'Optimalkan operasional, lacak perangkat, dan kelola tim Anda dengan LaserTrack Lite. Solusi terpadu untuk distributor, klinik, dan teknisi. Coba sekarang!',
   manifest: '/manifest.json',
+  icons: {
+    apple: '/icons/icon-192x192.png',
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#29ABE2',
+  themeColor: '#1e40af',
 };
 
 export default function RootLayout({
@@ -27,7 +30,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body className={cn('font-body antialiased min-h-screen bg-background')}>
         <AppProvider>
