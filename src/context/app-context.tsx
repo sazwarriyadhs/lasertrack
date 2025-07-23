@@ -9,7 +9,7 @@ interface AppContextType {
   user: User;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => User | null;
   logout: () => void;
   updateUser: (updatedData: Partial<User>) => void;
 }
@@ -17,7 +17,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User>(users.find(u => u.role === 'Super Admin')!); // Default non-auth user
+  const [currentUser, setCurrentUser] = useState<User>(users[0]); // Default non-auth user
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -44,7 +44,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = (email: string, password: string): boolean => {
+  const login = (email: string, password: string): User | null => {
     const userToLogin = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
 
     if (userToLogin) {
@@ -62,14 +62,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
         setIsAuthenticated(true);
         setLoading(false);
-        return true;
+        return userToLogin;
     }
-    return false;
+    return null;
   };
 
   const logout = () => {
     setLoading(true);
-    const nonAuthUser = users.find(u => u.role === 'Super Admin')!;
+    const nonAuthUser = users[0];
     setCurrentUser(nonAuthUser);
     setIsAuthenticated(false);
     try {

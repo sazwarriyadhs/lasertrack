@@ -2,14 +2,14 @@
 import type { User, Device, Location, MaintenanceChecklistItem, DistributorLocation, ActivityLog, UserActivity, ClinicLocation, TechnicianLocation, MaintenanceRecord, PurchaseHistoryRecord, ChatConversation, ChatMessage } from '@/lib/types';
 
 export const users: User[] = [
-  { id: 'user-1', name: 'Admin User', email: 'superadmin@lasertrack.com', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100', address: '123 Admin Plaza, Suite 100, Capital City', contact: {email: 'superadmin@lasertrack.com', phone: '555-0101'} },
-  { id: 'user-2', name: 'PT Regenesis Indonesia', email: 'distributor@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', distributorId: 'dist-5', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia', contact: {email: 'info@regenesis.co.id', phone: '021-1234-5678'} },
-  { id: 'user-3', name: 'Klinik Baruna', email: 'clinic@lasertrack.com', role: 'Clinic', clinicId: 'clinic-10', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Pajajaran No. 9, Bogor', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'} },
-  { id: 'tech-1', name: 'Budi Teknisi', email: 'tech@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: 'Jl. Teknisi No. 1, Jakarta', contact: {email: 'budi.t@tech.com', phone: '0812-1111-2222'}, distributorId: 'dist-5' },
+  { id: 'user-1', name: 'Admin User', email: 'superadmin@lasertrack.com', password: 'password', role: 'Super Admin', avatarUrl: 'https://placehold.co/100x100', address: '123 Admin Plaza, Suite 100, Capital City', contact: {email: 'superadmin@lasertrack.com', phone: '555-0101'} },
+  { id: 'user-2', name: 'PT Regenesis Indonesia', email: 'distributor@lasertrack.com', password: 'password', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/1e40af/FFFFFF', distributorId: 'dist-5', address: 'Gedung Regenesis, Jl. Jend. Sudirman Kav. 50, Jakarta, Indonesia', contact: {email: 'info@regenesis.co.id', phone: '021-1234-5678'} },
+  { id: 'user-3', name: 'Klinik Baruna', email: 'clinic@lasertrack.com', password: 'password', role: 'Clinic', clinicId: 'clinic-10', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Pajajaran No. 9, Bogor', contact: {email: 'hello@baruna.clinic', phone: '021-222-5555'} },
+  { id: 'tech-1', name: 'Budi Teknisi', email: 'tech@lasertrack.com', password: 'password', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/F97316/FFFFFF', address: 'Jl. Teknisi No. 1, Jakarta', contact: {email: 'budi.t@tech.com', phone: '0812-1111-2222'}, distributorId: 'dist-5' },
   // Add other users for chat
-  { id: 'user-5', name: 'PT Innomed Jaya Utama', email: 'distributor2@lasertrack.com', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', distributorId: 'dist-2', address: 'Jl. Kramat Raya No. 45, Jakarta', contact: {email: 'support@innomed.asia', phone: '021-987-6543'} },
-  { id: 'user-6', name: 'Klinik Dr. Ananda', email: 'clinic2@lasertrack.com', role: 'Clinic', clinicId: 'clinic-6', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Margonda Raya No. 5, Depok', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'} },
-  { id: 'tech-2', name: 'Citra Ayu', email: 'tech2@lasertrack.com', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: 'Jl. Teknisi No. 2, Jakarta', contact: {email: 'citra.a@tech.com', phone: '0812-3333-4444'}, distributorId: 'dist-5' },
+  { id: 'user-5', name: 'PT Innomed Jaya Utama', email: 'distributor2@lasertrack.com', password: 'password', role: 'Distributor', avatarUrl: 'https://placehold.co/100x100/10B981/FFFFFF', distributorId: 'dist-2', address: 'Jl. Kramat Raya No. 45, Jakarta', contact: {email: 'support@innomed.asia', phone: '021-987-6543'} },
+  { id: 'user-6', name: 'Klinik Dr. Ananda', email: 'clinic2@lasertrack.com', password: 'password', role: 'Clinic', clinicId: 'clinic-6', distributorId: 'dist-5', avatarUrl: 'https://placehold.co/100x100/16A34A/FFFFFF', address: 'Jl. Margonda Raya No. 5, Depok', contact: {email: 'info@ananda-depok.com', phone: '021-777-1111'} },
+  { id: 'tech-2', name: 'Citra Ayu', email: 'tech2@lasertrack.com', password: 'password', role: 'Technician', avatarUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF', address: 'Jl. Teknisi No. 2, Jakarta', contact: {email: 'citra.a@tech.com', phone: '0812-3333-4444'}, distributorId: 'dist-5' },
 ];
 
 export const devices: Device[] = [
@@ -128,4 +128,5 @@ export const chatMessages: ChatMessage[] = [
 
 
     
+
 

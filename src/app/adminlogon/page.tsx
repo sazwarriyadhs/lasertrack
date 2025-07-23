@@ -33,9 +33,9 @@ export default function SuperAdminLoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
-        const user = login(email, password);
-        if (user && user.role === 'Super Admin') {
+    const user = login(email, password);
+    if (user) {
+        if (user.role === 'Super Admin') {
             router.push('/dashboard');
         } else {
              toast({

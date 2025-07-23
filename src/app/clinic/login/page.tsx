@@ -32,9 +32,9 @@ export default function ClinicLoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
-        const user = login(email, password);
-        if (user && user.role === 'Clinic') {
+    const user = login(email, password);
+    if (user) {
+        if (user.role === 'Clinic') {
             router.push('/dashboard');
         } else {
              toast({

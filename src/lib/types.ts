@@ -11,12 +11,13 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  password?: string;
   role: Role;
   avatarUrl: string;
   distributorId?: string; 
   clinicId?: string;
-  contact?: ContactInfo;
-  address?: string;
+  contact: ContactInfo;
+  address: string;
 }
 
 export type DeviceStatus = 'Operational' | 'Under Maintenance' | 'Decommissioned' | 'Needs Attention';

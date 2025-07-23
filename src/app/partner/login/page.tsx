@@ -14,8 +14,6 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { Checkbox } from '@/components/ui/checkbox';
-import Image from 'next/image';
 
 export default function DistributorLoginPage() {
   const router = useRouter();
@@ -36,9 +34,9 @@ export default function DistributorLoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
-        const user = login(email, password);
-        if (user && user.role === 'Distributor') {
+    const user = login(email, password);
+    if (user) {
+        if (user.role === 'Distributor') {
             router.push('/dashboard');
         } else {
              toast({

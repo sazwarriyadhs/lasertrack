@@ -33,9 +33,9 @@ export default function TechnicianLoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
-      const user = login(email, password);
-        if (user && user.role === 'Technician') {
+    const user = login(email, password);
+    if (user) {
+        if (user.role === 'Technician') {
             router.push('/dashboard');
         } else {
              toast({
