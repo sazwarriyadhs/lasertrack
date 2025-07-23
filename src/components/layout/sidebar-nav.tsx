@@ -134,7 +134,7 @@ export function SidebarNav() {
                 );
             case 'Clinic':
                 navItems = [
-                    { href: '/dashboard', label: t('dashboard_title', {role: ''}).replace(' Dashboard', '') },
+                    { href: '/dashboard', label: t('dashboard_title', {role: ''}).replace(' Dashboard', ''), icon: LayoutDashboard },
                     { href: '/dashboard#maintenance-history-section', label: t('maintenance_history'), icon: FileText },
                     { href: '/dashboard#request-service-section', label: t('service_request'), icon: Send },
                 ];
