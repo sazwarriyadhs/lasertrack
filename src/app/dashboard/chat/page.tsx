@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useApp } from '@/context/app-context';
-import { users, chatConversations as allConversations, chatMessages as allMessages } from '@/lib/data';
+import { users, chatConversations as allConversations, chatMessages as initialMessages } from '@/lib/data';
 import type { User, ChatConversation, ChatMessage } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,6 +19,7 @@ export default function ChatPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [allMessages, setAllMessages] = useState<ChatMessage[]>(initialMessages);
     const [newMessage, setNewMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -26,7 +27,7 @@ export default function ChatPage() {
     const myConversations = useMemo(() => {
         if (!currentUser) return [];
         return allConversations.filter(c => c.participantIds.includes(currentUser.id));
-    }, [currentUser.id]);
+    }, [currentUser?.id]);
 
     const filteredConversations = useMemo(() => {
         return myConversations.filter(convo => {
@@ -34,7 +35,7 @@ export default function ChatPage() {
             const otherUser = users.find(u => u.id === otherParticipantId);
             return otherUser?.name.toLowerCase().includes(searchTerm.toLowerCase());
         });
-    }, [myConversations, searchTerm, currentUser.id]);
+    }, [myConversations, searchTerm, currentUser?.id]);
 
     useEffect(() => {
         if (selectedConversation) {
@@ -42,7 +43,7 @@ export default function ChatPage() {
         } else {
             setMessages([]);
         }
-    }, [selectedConversation]);
+    }, [selectedConversation, allMessages]);
     
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -50,11 +51,10 @@ export default function ChatPage() {
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newMessage.trim() || !selectedConversation) return;
+        if (!newMessage.trim() || !selectedConversation || !currentUser) return;
 
         setIsSending(true);
         
-        // Simulate API call and data persistence
         setTimeout(() => {
             const message: ChatMessage = {
                 id: `msg-${Date.now()}`,
@@ -64,11 +64,7 @@ export default function ChatPage() {
                 text: newMessage,
             };
             
-            // Add to the "global" message pool
-            allMessages.push(message);
-
-            // Update the local state for the current view
-            setMessages(prev => [...prev, message]);
+            setAllMessages(prev => [...prev, message]);
 
             setNewMessage('');
             setIsSending(false);
