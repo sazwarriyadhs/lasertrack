@@ -130,6 +130,9 @@ export const chatConversations: ChatConversation[] = [
     { id: 'convo-5', participantIds: ['user-2', 'tech-1'] }, // Regenesis <-> Budi Teknisi
     { id: 'convo-6', participantIds: ['user-2', 'tech-2'] }, // Regenesis <-> Citra Ayu
     { id: 'convo-12', participantIds: ['dist-user-3', 'tech-user-6']}, // Mitra Medika <-> Rian Hidayat
+
+    // Clinic to Technician
+    { id: 'convo-13', participantIds: ['user-6', 'tech-2'] }, // Klinik Dr. Ananda <-> Citra Ayu
 ];
 
 export const chatMessages: ChatMessage[] = [
@@ -150,6 +153,11 @@ export const chatMessages: ChatMessage[] = [
 
     { id: 'msg-13', conversationId: 'convo-6', senderId: 'user-2', timestamp: '2024-07-23T13:00:00Z', text: 'Citra, ada jadwal maintenance rutin untuk PicoWay di Klinik Dr. Ananda besok. Tolong dipersiapkan ya.' },
     { id: 'msg-14', conversationId: 'convo-6', senderId: 'tech-2', timestamp: '2024-07-23T13:02:00Z', text: 'Baik, Bu. Akan saya siapkan semua peralatannya. Jam berapa saya harus ke sana?' },
+    { id: 'msg-19', conversationId: 'convo-13', senderId: 'user-6', timestamp: '2024-07-23T13:10:00Z', text: 'Halo Mba Citra, ini dari Klinik Ananda. Besok jadi ya untuk maintenance PicoWay?' },
+    { id: 'msg-20', conversationId: 'convo-13', senderId: 'tech-2', timestamp: '2024-07-23T13:12:00Z', text: 'Betul, Ibu. Besok pagi jam 10 saya akan ke sana sesuai jadwal.' },
+    { id: 'msg-21', conversationId: 'convo-4', senderId: 'user-6', timestamp: '2024-07-23T13:15:00Z', text: 'Halo Regenesis, kami sudah terhubung dengan teknisi Citra untuk jadwal besok. Terima kasih atas bantuannya.' },
+    { id: 'msg-22', conversationId: 'convo-4', senderId: 'user-2', timestamp: '2024-07-23T13:16:00Z', text: 'Baik, terima kasih atas konfirmasinya. Senang membantu.' },
+
 
     { id: 'msg-15', conversationId: 'convo-2', senderId: 'user-5', timestamp: '2024-07-23T15:00:00Z', text: 'Selamat sore, Pak Admin. Kami ingin mengonfirmasi pendaftaran 2 klinik baru kami.' },
     { id: 'msg-16', conversationId: 'convo-2', senderId: 'user-1', timestamp: '2024-07-23T15:01:00Z', text: 'Sore. Baik, saya lihat datanya sudah masuk. Akan segera saya proses aktivasinya.' },
@@ -169,3 +177,4 @@ export const chatMessages: ChatMessage[] = [
 
 
     
+
