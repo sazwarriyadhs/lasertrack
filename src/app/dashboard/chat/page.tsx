@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useApp } from '@/context/app-context';
-import { users, chatConversations as allConversations, chatMessages as initialMessages } from '@/lib/data';
+import { users, chatConversations as allConversations, chatMessages as allMessages } from '@/lib/data';
 import type { User, ChatConversation, ChatMessage } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,12 +19,13 @@ export default function ChatPage() {
     const { t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
-    const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const myConversations = useMemo(() => {
+        if (!currentUser) return [];
         return allConversations.filter(c => c.participantIds.includes(currentUser.id));
     }, [currentUser.id]);
 
@@ -39,7 +40,7 @@ export default function ChatPage() {
 
     useEffect(() => {
         if (selectedConversation) {
-            setMessages(initialMessages.filter(m => m.conversationId === selectedConversation.id));
+            setMessages(allMessages.filter(m => m.conversationId === selectedConversation.id));
         } else {
             setMessages([]);
         }
@@ -55,7 +56,6 @@ export default function ChatPage() {
 
         setIsSending(true);
 
-        // Simulate sending a message
         setTimeout(() => {
             const message: ChatMessage = {
                 id: `msg-${Date.now()}`,
@@ -65,10 +65,8 @@ export default function ChatPage() {
                 text: newMessage,
             };
             
-            // This would be an API call in a real app
-            // For now, we update the local state to see the change
+            allMessages.push(message);
             setMessages(prev => [...prev, message]);
-            initialMessages.push(message); // Persist for session
 
             setNewMessage('');
             setIsSending(false);
@@ -76,8 +74,15 @@ export default function ChatPage() {
     };
 
     const getOtherParticipant = (convo: ChatConversation) => {
+        if (!currentUser) return null;
         const otherId = convo.participantIds.find(id => id !== currentUser.id);
         return users.find(u => u.id === otherId);
+    }
+    
+    const getLastMessage = (conversationId: string) => {
+         return allMessages
+            .filter(m => m.conversationId === conversationId)
+            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
     }
 
     return (
@@ -98,9 +103,7 @@ export default function ChatPage() {
                 <ScrollArea className="flex-1">
                     {filteredConversations.map(convo => {
                         const otherUser = getOtherParticipant(convo);
-                        const lastMessage = messages
-                            .filter(m => m.conversationId === convo.id)
-                            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
+                        const lastMessage = getLastMessage(convo.id);
 
                         if (!otherUser) return null;
 
@@ -114,7 +117,7 @@ export default function ChatPage() {
                                 onClick={() => setSelectedConversation(convo)}
                             >
                                 <Avatar>
-                                    <AvatarImage src={otherUser.avatarUrl} alt={otherUser.name} />
+                                    <AvatarImage src={otherUser.avatarUrl} alt={otherUser.name} data-ai-hint="person portrait" />
                                     <AvatarFallback>{otherUser.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 overflow-hidden">
@@ -193,5 +196,3 @@ export default function ChatPage() {
         </Card>
     )
 }
-
-    
