@@ -76,6 +76,7 @@ export default function TechnicianAssignmentPage() {
              try {
                 const result = await generateWorkOrderAction({
                      distributorName: distributor.name,
+                     distributorLogoUrl: distributor.avatarUrl,
                      technicianName: technician.name,
                      clinicName: clinic.name,
                      clinicAddress: clinic.address,
