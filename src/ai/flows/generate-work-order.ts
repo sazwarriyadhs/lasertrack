@@ -17,7 +17,8 @@ import * as path from 'path';
 
 const GenerateWorkOrderInputSchema = z.object({
   distributorName: z.string().describe('The name of the distributor company.'),
-  distributorLogoUrl: z.string().optional().describe('The URL of the distributor logo.'),
+  distributorAddress: z.string().describe('The address of the distributor company.'),
+  distributorLogoUrl: z.string().optional().describe('The URL of the distributor logo (as a data URI).'),
   technicianName: z.string().describe('The name of the assigned technician.'),
   clinicName: z.string().describe('The name of the target clinic.'),
   clinicAddress: z.string().describe('The address of the target clinic.'),
@@ -53,61 +54,89 @@ const generateWorkOrderFlow = ai.defineFlow(
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
     const fontItalic = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
 
-    // Embed Distributor Logo
-    if (input.distributorLogoUrl) {
-        try {
-            const logoUrl = input.distributorLogoUrl;
-            // Assuming the URL is a placehold.co link or similar public URL
-            // In a real app, you'd fetch this. For demonstration, we'll simulate.
-            // Since we can't do network requests, we'll assume a placeholder if the URL is generic.
-            // A real implementation would require a fetch and buffer conversion.
-            // For now, this part will be skipped if it's not a data URI
-        } catch (e) {
-            console.error("Could not embed distributor logo:", e);
-        }
-    }
+    const leftMargin = 50;
+    const rightMargin = width - 50;
+    let y = height - 50;
 
     const drawText = (text: string, x: number, y: number, options: any) => {
         page.drawText(text, { x, y, ...options });
     };
 
-    // Header
-    drawText('SURAT PERINTAH KERJA', width / 2 - 100, height - 50, { font: fontBold, size: 20 });
-    drawText('WORK ORDER', width / 2 - 45, height - 70, { font: fontItalic, size: 14 });
+    // Embed Distributor Logo & Address
+    if (input.distributorLogoUrl && (input.distributorLogoUrl.startsWith('data:image/png;base64,') || input.distributorLogoUrl.startsWith('data:image/jpeg;base64,'))) {
+        try {
+            const isPng = input.distributorLogoUrl.startsWith('data:image/png;base64,');
+            const base64Data = input.distributorLogoUrl.substring(input.distributorLogoUrl.indexOf(',') + 1);
+            const imageBytes = Buffer.from(base64Data, 'base64');
+            const image = isPng 
+                ? await pdfDoc.embedPng(imageBytes)
+                : await pdfDoc.embedJpg(imageBytes);
+
+            const imageDims = image.scale(0.5); // Adjust scale as needed
+            page.drawImage(image, {
+                x: leftMargin,
+                y: y - imageDims.height + 20,
+                width: imageDims.width,
+                height: imageDims.height,
+            });
+            
+             drawText(input.distributorName, leftMargin + imageDims.width + 10, y, { font: fontBold, size: 14 });
+             drawText(input.distributorAddress, leftMargin + imageDims.width + 10, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
+
+        } catch (e) {
+            console.error("Could not embed distributor logo:", e);
+            drawText(input.distributorName, leftMargin, y, { font: fontBold, size: 14 });
+            drawText(input.distributorAddress, leftMargin, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
+        }
+    } else {
+        // Fallback if no logo
+        drawText(input.distributorName, leftMargin, y, { font: fontBold, size: 14 });
+        drawText(input.distributorAddress, leftMargin, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
+    }
+    y -= 60;
+
+
+    // Header Title
+    drawText('SURAT PERINTAH KERJA', width / 2 - 100, y, { font: fontBold, size: 20 });
+    y -= 20;
+    drawText('WORK ORDER', width / 2 - 45, y, { font: fontItalic, size: 14 });
+    y -= 20;
     const spkNumber = `No: SPK/${new Date().getFullYear()}/${Math.floor(1000 + Math.random() * 9000)}`;
-    drawText(spkNumber, width / 2 - (spkNumber.length * 3.5), height - 90, { font, size: 12 });
+    drawText(spkNumber, width / 2 - (spkNumber.length * 3.5), y, { font, size: 12 });
+    y -= 20;
+
 
     page.drawLine({
-        start: { x: 50, y: height - 110 },
-        end: { x: width - 50, y: height - 110 },
+        start: { x: leftMargin, y },
+        end: { x: rightMargin, y },
         thickness: 2,
     });
+    y -= 30;
 
     // Content
-    let y = height - 140;
-    const leftMargin = 60;
+    const contentLeftMargin = 60;
     const lineHeight = 20;
 
     const addRow = (label: string, value: string) => {
         const lines = value.split('\n');
-        drawText(label, leftMargin, y, { font: font, size: 11 });
-        drawText(':', leftMargin + 150, y, { font: font, size: 11 });
+        drawText(label, contentLeftMargin, y, { font: font, size: 11 });
+        drawText(':', contentLeftMargin + 150, y, { font: font, size: 11 });
         
         let valueY = y;
         for(const line of lines) {
-            drawText(line, leftMargin + 160, valueY, { font: fontBold, size: 11, lineHeight: 14 });
+            drawText(line, contentLeftMargin + 160, valueY, { font: fontBold, size: 11, lineHeight: 14 });
             valueY -= 14;
         }
         y -= (lines.length * 14) + (lineHeight - 14);
     };
     
-    drawText('Berdasarkan permintaan dari Klien, dengan ini kami menugaskan:', leftMargin, y, { font, size: 11 });
+    drawText('Berdasarkan permintaan dari Klien, dengan ini kami menugaskan:', contentLeftMargin, y, { font, size: 11 });
     y -= 30;
 
     addRow('Nama Teknisi', input.technicianName);
     y -= lineHeight;
 
-    drawText('Untuk melaksanakan pekerjaan maintenance / perbaikan untuk detail sebagai berikut:', leftMargin, y, { font, size: 11 });
+    drawText('Untuk melaksanakan pekerjaan maintenance / perbaikan untuk detail sebagai berikut:', contentLeftMargin, y, { font, size: 11 });
     y -= 30;
 
     addRow('Nama Klien', input.clinicName);
@@ -124,7 +153,7 @@ const generateWorkOrderFlow = ai.defineFlow(
 
 
     y -= 30;
-    drawText('Demikian Surat Perintah Kerja ini dibuat untuk dapat dilaksanakan dengan sebaik-baiknya.', leftMargin, y, { font, size: 11 });
+    drawText('Demikian Surat Perintah Kerja ini dibuat untuk dapat dilaksanakan dengan sebaik-baiknya.', contentLeftMargin, y, { font, size: 11 });
 
     // Signature
     const signatureY = y - 100;
@@ -141,9 +170,9 @@ const generateWorkOrderFlow = ai.defineFlow(
         const laserLogoBytes = await fs.readFile(laserLogoPath);
         const laserLogoImage = await pdfDoc.embedPng(laserLogoBytes);
         
-        drawText('Powered by:', leftMargin, footerY + 5, { font: fontItalic, size: 8, color: rgb(0.5, 0.5, 0.5) });
+        drawText('Powered by:', contentLeftMargin, footerY + 5, { font: fontItalic, size: 8, color: rgb(0.5, 0.5, 0.5) });
         page.drawImage(laserLogoImage, {
-            x: leftMargin + 55,
+            x: contentLeftMargin + 55,
             y: footerY,
             width: 90,
             height: 20,
@@ -151,7 +180,7 @@ const generateWorkOrderFlow = ai.defineFlow(
 
     } catch (e) {
         console.error("Could not embed LaserTrack logo:", e);
-        drawText('Powered by LaserTrack Lite', leftMargin, footerY, { font: fontItalic, size: 8, color: rgb(0.5, 0.5, 0.5) });
+        drawText('Powered by LaserTrack Lite', contentLeftMargin, footerY, { font: fontItalic, size: 8, color: rgb(0.5, 0.5, 0.5) });
     }
 
     const pdfBytes = await pdfDoc.save();

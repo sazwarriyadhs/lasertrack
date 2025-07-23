@@ -56,6 +56,29 @@ export default function TechnicianAssignmentPage() {
             description: '',
         }
     });
+    
+    const getBase64ImageFromUrl = async (imageUrl: string): Promise<string> => {
+        try {
+            if (imageUrl.startsWith('data:')) {
+                return imageUrl;
+            }
+            const response = await fetch(imageUrl);
+            if (!response.ok) {
+                 return '';
+            }
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error('Error converting image to base64', error);
+            return '';
+        }
+    }
+
 
     const onSubmitAssignment = (values: z.infer<typeof assignmentFormSchema>) => {
         startTransition(async () => {
@@ -74,9 +97,12 @@ export default function TechnicianAssignmentPage() {
              }
  
              try {
+                const logoDataUri = distributor.avatarUrl ? await getBase64ImageFromUrl(distributor.avatarUrl) : '';
+
                 const result = await generateWorkOrderAction({
                      distributorName: distributor.name,
-                     distributorLogoUrl: distributor.avatarUrl,
+                     distributorAddress: distributor.address,
+                     distributorLogoUrl: logoDataUri,
                      technicianName: technician.name,
                      clinicName: clinic.name,
                      clinicAddress: clinic.address,
