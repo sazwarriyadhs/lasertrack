@@ -1,4 +1,3 @@
-
 'use client';
 import { MaintenanceForm } from '@/components/maintenance/maintenance-form';
 import { devices } from '@/lib/data';
@@ -9,9 +8,11 @@ import { ArrowLeft } from 'lucide-react';
 import { Logo } from '@/components/layout/logo';
 import { useApp } from '@/context/app-context';
 import { useEffect } from 'react';
+import React from 'react';
 
 export default function MaintenancePage({ params }: { params: { deviceId: string } }) {
-    const device = devices.find(d => d.id === params.deviceId);
+    const { deviceId } = params;
+    const device = devices.find(d => d.id === deviceId);
     const { isAuthenticated } = useApp();
     const router = useRouter();
 
@@ -41,6 +42,7 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
                     </Button>
                 </nav>
                  <Logo />
+                 <div className="flex-1" />
             </header>
             <main className="flex-1 p-4 sm:p-6 md:p-10">
                 <div className="mx-auto grid w-full max-w-6xl gap-2 mb-6">

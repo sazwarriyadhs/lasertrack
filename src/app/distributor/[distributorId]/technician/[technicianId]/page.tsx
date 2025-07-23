@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/layout/logo';
 import { cn } from '@/lib/utils';
 import type { TechnicianLocation, HandlingStatus } from '@/lib/types';
+import React from 'react';
 
 
 const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, label: string, color: string }> = {
@@ -23,9 +24,10 @@ const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, labe
 
 
 export default function TechnicianDetailPage({ params }: { params: { distributorId: string, technicianId: string } }) {
+    const { distributorId, technicianId } = params;
     const router = useRouter();
-    const technician = technicianLocations.find(t => t.id === params.technicianId && t.distributorId === params.distributorId);
-    const distributor = distributorLocations.find(d => d.id === params.distributorId);
+    const technician = technicianLocations.find(t => t.id === technicianId && t.distributorId === distributorId);
+    const distributor = distributorLocations.find(d => d.id === distributorId);
     
     if (!technician || !distributor) {
         notFound();
