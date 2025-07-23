@@ -94,8 +94,8 @@ export const purchaseHistory: PurchaseHistoryRecord[] = [
     { id: 'pur-2', deviceId: 'dev-2', deviceName: 'Vbeam Perfecta®', purchaseDate: '2022-11-20', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2024-11-20' },
     { id: 'pur-3', deviceId: 'dev-3', deviceName: 'Cellec V', purchaseDate: '2023-03-10', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-03-10' },
     { id: 'pur-4', deviceId: 'dev-4', deviceName: 'BeautiFill', purchaseDate: '2023-06-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-06-01' },
-    { id: 'pur-5', deviceId: 'dev-6', deviceName: 'PicoWay®', purchaseDate: '2023-08-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-01' },
-    { id: 'pur-6', deviceId: 'dev-7', deviceName: 'Vbeam Perfecta®', purchaseDate: '2023-09-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-09-01' },
+    { id: 'pur-6', deviceId: 'dev-6', deviceName: 'PicoWay®', purchaseDate: '2023-08-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-08-01' },
+    { id: 'pur-7', deviceId: 'dev-7', deviceName: 'Vbeam Perfecta®', purchaseDate: '2023-09-01', distributorName: 'PT Regenesis Indonesia', warrantyEndDate: '2025-09-01' },
 ];
 
 // Chat Data
@@ -116,10 +116,21 @@ export const chatConversations: ChatConversation[] = [
 export const chatMessages: ChatMessage[] = [
     { id: 'msg-1', conversationId: 'convo-1', senderId: 'user-1', timestamp: '2024-07-22T10:00:00Z', text: 'Selamat pagi, mohon laporan bulanan untuk segera dikirimkan.' },
     { id: 'msg-2', conversationId: 'convo-1', senderId: 'user-2', timestamp: '2024-07-22T10:01:00Z', text: 'Baik Pak, sedang kami siapkan.' },
+    { id: 'msg-7', conversationId: 'convo-1', senderId: 'user-1', timestamp: '2024-07-23T11:00:00Z', text: 'Terima kasih. Ditunggu laporannya sebelum jam 5 sore ya.' },
+    { id: 'msg-8', conversationId: 'convo-1', senderId: 'user-2', timestamp: '2024-07-23T11:02:00Z', text: 'Siap, Pak. Pasti akan kami kirimkan tepat waktu.' },
+    
     { id: 'msg-3', conversationId: 'convo-3', senderId: 'user-3', timestamp: '2024-07-21T14:30:00Z', text: 'Halo, kami ada kendala dengan perangkat Vbeam, butuh bantuan teknisi segera.' },
     { id: 'msg-4', conversationId: 'convo-3', senderId: 'user-2', timestamp: '2024-07-21T14:32:00Z', text: 'Baik, Ibu. Kami akan segera kirimkan teknisi. Mohon tunggu informasi selanjutnya.' },
+    { id: 'msg-9', conversationId: 'convo-3', senderId: 'user-3', timestamp: '2024-07-22T09:15:00Z', text: 'Terima kasih, teknisinya sudah datang dan sedang menangani. Pelayanan cepat!' },
+    { id: 'msg-10', conversationId: 'convo-3', senderId: 'user-2', timestamp: '2024-07-22T09:17:00Z', text: 'Sama-sama, Ibu. Senang bisa membantu. Mohon kabari jika ada perkembangan lebih lanjut.' },
+
     { id: 'msg-5', conversationId: 'convo-5', senderId: 'user-2', timestamp: '2024-07-21T14:35:00Z', text: 'Budi, tolong segera ke Klinik Baruna. Ada masalah di Vbeam mereka.' },
     { id: 'msg-6', conversationId: 'convo-5', senderId: 'tech-1', timestamp: '2024-07-21T14:36:00Z', text: 'Siap, saya segera meluncur.' },
+    { id: 'msg-11', conversationId: 'convo-5', senderId: 'user-2', timestamp: '2024-07-21T17:00:00Z', text: 'Bagaimana perkembangannya, Budi?' },
+    { id: 'msg-12', conversationId: 'convo-5', senderId: 'tech-1', timestamp: '2024-07-21T17:05:00Z', text: 'Sudah teratasi, Pak. Hanya masalah kecil pada kalibrasi. Laporan lengkap akan saya kirimkan.' },
+
+    { id: 'msg-13', conversationId: 'convo-6', senderId: 'user-2', timestamp: '2024-07-23T13:00:00Z', text: 'Citra, ada jadwal maintenance rutin untuk PicoWay di Klinik Dr. Ananda besok. Tolong dipersiapkan ya.' },
+    { id: 'msg-14', conversationId: 'convo-6', senderId: 'tech-2', timestamp: '2024-07-23T13:02:00Z', text: 'Baik, Bu. Akan saya siapkan semua peralatannya. Jam berapa saya harus ke sana?' },
 ];
     
 
@@ -130,3 +141,6 @@ export const chatMessages: ChatMessage[] = [
     
 
 
+
+
+    
