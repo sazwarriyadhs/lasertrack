@@ -56,6 +56,12 @@ export default function DistributorLoginPage() {
 
   return (
       <div className="flex flex-col min-h-screen items-center justify-center bg-muted/30 p-4 relative">
+        <Button variant="outline" asChild className="absolute top-4 left-4">
+            <Link href="/">
+                <ArrowLeft className="mr-2" />
+                Kembali ke Landing Page
+            </Link>
+        </Button>
         <div className="w-full max-w-sm">
             <Card className="shadow-lg">
                 <CardHeader>
@@ -109,3 +115,5 @@ export default function DistributorLoginPage() {
     </div>
   );
 }
+
+    

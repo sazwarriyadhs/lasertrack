@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useApp } from '@/context/app-context';
-import { users, chatConversations as allConversations, chatMessages as allMessages } from '@/lib/data';
+import { users, chatConversations as allConversations, chatMessages as initialMessages } from '@/lib/data';
 import type { User, ChatConversation, ChatMessage } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,12 +12,14 @@ import { Button } from '@/components/ui/button';
 import { Send, Search, Loader2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/language-context';
 
 export default function ChatPage() {
     const { user: currentUser } = useApp();
+    const { t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
     const [newMessage, setNewMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -37,7 +39,7 @@ export default function ChatPage() {
 
     useEffect(() => {
         if (selectedConversation) {
-            setMessages(allMessages.filter(m => m.conversationId === selectedConversation.id));
+            setMessages(initialMessages.filter(m => m.conversationId === selectedConversation.id));
         } else {
             setMessages([]);
         }
@@ -64,8 +66,9 @@ export default function ChatPage() {
             };
             
             // This would be an API call in a real app
-            allMessages.push(message); 
+            // For now, we update the local state to see the change
             setMessages(prev => [...prev, message]);
+            initialMessages.push(message); // Persist for session
 
             setNewMessage('');
             setIsSending(false);
@@ -81,11 +84,11 @@ export default function ChatPage() {
         <Card className="h-[85vh] flex">
             <div className="w-1/3 border-r flex flex-col">
                 <CardHeader>
-                    <CardTitle>Pesan</CardTitle>
+                    <CardTitle>{t('messages')}</CardTitle>
                     <div className="relative mt-2">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Cari kontak..."
+                            placeholder={t('search') + " kontak..."}
                             className="pl-10"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -95,7 +98,7 @@ export default function ChatPage() {
                 <ScrollArea className="flex-1">
                     {filteredConversations.map(convo => {
                         const otherUser = getOtherParticipant(convo);
-                        const lastMessage = allMessages
+                        const lastMessage = messages
                             .filter(m => m.conversationId === convo.id)
                             .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
 
@@ -190,3 +193,5 @@ export default function ChatPage() {
         </Card>
     )
 }
+
+    

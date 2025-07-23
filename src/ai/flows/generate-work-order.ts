@@ -62,12 +62,18 @@ const generateWorkOrderFlow = ai.defineFlow(
         page.drawText(text, { x, y, ...options });
     };
 
+    const fallbackHeader = () => {
+        drawText(input.distributorName, leftMargin, y, { font: fontBold, size: 14 });
+        drawText(input.distributorAddress, leftMargin, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
+    }
+
     // Embed Distributor Logo & Address
     if (input.distributorLogoUrl && (input.distributorLogoUrl.startsWith('data:image/png;base64,') || input.distributorLogoUrl.startsWith('data:image/jpeg;base64,'))) {
         try {
             const isPng = input.distributorLogoUrl.startsWith('data:image/png;base64,');
             const base64Data = input.distributorLogoUrl.substring(input.distributorLogoUrl.indexOf(',') + 1);
             const imageBytes = Buffer.from(base64Data, 'base64');
+            
             const image = isPng 
                 ? await pdfDoc.embedPng(imageBytes)
                 : await pdfDoc.embedJpg(imageBytes);
@@ -84,14 +90,11 @@ const generateWorkOrderFlow = ai.defineFlow(
              drawText(input.distributorAddress, leftMargin + imageDims.width + 10, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
 
         } catch (e) {
-            console.error("Could not embed distributor logo:", e);
-            drawText(input.distributorName, leftMargin, y, { font: fontBold, size: 14 });
-            drawText(input.distributorAddress, leftMargin, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
+            console.error("Could not embed distributor logo, using fallback:", e);
+            fallbackHeader();
         }
     } else {
-        // Fallback if no logo
-        drawText(input.distributorName, leftMargin, y, { font: fontBold, size: 14 });
-        drawText(input.distributorAddress, leftMargin, y - 15, { font: font, size: 9, lineHeight: 12, maxWidth: 200 });
+        fallbackHeader();
     }
     y -= 60;
 
@@ -189,3 +192,5 @@ const generateWorkOrderFlow = ai.defineFlow(
     return { workOrder: pdfBase64 };
   }
 );
+
+    
