@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
@@ -30,7 +29,6 @@ export default function ChatPage() {
     }, [currentUser.id]);
 
     const filteredConversations = useMemo(() => {
-        if (!searchTerm) return myConversations;
         return myConversations.filter(convo => {
             const otherParticipantId = convo.participantIds.find(id => id !== currentUser.id);
             const otherUser = users.find(u => u.id === otherParticipantId);
@@ -40,7 +38,7 @@ export default function ChatPage() {
 
     useEffect(() => {
         if (selectedConversation) {
-            setMessages(allMessages.filter(m => m.conversationId === selectedConversation.id));
+            setMessages(allMessages.filter(m => m.conversationId === selectedConversation.id).sort((a,b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()));
         } else {
             setMessages([]);
         }
@@ -55,7 +53,8 @@ export default function ChatPage() {
         if (!newMessage.trim() || !selectedConversation) return;
 
         setIsSending(true);
-
+        
+        // Simulate API call and data persistence
         setTimeout(() => {
             const message: ChatMessage = {
                 id: `msg-${Date.now()}`,
@@ -65,7 +64,10 @@ export default function ChatPage() {
                 text: newMessage,
             };
             
+            // Add to the "global" message pool
             allMessages.push(message);
+
+            // Update the local state for the current view
             setMessages(prev => [...prev, message]);
 
             setNewMessage('');
