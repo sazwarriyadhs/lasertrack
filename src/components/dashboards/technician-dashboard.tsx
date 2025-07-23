@@ -54,28 +54,21 @@ export default function TechnicianDashboard() {
     const { user } = useApp();
     const { t } = useLanguage();
 
-    const { assignedDevices, myDevices, myHistory, urgentTasks } = useMemo(() => {
-        if (!user.id) return { assignedDevices: [], myDevices: [], myHistory: [], urgentTasks: [] };
+    const { assignedDevices, urgentTasks } = useMemo(() => {
+        if (!user.id) return { assignedDevices: [], urgentTasks: [] };
         
         // Devices assigned to this technician
         const assigned = devices.filter(d => d.assignedTechnicianId === user.id);
         
-        // All devices from the technician's distributor
+        // All devices from the technician's distributor that need attention
         const myClinicIds = distributorClinics.filter(c => c.distributorId === user.distributorId).map(c => c.id);
-        const allMyDistributorDevices = devices.filter(d => myClinicIds.includes(d.clinicId));
-        
-        // Maintenance history for this technician
-        const hist = maintenanceHistory.filter(h => h.technicianName === user.name);
-
-        const urgent = allMyDistributorDevices.filter(d => d.status === 'Needs Attention');
+        const urgent = devices.filter(d => myClinicIds.includes(d.clinicId) && d.status === 'Needs Attention');
         
         return { 
-            assignedDevices: assigned, 
-            myDevices: allMyDistributorDevices, 
-            myHistory: hist,
+            assignedDevices: assigned,
             urgentTasks: urgent
         };
-    }, [user.id, user.name, user.distributorId]);
+    }, [user.id, user.distributorId]);
     
 
     return (
@@ -162,7 +155,7 @@ export default function TechnicianDashboard() {
                                     <CardContent className="p-4 flex items-center justify-between gap-4">
                                         <div className="flex-1">
                                             <Badge variant={device.status === 'Needs Attention' ? 'destructive' : 'secondary'} className="font-normal mb-2">
-                                                {t(device.status.toLowerCase().replace(' ', '_'))}
+                                                {t(device.status.toLowerCase().replace(/ /g, '_'))}
                                             </Badge>
                                             <h3 className="font-semibold">{device.name}</h3>
                                             <p className="text-sm text-muted-foreground">
@@ -197,40 +190,3 @@ export default function TechnicianDashboard() {
          </div>
     );
 }
-
-// Translations for new keys:
-// en.ts
-// 'Kunjungan Hari Ini': 'Today\'s Visits',
-// 'Alat Butuh Perawatan': 'Devices Needing Care',
-// 'Notifikasi Baru': 'New Notifications',
-// 'Tambah Laporan': 'Add Report',
-// 'Jadwal Kunjungan': 'Visit Schedule',
-// 'Semua Alat': 'All Devices',
-// 'Riwayat Servis': 'Service History',
-// 'Tugas Mendesak': 'Urgent Tasks',
-// 'Perangkat yang membutuhkan penanganan segera.': 'Devices that require immediate attention.',
-// 'Lihat': 'View',
-// 'Tidak ada tugas mendesak.': 'No urgent tasks.',
-// 'Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.': 'There are {{count}} devices needing attention. Check the device list.',
-// 'Lihat daftar perangkat': 'View device list'
-
-// id.ts
-// 'Kunjungan Hari Ini': 'Kunjungan Hari Ini',
-// 'Alat Butuh Perawatan': 'Alat Butuh Perawatan',
-// 'Notifikasi Baru': 'Notifikasi Baru',
-// 'Tambah Laporan': 'Tambah Laporan',
-// 'Jadwal Kunjungan': 'Jadwal Kunjungan',
-// 'Semua Alat': 'Semua Alat',
-// 'Riwayat Servis': 'Riwayat Servis',
-// 'Tugas Mendesak': 'Tugas Mendesak',
-// 'Perangkat yang membutuhkan penanganan segera.': 'Perangkat yang membutuhkan penanganan segera.',
-// 'Lihat': 'Lihat',
-// 'Tidak ada tugas mendesak.': 'Tidak ada tugas mendesak.',
-// 'Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.': 'Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.',
-// 'Lihat daftar perangkat': 'Lihat daftar perangkat'
-
-// types.ts:
-// Make sure device status keys in locales match DeviceStatus type but in lowercase with underscores.
-// "needs_attention" for "Needs Attention"
-// "under_maintenance" for "Under Maintenance"
-

@@ -209,7 +209,7 @@ export default function ClinicDashboard() {
     const myDistributor = distributorLocations.find(d => d.id === user.distributorId);
     const myTechnicians = technicianLocations.filter(t => t.distributorId === user.distributorId);
     const clinicMaintenanceHistory = maintenanceHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
-    const clinicPurchaseHistory = purchaseHistory.filter(h => clinicDevices.some(d => d.id === h.deviceId));
+    const clinicPurchaseHistory = purchaseHistory.filter(h => h.deviceId && clinicDevices.some(d => d.id === h.deviceId));
     
     const activeMaintenanceDevice = clinicDevices.find(d => d.status === 'Under Maintenance' || d.status === 'Needs Attention');
     const assignedTechnician = activeMaintenanceDevice ? myTechnicians.find(t => t.handledDeviceId === activeMaintenanceDevice.id) : undefined;
@@ -354,5 +354,3 @@ export default function ClinicDashboard() {
         </div>
     );
 }
-
-    
