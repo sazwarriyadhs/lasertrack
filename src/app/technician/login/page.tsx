@@ -34,12 +34,21 @@ export default function TechnicianLoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (login(email, password)) {
-      router.push('/dashboard');
+      const user = login(email, password);
+        if (user && user.role === 'Technician') {
+            router.push('/dashboard');
+        } else {
+             toast({
+                variant: 'destructive',
+                title: 'Login Gagal',
+                description: 'Akun ini tidak memiliki akses Teknisi.',
+            });
+        }
     } else {
       toast({
         variant: 'destructive',
         title: 'Login Gagal',
-        description: 'Email atau password tidak valid untuk peran Teknisi.',
+        description: 'Email atau password tidak valid.',
       });
     }
   };
@@ -50,16 +59,16 @@ export default function TechnicianLoginPage() {
         <Card className="shadow-lg">
             <CardHeader>
                   <div className='flex justify-center'><Logo /></div>
-                <CardTitle className="text-center text-3xl font-bold">Login</CardTitle>
+                <CardTitle className="text-center text-3xl font-bold">Login Teknisi</CardTitle>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleLogin} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="sr-only">Email Address</Label>
+                        <Label htmlFor="email" className="sr-only">Alamat Email</Label>
                         <Input 
                             id="email" 
                             type="email" 
-                            placeholder="Email Address"
+                            placeholder="Alamat Email"
                             required 
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -76,26 +85,26 @@ export default function TechnicianLoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="remember-me" />
-                        <Label htmlFor="remember-me" className="font-normal text-sm">
-                            Remember Me
-                        </Label>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="remember-me" />
+                            <Label htmlFor="remember-me" className="font-normal text-sm">
+                                Ingat Saya
+                            </Label>
+                        </div>
+                        <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                            Lupa kata sandi?
+                        </Link>
                     </div>
                     <Button type="submit" className="w-full h-11">
                         Login
                     </Button>
                 </form>
-                <div className="mt-4 text-center text-sm flex justify-between">
-                    <Link href="#" className="text-muted-foreground hover:text-primary">
-                        Forgot password?
-                    </Link>
-                </div>
             </CardContent>
         </Card>
       </div>
        <div className="absolute bottom-6 text-center text-sm text-muted-foreground">
-           <p className="mb-1">Supported by:</p>
+           <p className="mb-1">Didukung oleh:</p>
           <Logo variant="small" />
       </div>
     </div>

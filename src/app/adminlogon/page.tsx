@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -32,14 +33,22 @@ export default function SuperAdminLoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.toLowerCase().startsWith('superadmin')) {
-      login('Super Admin');
-      router.push('/dashboard');
+    if (login(email, password)) {
+        const user = login(email, password);
+        if (user && user.role === 'Super Admin') {
+            router.push('/dashboard');
+        } else {
+             toast({
+                variant: 'destructive',
+                title: 'Login Gagal',
+                description: 'Akun ini tidak memiliki akses Super Admin.',
+            });
+        }
     } else {
       toast({
         variant: 'destructive',
         title: 'Login Gagal',
-        description: 'Email atau password tidak valid untuk peran Super Admin.',
+        description: 'Email atau password tidak valid.',
       });
     }
   };

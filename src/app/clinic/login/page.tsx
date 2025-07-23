@@ -32,14 +32,22 @@ export default function ClinicLoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.toLowerCase().startsWith('clinic')) {
-      login('Clinic');
-      router.push('/dashboard');
+    if (login(email, password)) {
+        const user = login(email, password);
+        if (user && user.role === 'Clinic') {
+            router.push('/dashboard');
+        } else {
+             toast({
+                variant: 'destructive',
+                title: 'Login Gagal',
+                description: 'Akun ini tidak memiliki akses Klinik.',
+            });
+        }
     } else {
       toast({
         variant: 'destructive',
         title: 'Login Gagal',
-        description: 'Email atau password tidak valid untuk peran Klinik.',
+        description: 'Email atau password tidak valid.',
       });
     }
   };

@@ -37,7 +37,16 @@ export default function DistributorLoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (login(email, password)) {
-      router.push('/dashboard');
+        const user = login(email, password);
+        if (user && user.role === 'Distributor') {
+            router.push('/dashboard');
+        } else {
+             toast({
+                variant: 'destructive',
+                title: 'Login Gagal',
+                description: 'Akun ini tidak memiliki akses Distributor.',
+            });
+        }
     } else {
       toast({
         variant: 'destructive',
@@ -53,12 +62,12 @@ export default function DistributorLoginPage() {
             <Card className="shadow-lg">
                 <CardHeader>
                      <div className='flex justify-center'><Logo /></div>
-                    <CardTitle className="text-center text-3xl font-bold">Login</CardTitle>
+                    <CardTitle className="text-center text-3xl font-bold">Login Mitra</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email Address</Label>
+                            <Label htmlFor="email">Alamat Email</Label>
                             <Input 
                                 id="email" 
                                 type="email" 
@@ -83,12 +92,12 @@ export default function DistributorLoginPage() {
                     </form>
                     <div className="mt-4 text-center text-sm flex justify-between">
                         <Link href="#" className="text-muted-foreground hover:text-primary">
-                            Forgot password?
+                            Lupa kata sandi?
                         </Link>
                         <p className="text-muted-foreground">
-                            Not a member?{' '}
+                            Bukan anggota?{' '}
                             <Link href="/partner/register" className="font-semibold text-primary hover:underline">
-                                Sign up now
+                                Daftar sekarang
                             </Link>
                         </p>
                     </div>
@@ -96,7 +105,7 @@ export default function DistributorLoginPage() {
             </Card>
         </div>
          <div className="absolute bottom-6 text-center text-sm text-muted-foreground">
-             <p className="mb-1">Supported by:</p>
+             <p className="mb-1">Didukung oleh:</p>
             <Logo variant="small" />
         </div>
     </div>
