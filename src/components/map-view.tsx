@@ -68,11 +68,12 @@ const generatePopupContent = (props: any): string => {
         `;
     } else if (props.type === 'Clinic') {
         const clinicProps = props as (ClinicLocation & { devices: Device[] });
+        const clinicDevices = allDevices.filter(d => d.clinicId === clinicProps.id);
         popupContent += `<hr class="my-2">`;
-        popupContent += `<h4 class="font-semibold text-sm mb-1">Perangkat (${clinicProps.devices.length})</h4>`;
-        if (clinicProps.devices.length > 0) {
+        popupContent += `<h4 class="font-semibold text-sm mb-1">Perangkat (${clinicDevices.length})</h4>`;
+        if (clinicDevices.length > 0) {
             popupContent += `<ul class="text-xs space-y-1">`;
-            clinicProps.devices.forEach(device => {
+            clinicDevices.forEach(device => {
                 const statusColor = deviceStatusColors[device.status];
                 popupContent += `
                     <li>
@@ -242,11 +243,16 @@ export function MapView({ locations, initialZoom = 5 }: { locations: (Location &
                 }, 1000);
             }
         } else if (locations.length > 1) {
-             map.getView().animate({
-                zoom: initialZoom,
-                center: fromLonLat([113.9213, -0.7893]), // Reset to default center
-                duration: 1000
-            });
+             const extent = vectorSource.getExtent();
+             if (extent[0] !== Infinity) {
+                map.getView().fit(extent, { padding: [100, 100, 100, 100], duration: 1000, maxZoom: 15 });
+             } else {
+                map.getView().animate({
+                    zoom: initialZoom,
+                    center: fromLonLat([113.9213, -0.7893]), // Reset to default center
+                    duration: 1000
+                });
+             }
             overlay.setPosition(undefined);
         } else {
              overlay.setPosition(undefined);

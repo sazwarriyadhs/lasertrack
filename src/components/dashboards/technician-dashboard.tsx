@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { devices, distributorClinics, maintenanceHistory } from '@/lib/data';
-import { ArrowRight, HardHat, Bell, List, Calendar, Wrench, Plus, FileClock, Briefcase, ClipboardList } from 'lucide-react';
+import { ArrowRight, HardHat, Bell, List, Calendar, Wrench, Plus, Briefcase, ClipboardList } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
+import { useLanguage } from '@/context/language-context';
 
 
 const StatCard = ({ title, value, icon, href }: { title: string, value: number | string, icon: React.ElementType, href: string }) => {
@@ -51,14 +52,29 @@ const NavCard = ({ title, icon, href }: { title: string, icon: React.ElementType
 
 export default function TechnicianDashboard() {
     const { user } = useApp();
+    const { t } = useLanguage();
 
-    const { assignedDevices, myDevices, myHistory } = useMemo(() => {
-        if (!user.id) return { assignedDevices: [], myDevices: [], myHistory: [] };
-        const myDevs = devices.filter(d => d.assignedTechnicianId === user.id);
+    const { assignedDevices, myDevices, myHistory, urgentTasks } = useMemo(() => {
+        if (!user.id) return { assignedDevices: [], myDevices: [], myHistory: [], urgentTasks: [] };
+        
+        // Devices assigned to this technician
+        const assigned = devices.filter(d => d.assignedTechnicianId === user.id);
+        
+        // All devices from the technician's distributor
         const myClinicIds = distributorClinics.filter(c => c.distributorId === user.distributorId).map(c => c.id);
         const allMyDistributorDevices = devices.filter(d => myClinicIds.includes(d.clinicId));
+        
+        // Maintenance history for this technician
         const hist = maintenanceHistory.filter(h => h.technicianName === user.name);
-        return { assignedDevices: myDevs, myDevices: allMyDistributorDevices, myHistory: hist };
+
+        const urgent = allMyDistributorDevices.filter(d => d.status === 'Needs Attention');
+        
+        return { 
+            assignedDevices: assigned, 
+            myDevices: allMyDistributorDevices, 
+            myHistory: hist,
+            urgentTasks: urgent
+        };
     }, [user.id, user.name, user.distributorId]);
     
 
@@ -71,58 +87,58 @@ export default function TechnicianDashboard() {
                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <h1 className="text-xl font-bold">Muhammad Aditya</h1>
-                        <p className="text-muted-foreground">Teknisi</p>
+                        <h1 className="text-xl font-bold">{user.name}</h1>
+                        <p className="text-muted-foreground">{t('Technician')}</p>
                     </div>
                 </div>
                  <Button variant="ghost" size="icon" className="rounded-full relative">
                     <Bell className="h-6 w-6" />
                      <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center" variant="destructive">2</Badge>
-                    <span className="sr-only">Notifikasi</span>
+                    <span className="sr-only">{t('notifications')}</span>
                 </Button>
             </div>
             
-            <h2 className="text-2xl font-bold">Dashboard</h2>
+            <h2 className="text-2xl font-bold">{t('dashboard_title', {role: ''}).replace(' Dashboard', '')}</h2>
 
              <div className="grid grid-cols-3 gap-4">
                 <StatCard 
-                    title="Kunjungan Hari Ini"
+                    title={t('Kunjungan Hari Ini')}
                     value={5}
                     icon={Calendar}
                     href="#"
                 />
                 <StatCard 
-                    title="Alat Butuh Perawatan"
-                    value={myDevices.filter(d => d.status === 'Needs Attention').length}
+                    title={t('Alat Butuh Perawatan')}
+                    value={urgentTasks.length}
                     icon={Wrench}
                     href="/dashboard/device-list"
                 />
                 <StatCard 
-                    title="Notifikasi Baru"
+                    title={t('Notifikasi Baru')}
                     value={2}
                     icon={Bell}
                     href="#"
                 />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                  <NavCard 
-                    title="Tambah Laporan"
+                    title={t('Tambah Laporan')}
                     icon={Plus}
                     href="/dashboard/device-list"
                  />
                   <NavCard 
-                    title="Jadwal Kunjungan"
+                    title={t('Jadwal Kunjungan')}
                     icon={Calendar}
                     href="#"
                  />
                  <NavCard 
-                    title="Semua Alat"
+                    title={t('Semua Alat')}
                     icon={Briefcase}
                     href="/dashboard/device-list"
                  />
                  <NavCard 
-                    title="Riwayat Servis"
+                    title={t('Riwayat Servis')}
                     icon={ClipboardList}
                     href="#"
                  />
@@ -132,21 +148,21 @@ export default function TechnicianDashboard() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <HardHat className="text-primary"/>
-                        Tugas Mendesak
+                        {t('Tugas Mendesak')}
                     </CardTitle>
-                    <CardDescription>Perangkat yang membutuhkan penanganan segera.</CardDescription>
+                    <CardDescription>{t('Perangkat yang membutuhkan penanganan segera.')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
                         {assignedDevices.length > 0 ? (
-                            assignedDevices.slice(0, 2).map((device) => {
+                            assignedDevices.slice(0, 3).map((device) => {
                                 const clinic = distributorClinics.find(c => c.id === device.clinicId);
                                 return (
                                 <Card key={device.id} className="bg-muted/30">
                                     <CardContent className="p-4 flex items-center justify-between gap-4">
                                         <div className="flex-1">
                                             <Badge variant={device.status === 'Needs Attention' ? 'destructive' : 'secondary'} className="font-normal mb-2">
-                                                {device.status}
+                                                {t(device.status.toLowerCase().replace(' ', '_'))}
                                             </Badge>
                                             <h3 className="font-semibold">{device.name}</h3>
                                             <p className="text-sm text-muted-foreground">
@@ -155,7 +171,7 @@ export default function TechnicianDashboard() {
                                         </div>
                                         <Button asChild size="sm" className="flex-shrink-0">
                                             <Link href={`/maintenance/${device.id}`}>
-                                                Lihat <ArrowRight className="ml-2 h-4 w-4" />
+                                                {t('Lihat')} <ArrowRight className="ml-2 h-4 w-4" />
                                             </Link>
                                         </Button>
                                     </CardContent>
@@ -163,7 +179,15 @@ export default function TechnicianDashboard() {
                             )})
                         ) : (
                             <div className="text-center py-6 text-muted-foreground">
-                                <p className="text-sm">Tidak ada tugas mendesak.</p>
+                                <p className="text-sm">{t('Tidak ada tugas mendesak.')}</p>
+                            </div>
+                        )}
+                         {assignedDevices.length === 0 && urgentTasks.length > 0 && (
+                             <div className="text-center py-6 text-muted-foreground">
+                                <p className="text-sm">{t('Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.', {count: urgentTasks.length})}</p>
+                                <Button asChild variant="link">
+                                    <Link href="/dashboard/device-list">{t('Lihat daftar perangkat')}</Link>
+                                </Button>
                             </div>
                         )}
                     </div>
@@ -173,4 +197,40 @@ export default function TechnicianDashboard() {
          </div>
     );
 }
+
+// Translations for new keys:
+// en.ts
+// 'Kunjungan Hari Ini': 'Today\'s Visits',
+// 'Alat Butuh Perawatan': 'Devices Needing Care',
+// 'Notifikasi Baru': 'New Notifications',
+// 'Tambah Laporan': 'Add Report',
+// 'Jadwal Kunjungan': 'Visit Schedule',
+// 'Semua Alat': 'All Devices',
+// 'Riwayat Servis': 'Service History',
+// 'Tugas Mendesak': 'Urgent Tasks',
+// 'Perangkat yang membutuhkan penanganan segera.': 'Devices that require immediate attention.',
+// 'Lihat': 'View',
+// 'Tidak ada tugas mendesak.': 'No urgent tasks.',
+// 'Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.': 'There are {{count}} devices needing attention. Check the device list.',
+// 'Lihat daftar perangkat': 'View device list'
+
+// id.ts
+// 'Kunjungan Hari Ini': 'Kunjungan Hari Ini',
+// 'Alat Butuh Perawatan': 'Alat Butuh Perawatan',
+// 'Notifikasi Baru': 'Notifikasi Baru',
+// 'Tambah Laporan': 'Tambah Laporan',
+// 'Jadwal Kunjungan': 'Jadwal Kunjungan',
+// 'Semua Alat': 'Semua Alat',
+// 'Riwayat Servis': 'Riwayat Servis',
+// 'Tugas Mendesak': 'Tugas Mendesak',
+// 'Perangkat yang membutuhkan penanganan segera.': 'Perangkat yang membutuhkan penanganan segera.',
+// 'Lihat': 'Lihat',
+// 'Tidak ada tugas mendesak.': 'Tidak ada tugas mendesak.',
+// 'Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.': 'Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.',
+// 'Lihat daftar perangkat': 'Lihat daftar perangkat'
+
+// types.ts:
+// Make sure device status keys in locales match DeviceStatus type but in lowercase with underscores.
+// "needs_attention" for "Needs Attention"
+// "under_maintenance" for "Under Maintenance"
 

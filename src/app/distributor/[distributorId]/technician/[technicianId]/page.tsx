@@ -2,7 +2,7 @@
 'use client';
 
 import { technicianLocations, distributorLocations, devices } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +23,7 @@ const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, labe
 
 
 export default function TechnicianDetailPage({ params }: { params: { distributorId: string, technicianId: string } }) {
+    const router = useRouter();
     const technician = technicianLocations.find(t => t.id === params.technicianId && t.distributorId === params.distributorId);
     const distributor = distributorLocations.find(d => d.id === params.distributorId);
     
@@ -37,11 +38,9 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
         <div className="flex min-h-screen w-full flex-col bg-muted/40">
              <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b bg-card px-4 md:px-6">
                 <div className="flex-1">
-                    <Button asChild variant="outline">
-                        <Link href="/dashboard/technician-management">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Kembali ke Manajemen Teknisi
-                        </Link>
+                    <Button variant="outline" onClick={() => router.back()}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Kembali
                     </Button>
                 </div>
                  <Logo />

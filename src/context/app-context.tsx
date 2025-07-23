@@ -9,7 +9,7 @@ interface AppContextType {
   user: User;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (role: Role) => void;
+  login: (email: string, password: string) => boolean;
   logout: () => void;
   updateUser: (updatedData: Partial<User>) => void;
 }
@@ -17,7 +17,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User>(users.find(u => u.role === 'Technician')!); // Default non-auth user
+  const [currentUser, setCurrentUser] = useState<User>(users.find(u => u.id === 'user-4')!); // Default non-auth user
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -53,40 +53,33 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = (role: Role) => {
-    let newUser;
-    if (role === 'Technician') {
-        newUser = users.find(u => u.id === 'tech-1');
-    } else if (role === 'Distributor') {
-        newUser = users.find(u => u.id === 'user-2')
-    } else if (role === 'Clinic') {
-        newUser = users.find(u => u.id === 'user-3')
-    } else {
-        newUser = users.find(u => u.role === role);
-    }
+  const login = (email: string, password: string): boolean => {
+    const userToLogin = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
 
-    if (newUser) {
+    if (userToLogin) {
         setLoading(true);
         try {
-            const savedUserData = sessionStorage.getItem(`user_data_${newUser.id}`);
+            const savedUserData = sessionStorage.getItem(`user_data_${userToLogin.id}`);
             if (savedUserData) {
                 setCurrentUser(JSON.parse(savedUserData));
             } else {
-                setCurrentUser(newUser);
+                setCurrentUser(userToLogin);
             }
-            sessionStorage.setItem('userRole', role);
-            sessionStorage.setItem('userId', newUser.id);
+            sessionStorage.setItem('userRole', userToLogin.role);
+            sessionStorage.setItem('userId', userToLogin.id);
         } catch (e) {
             console.warn('Session storage is not available. User state will not be persisted.');
         }
         setIsAuthenticated(true);
         setLoading(false);
+        return true;
     }
+    return false;
   };
 
   const logout = () => {
     setLoading(true);
-    const nonAuthUser = users.find(u => u.role === 'Technician')!;
+    const nonAuthUser = users.find(u => u.id === 'user-4')!;
     setCurrentUser(nonAuthUser);
     setIsAuthenticated(false);
     try {

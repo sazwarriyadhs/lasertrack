@@ -4,23 +4,24 @@ import Link from 'next/link';
 import { useApp } from '@/context/app-context';
 import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Route, Wrench, FileText, Send, MessageSquare, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useLanguage } from '@/context/language-context';
 
 export function SidebarNav() {
     const { user } = useApp();
     const pathname = usePathname();
+    const router = useRouter();
     const { t } = useLanguage();
 
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         if (href.includes('#')) {
             e.preventDefault();
+            const targetId = href.split('#')[1];
+
             if (pathname !== '/dashboard') {
-                // Navigate to dashboard first, then scroll
-                 window.location.href = href;
+                router.push(`/dashboard?section=${targetId}`);
             } else {
-                const targetId = href.split('#')[1];
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
@@ -28,6 +29,20 @@ export function SidebarNav() {
             }
         }
     };
+    
+     // Effect to scroll to section if query param exists
+    React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get('section');
+        if (section) {
+            const targetElement = document.getElementById(section);
+            if (targetElement) {
+                setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth' }), 100);
+            }
+            // Clean up URL
+            router.replace('/dashboard', undefined);
+        }
+    }, [pathname, router]);
 
     const isSubItemActive = (subItems: { href: string }[]) => {
         return subItems.some(item => pathname === item.href);
@@ -126,7 +141,7 @@ export function SidebarNav() {
                      <ul className="space-y-1">
                         {navItems.map((item) => (
                             <li key={item.label}>
-                                <Button asChild variant={pathname === item.href ? 'secondary' : 'ghost'} className="w-full justify-start gap-2">
+                                <Button asChild variant={(pathname === '/dashboard' && !window.location.hash && item.href === '/dashboard') || (window.location.hash === item.href.split('#')[1]) ? 'secondary' : 'ghost'} className="w-full justify-start gap-2">
                                      <Link href={item.href} onClick={(e) => handleNavClick(e, item.href)}>
                                         <item.icon className="h-5 w-5" />
                                         {item.label}
