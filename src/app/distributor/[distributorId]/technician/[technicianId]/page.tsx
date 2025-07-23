@@ -14,19 +14,21 @@ import { cn } from '@/lib/utils';
 import type { TechnicianLocation, HandlingStatus } from '@/lib/types';
 import React from 'react';
 import { MapView } from '@/components/map-view';
+import { useLanguage } from '@/context/language-context';
 
 
-const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, label: string, color: string }> = {
-    'Dalam Perjalanan': { icon: Route, label: 'Dalam Perjalanan', color: 'text-blue-500' },
-    'Menangani': { icon: Wrench, label: 'Sedang Menangani', color: 'text-yellow-500' },
-    'Selesai': { icon: CheckCircle, label: 'Tugas Selesai', color: 'text-green-500' },
-    'Standby': { icon: CheckCircle, label: 'Standby', color: 'text-gray-500' },
+const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, labelKey: string, color: string }> = {
+    'Dalam Perjalanan': { icon: Route, labelKey: 'en_route', color: 'text-blue-500' },
+    'Menangani': { icon: Wrench, labelKey: 'handling', color: 'text-yellow-500' },
+    'Selesai': { icon: CheckCircle, labelKey: 'completed', color: 'text-green-500' },
+    'Standby': { icon: CheckCircle, labelKey: 'standby', color: 'text-gray-500' },
 };
 
 
 export default function TechnicianDetailPage({ params }: { params: { distributorId: string, technicianId: string } }) {
     const { distributorId, technicianId } = params;
     const router = useRouter();
+    const { t } = useLanguage();
     const technician = technicianLocations.find(t => t.id === technicianId && t.distributorId === distributorId);
     const distributor = distributorLocations.find(d => d.id === distributorId);
     
@@ -43,7 +45,7 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                 <div className="flex-1">
                     <Button variant="outline" onClick={() => router.back()}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Kembali
+                        {t('back')}
                     </Button>
                 </div>
                  <Logo />
@@ -53,16 +55,16 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                 <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-2">
                      <Card className="lg:col-span-1">
                         <CardHeader className="flex flex-col items-center text-center p-6 bg-muted/50 rounded-t-lg">
-                            <Avatar className="h-24 w-24 mb-4 border-4 border-background">
-                                <AvatarImage src={technician.avatarUrl} alt={technician.name} data-ai-hint="person portrait" />
+                            <Avatar className="h-24 w-24 mb-4 border-4 border-background" data-ai-hint="person portrait">
+                                <AvatarImage src={technician.avatarUrl} alt={technician.name} />
                                 <AvatarFallback>{technician.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <CardTitle className="text-3xl">{technician.name}</CardTitle>
-                            <CardDescription>Teknisi Profesional di {distributor.name}</CardDescription>
+                            <CardDescription>{t('professional_technician_at', {distributor: distributor.name})}</CardDescription>
                         </CardHeader>
                         <CardContent className="p-6 grid md:grid-cols-2 gap-6">
                             <div className="space-y-4">
-                                <h3 className="font-semibold text-lg border-b pb-2">Informasi Kontak</h3>
+                                <h3 className="font-semibold text-lg border-b pb-2">{t('contact_information')}</h3>
                                 <div className="flex items-center gap-3">
                                     <Mail className="h-5 w-5 text-muted-foreground" />
                                     <span>{technician.contact.email}</span>
@@ -77,15 +79,15 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                 <h3 className="font-semibold text-lg border-b pb-2">Status Tugas</h3>
+                                 <h3 className="font-semibold text-lg border-b pb-2">{t('duty_status')}</h3>
                                 <Badge variant={technician.dutyStatus === 'On Duty' ? 'default' : 'secondary'} className="text-base">
-                                   {technician.dutyStatus === 'On Duty' ? "Sedang Bertugas" : "Tidak Bertugas"}
+                                   {technician.dutyStatus === 'On Duty' ? t('on_duty_label') : t('off_duty_label')}
                                 </Badge>
 
                                 {statusInfo && (
                                      <div className="flex items-center gap-3">
                                         <statusInfo.icon className={cn("h-5 w-5", statusInfo.color)} />
-                                        <span className={cn("font-semibold", statusInfo.color)}>{statusInfo.label}</span>
+                                        <span className={cn("font-semibold", statusInfo.color)}>{t(statusInfo.labelKey)}</span>
                                     </div>
                                 )}
 
@@ -94,7 +96,7 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                                         <CardHeader className="p-3">
                                             <CardTitle className="text-base flex items-center gap-2">
                                                 <HardHat className="h-4 w-4" />
-                                                Menangani Perangkat
+                                                {t('handling_device')}
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent className="p-3 pt-0">
@@ -107,12 +109,12 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                                         <CardHeader className="p-3">
                                             <CardTitle className="text-base flex items-center gap-2">
                                                 <HardHat className="h-4 w-4" />
-                                                Tugas Saat Ini
+                                                {t('current_task')}
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent className="p-3 pt-0">
-                                             <p className="font-semibold">Standby</p>
-                                             <p className="text-sm text-muted-foreground">Menunggu penugasan baru.</p>
+                                             <p className="font-semibold">{t('standby')}</p>
+                                             <p className="text-sm text-muted-foreground">{t('waiting_for_new_assignment')}</p>
                                         </CardContent>
                                     </Card>
                                 ) : null}
@@ -121,8 +123,8 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                     </Card>
                     <Card className="lg:col-span-1 h-[400px] lg:h-auto">
                         <CardHeader>
-                            <CardTitle>Lokasi Teknisi (GPS)</CardTitle>
-                            <CardDescription>Posisi terakhir teknisi yang tercatat.</CardDescription>
+                            <CardTitle>{t('technician_location_gps')}</CardTitle>
+                            <CardDescription>{t('last_recorded_position')}</CardDescription>
                         </CardHeader>
                         <CardContent className="h-[calc(100%-8rem)] p-0">
                             <MapView locations={[technician]} initialZoom={15} />

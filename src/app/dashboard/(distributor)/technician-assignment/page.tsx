@@ -8,6 +8,7 @@ import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { generateWorkOrderAction } from '@/app/actions';
+import { useLanguage } from '@/context/language-context';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,7 @@ const assignmentFormSchema = z.object({
 export default function TechnicianAssignmentPage() {
     const { user } = useApp();
     const { toast } = useToast();
+    const { t } = useLanguage();
     const [isPending, startTransition] = useTransition();
 
     const distributorId = user.distributorId;
@@ -131,8 +133,8 @@ export default function TechnicianAssignmentPage() {
                     document.body.removeChild(link);
                      
                      toast({
-                         title: 'Surat Perintah Kerja Dibuat',
-                         description: 'SPK telah berhasil dibuat dan diunduh.',
+                         title: t('work_order_created'),
+                         description: t('spk_created_and_downloaded'),
                      });
                      form.reset();
                  } else {
@@ -152,8 +154,8 @@ export default function TechnicianAssignmentPage() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Form Penugasan Teknisi Baru</CardTitle>
-                <CardDescription>Isi form untuk membuat Surat Perintah Kerja (SPK) untuk teknisi.</CardDescription>
+                <CardTitle>{t('technician_assignment_title')}</CardTitle>
+                <CardDescription>{t('technician_assignment_desc')}</CardDescription>
             </CardHeader>
             <CardContent>
                  <Form {...form}>
@@ -164,11 +166,11 @@ export default function TechnicianAssignmentPage() {
                                 name="clinicId"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Pilih Klinik</FormLabel>
+                                        <FormLabel>{t('select_clinic')}</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Pilih klinik" />
+                                                <SelectValue placeholder={t('select_clinic')} />
                                             </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -184,11 +186,11 @@ export default function TechnicianAssignmentPage() {
                                 name="deviceId"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Pilih Perangkat</FormLabel>
+                                        <FormLabel>{t('select_device')}</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!form.watch('clinicId')}>
                                             <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Pilih perangkat" />
+                                                <SelectValue placeholder={t('select_device')} />
                                             </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -204,11 +206,11 @@ export default function TechnicianAssignmentPage() {
                                 name="technicianId"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Pilih Teknisi</FormLabel>
+                                        <FormLabel>{t('select_technician')}</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Pilih teknisi" />
+                                                <SelectValue placeholder={t('select_technician')} />
                                             </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -224,7 +226,7 @@ export default function TechnicianAssignmentPage() {
                                 name="deadline"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Deadline</FormLabel>
+                                        <FormLabel>{t('deadline')}</FormLabel>
                                         <FormControl>
                                             <Input type="date" {...field} />
                                         </FormControl>
@@ -237,17 +239,17 @@ export default function TechnicianAssignmentPage() {
                                 name="complexity"
                                 render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Tingkat Kerumitan</FormLabel>
+                                    <FormLabel>{t('complexity')}</FormLabel>
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
-                                        <SelectValue placeholder="Pilih tingkat kerumitan" />
+                                        <SelectValue placeholder={t('select_complexity')} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="Rendah">Rendah</SelectItem>
-                                        <SelectItem value="Sedang">Sedang</SelectItem>
-                                        <SelectItem value="Tinggi">Tinggi</SelectItem>
+                                        <SelectItem value="Rendah">{t('low')}</SelectItem>
+                                        <SelectItem value="Sedang">{t('medium')}</SelectItem>
+                                        <SelectItem value="Tinggi">{t('high')}</SelectItem>
                                     </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -259,9 +261,9 @@ export default function TechnicianAssignmentPage() {
                                 name="estimatedDuration"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Estimasi Durasi</FormLabel>
+                                        <FormLabel>{t('estimated_duration')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Contoh: 2 Jam, 1 Hari" {...field} />
+                                            <Input placeholder={t('duration_example')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -274,9 +276,9 @@ export default function TechnicianAssignmentPage() {
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Deskripsi Masalah</FormLabel>
+                                    <FormLabel>{t('problem_description')}</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Jelaskan masalah yang terjadi secara singkat..." rows={4} {...field} />
+                                        <Textarea placeholder={t('problem_description_placeholder')} rows={4} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -286,7 +288,7 @@ export default function TechnicianAssignmentPage() {
                         <div className="flex justify-end">
                             <Button type="submit" disabled={isPending}>
                                 {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className='mr-2' />}
-                                Buat & Unduh SPK
+                                {t('create_and_download_spk')}
                             </Button>
                         </div>
                     </form>

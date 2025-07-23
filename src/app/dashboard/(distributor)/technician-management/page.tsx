@@ -38,10 +38,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import Link from 'next/link';
+import { useLanguage } from '@/context/language-context';
 
 
 export default function TechnicianManagementPage() {
     const { user } = useApp();
+    const { t } = useLanguage();
     const distributorId = user.distributorId;
     
     const [technicians, setTechnicians] = useState<TechnicianLocation[]>(
@@ -102,7 +104,7 @@ export default function TechnicianManagementPage() {
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
                  <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>{selectedTechnician ? 'Edit Teknisi' : 'Tambah Teknisi Baru'}</DialogTitle>
+                        <DialogTitle>{selectedTechnician ? t('edit_technician') : t('add_technician')}</DialogTitle>
                         <DialogDescription>
                             {selectedTechnician ? 'Ubah informasi teknisi di bawah ini.' : 'Isi detail untuk teknisi baru.'}
                         </DialogDescription>
@@ -118,12 +120,12 @@ export default function TechnicianManagementPage() {
             <Card>
                 <CardHeader className='flex-row items-center justify-between'>
                     <div>
-                        <CardTitle>Manajemen Tim Teknisi</CardTitle>
-                        <CardDescription>Kelola daftar teknisi, jadwal, dan riwayat pekerjaan.</CardDescription>
+                        <CardTitle>{t('technician_management_title')}</CardTitle>
+                        <CardDescription>{t('technician_management_desc')}</CardDescription>
                     </div>
                     <Button onClick={handleAdd}>
                         <UserPlus className='mr-2' />
-                        Tambah Teknisi
+                        {t('add_technician')}
                     </Button>
                 </CardHeader>
                 <CardContent>
@@ -131,7 +133,7 @@ export default function TechnicianManagementPage() {
                         <div className="relative w-full max-w-sm">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
-                                placeholder="Cari nama teknisi..."
+                                placeholder={t('search_technician_name')}
                                 className="pl-10"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -139,23 +141,23 @@ export default function TechnicianManagementPage() {
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
                             <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Filter Status Tugas" />
+                                <SelectValue placeholder={t('filter_duty_status')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="All">Semua Status</SelectItem>
-                                <SelectItem value="On Duty">On Duty</SelectItem>
-                                <SelectItem value="Off Duty">Off Duty</SelectItem>
+                                <SelectItem value="All">{t('all_statuses')}</SelectItem>
+                                <SelectItem value="On Duty">{t('on_duty')}</SelectItem>
+                                <SelectItem value="Off Duty">{t('off_duty')}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Nama Teknisi</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Tugas Aktif</TableHead>
-                                <TableHead>Kontak</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead>{t('technician_name')}</TableHead>
+                                <TableHead>{t('status')}</TableHead>
+                                <TableHead>{t('active_task')}</TableHead>
+                                <TableHead>{t('contact')}</TableHead>
+                                <TableHead className="text-right">{t('actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -183,14 +185,14 @@ export default function TechnicianManagementPage() {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                <AlertDialogTitle>{t('are_you_sure')}</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    Tindakan ini tidak dapat diurungkan. Ini akan menghapus data teknisi secara permanen.
+                                                    {t('action_cannot_be_undone')}
                                                 </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                <AlertDialogAction onClick={() => handleDelete(tech.id)}>Hapus</AlertDialogAction>
+                                                <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => handleDelete(tech.id)}>{t('delete')}</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
@@ -200,7 +202,7 @@ export default function TechnicianManagementPage() {
                              {filteredTechnicians.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={5} className="text-center">
-                                        Tidak ada teknisi yang cocok dengan kriteria.
+                                        {t('no_matching_data')}
                                     </TableCell>
                                 </TableRow>
                             )}

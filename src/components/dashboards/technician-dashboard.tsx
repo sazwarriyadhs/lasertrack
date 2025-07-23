@@ -60,7 +60,6 @@ export default function TechnicianDashboard() {
     const { urgentTasks, assignedTodayCount } = useMemo(() => {
         if (!user.distributorId) return { urgentTasks: [], assignedTodayCount: 0 };
         
-        // Filter clinics and devices relevant to the technician's distributor
         const myClinicIds = allClinics
             .filter(c => c.distributorId === user.distributorId)
             .map(c => c.id);
@@ -69,7 +68,6 @@ export default function TechnicianDashboard() {
 
         const urgent = myDevices.filter(d => d.status === 'Needs Attention');
         
-        // This is a dummy count for demonstration
         const todayCount = 3;
 
         return { 
@@ -83,7 +81,7 @@ export default function TechnicianDashboard() {
          <div className="space-y-6">
              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                     <Avatar className="h-14 w-14 border">
+                     <Avatar className="h-14 w-14 border" data-ai-hint="person portrait">
                         <AvatarImage src={user.avatarUrl} alt={user.name} />
                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
@@ -120,7 +118,7 @@ export default function TechnicianDashboard() {
                     title={t('new_notifications')}
                     value={unreadMessages}
                     icon={Bell}
-                    href="#"
+                    href="/dashboard/chat"
                 />
             </div>
             

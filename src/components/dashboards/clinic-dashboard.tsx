@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { devices, maintenanceHistory, technicianLocations, distributorLocations, purchaseHistory, distributorClinics } from '@/lib/data';
-import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord, DistributorLocation, ClinicLocation } from '@/lib/types';
+import type { Device, DeviceStatus, MaintenanceRecord, TechnicianLocation, PurchaseHistoryRecord, DistributorLocation, ClinicLocation, HandlingStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Phone, Mail, User, CheckCircle, Wrench, Route, Send, Loader2, Calendar, FileText, MapPin } from 'lucide-react';
@@ -23,6 +23,8 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { MapView } from '../map-view';
+import { useLanguage } from '@/context/language-context';
+import React from 'react';
 
 
 const statusColors: Record<DeviceStatus, string> = {
@@ -32,7 +34,7 @@ const statusColors: Record<DeviceStatus, string> = {
     Decommissioned: 'bg-gray-500/80',
 };
 
-const handlingStatusInfo = {
+const handlingStatusInfo: Record<HandlingStatus, { icon: React.ElementType, color: string }> = {
     'Dalam Perjalanan': { icon: Route, color: 'text-blue-500' },
     'Menangani': { icon: Wrench, color: 'text-yellow-500' },
     'Selesai': { icon: CheckCircle, color: 'text-green-500' },
@@ -55,8 +57,8 @@ const TechnicianStatusCard = ({ technician, device }: { technician: TechnicianLo
             </CardHeader>
             <CardContent>
                 <div className="flex items-center gap-4">
-                    <Avatar className="h-16 w-16">
-                        <AvatarImage src={technician.avatarUrl} alt={technician.name} data-ai-hint="person portrait" />
+                    <Avatar className="h-16 w-16" data-ai-hint="person portrait">
+                        <AvatarImage src={technician.avatarUrl} alt={technician.name} />
                         <AvatarFallback>{technician.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
@@ -74,18 +76,19 @@ const TechnicianStatusCard = ({ technician, device }: { technician: TechnicianLo
 }
 
 const ContactCard = ({distributor, technicians}: {distributor: DistributorLocation | undefined, technicians: TechnicianLocation[]}) => {
+    const {t} = useLanguage();
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Informasi Kontak</CardTitle>
+                <CardTitle>{t('contact_information')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                  {distributor && (
                     <div>
-                        <h3 className="font-semibold mb-2">Distributor Anda</h3>
+                        <h3 className="font-semibold mb-2">{t('your_distributor')}</h3>
                         <div className="flex items-center gap-4">
-                            <Avatar>
-                                <AvatarImage src={distributor.avatarUrl} alt={distributor.name} data-ai-hint="company logo" />
+                            <Avatar data-ai-hint="company logo">
+                                <AvatarImage src={distributor.avatarUrl} alt={distributor.name} />
                                 <AvatarFallback>{distributor.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>
@@ -103,11 +106,11 @@ const ContactCard = ({distributor, technicians}: {distributor: DistributorLocati
                     </div>
                  )}
                  <div>
-                    <h3 className="font-semibold mb-2">Teknisi Tersedia</h3>
+                    <h3 className="font-semibold mb-2">{t('available_technicians')}</h3>
                      {technicians.map(technician => (
                         <div key={technician.id} className="flex items-center gap-4 mb-3">
-                            <Avatar>
-                                <AvatarImage src={technician?.avatarUrl} alt={technician?.name} data-ai-hint="person portrait" />
+                            <Avatar data-ai-hint="person portrait">
+                                <AvatarImage src={technician?.avatarUrl} alt={technician?.name} />
                                 <AvatarFallback>{technician?.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>
@@ -123,7 +126,7 @@ const ContactCard = ({distributor, technicians}: {distributor: DistributorLocati
                             </div>
                         </div>
                     ))}
-                    {technicians.length === 0 && <p className="text-sm text-muted-foreground">Tidak ada teknisi yang tersedia saat ini.</p>}
+                    {technicians.length === 0 && <p className="text-sm text-muted-foreground">{t('no_technicians_available')}</p>}
                 </div>
             </CardContent>
         </Card>
@@ -132,6 +135,7 @@ const ContactCard = ({distributor, technicians}: {distributor: DistributorLocati
 
 const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
     const { toast } = useToast();
+    const { t } = useLanguage();
     const [isLoading, setIsLoading] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState('');
     const [description, setDescription] = useState('');
@@ -141,8 +145,8 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
         if (!selectedDevice || !description) {
             toast({
                 variant: 'destructive',
-                title: 'Form Tidak Lengkap',
-                description: 'Harap pilih perangkat dan isi deskripsi masalah.',
+                title: t('form_incomplete_title'),
+                description: t('form_incomplete_desc'),
             });
             return;
         }
@@ -150,8 +154,8 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
         // Simulate API call
         setTimeout(() => {
             toast({
-                title: 'Laporan Terkirim',
-                description: 'Permintaan maintenance Anda telah dikirim ke distributor.',
+                title: t('report_sent_title'),
+                description: t('report_sent_desc'),
             });
             setIsLoading(false);
             setSelectedDevice('');
@@ -162,16 +166,16 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
     return (
         <Card id="request-service-section">
             <CardHeader>
-                <CardTitle>Permintaan Maintenance & Laporan</CardTitle>
-                <CardDescription>Laporkan masalah perangkat atau minta jadwal maintenance.</CardDescription>
+                <CardTitle>{t('maintenance_request_title')}</CardTitle>
+                <CardDescription>{t('maintenance_request_desc')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="device-select">Pilih Perangkat</Label>
+                        <Label htmlFor="device-select">{t('select_device')}</Label>
                         <Select value={selectedDevice} onValueChange={setSelectedDevice}>
                             <SelectTrigger id="device-select">
-                                <SelectValue placeholder="Pilih perangkat yang bermasalah" />
+                                <SelectValue placeholder={t('select_device_placeholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {devices.map(device => (
@@ -183,10 +187,10 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
                         </Select>
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="description">Deskripsi Masalah</Label>
+                        <Label htmlFor="description">{t('problem_description')}</Label>
                         <Textarea
                             id="description"
-                            placeholder="Jelaskan masalah yang Anda alami..."
+                            placeholder={t('problem_description_placeholder_clinic')}
                             rows={4}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -194,7 +198,7 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
                     </div>
                     <Button type="submit" className="w-full" disabled={isLoading}>
                         {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2" />}
-                        Kirim Laporan
+                        {t('send_report')}
                     </Button>
                 </form>
             </CardContent>
@@ -205,6 +209,7 @@ const MaintenanceRequestForm = ({ devices }: { devices: Device[] }) => {
 
 export default function ClinicDashboard() {
     const { user } = useApp();
+    const {t} = useLanguage();
     const clinicId = user.clinicId; 
     const myClinic = distributorClinics.find(c => c.id === clinicId);
     const clinicDevices = devices.filter(d => d.clinicId === clinicId);
@@ -226,9 +231,9 @@ export default function ClinicDashboard() {
                         <CardHeader>
                              <CardTitle className="flex items-center gap-2">
                                 <MapPin className="text-primary"/>
-                                Peta Lokasi
+                                {t('location_map')}
                             </CardTitle>
-                            <CardDescription>Posisi klinik Anda dan distributor yang melayani.</CardDescription>
+                            <CardDescription>{t('location_map_desc')}</CardDescription>
                         </CardHeader>
                         <CardContent className="h-64 p-0">
                             <MapView locations={mapLocations} initialZoom={10} />
@@ -237,18 +242,18 @@ export default function ClinicDashboard() {
                 )}
                 <Card id="my-devices-section">
                     <CardHeader>
-                        <CardTitle>Perangkat Saya</CardTitle>
-                        <CardDescription>Daftar semua perangkat yang terdaftar di klinik Anda, {user.name}.</CardDescription>
+                        <CardTitle>{t('my_devices_title')}</CardTitle>
+                        <CardDescription>{t('my_devices_desc', {name: user.name})}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Nama Perangkat</TableHead>
-                                    <TableHead>Model</TableHead>
-                                    <TableHead>Serial No.</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Maintenance Terakhir</TableHead>
+                                    <TableHead>{t('device_name')}</TableHead>
+                                    <TableHead>{t('model')}</TableHead>
+                                    <TableHead>{t('serial_no')}</TableHead>
+                                    <TableHead>{t('status')}</TableHead>
+                                    <TableHead>{t('last_maintenance')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -260,7 +265,7 @@ export default function ClinicDashboard() {
                                         <TableCell>
                                             <Badge variant="secondary" className="font-normal">
                                                 <span className={cn('h-2 w-2 rounded-full mr-2', statusColors[device.status])}></span>
-                                                {device.status}
+                                                {t(device.status.toLowerCase().replace(/ /g, '_'))}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>{device.lastMaintenance}</TableCell>
@@ -269,7 +274,7 @@ export default function ClinicDashboard() {
                                 {clinicDevices.length === 0 && (
                                      <TableRow>
                                         <TableCell colSpan={5} className="text-center">
-                                            Belum ada perangkat terdaftar.
+                                            {t('no_devices_registered')}
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -279,18 +284,18 @@ export default function ClinicDashboard() {
                 </Card>
                 <Card id="maintenance-history-section">
                     <CardHeader>
-                        <CardTitle>Riwayat Maintenance</CardTitle>
-                        <CardDescription>Catatan maintenance untuk semua perangkat Anda.</CardDescription>
+                        <CardTitle>{t('maintenance_history_title')}</CardTitle>
+                        <CardDescription>{t('maintenance_history_desc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                        <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Tanggal</TableHead>
-                                    <TableHead>Perangkat</TableHead>
-                                    <TableHead>Teknisi</TableHead>
-                                    <TableHead>Deskripsi</TableHead>
-                                    <TableHead className='text-right'>Laporan</TableHead>
+                                    <TableHead>{t('date')}</TableHead>
+                                    <TableHead>{t('device')}</TableHead>
+                                    <TableHead>{t('technician')}</TableHead>
+                                    <TableHead>{t('description')}</TableHead>
+                                    <TableHead className='text-right'>{t('report')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -313,7 +318,7 @@ export default function ClinicDashboard() {
                                  {clinicMaintenanceHistory.length === 0 && (
                                      <TableRow>
                                         <TableCell colSpan={5} className="text-center">
-                                            Tidak ada riwayat maintenance.
+                                            {t('no_maintenance_history')}
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -323,17 +328,17 @@ export default function ClinicDashboard() {
                 </Card>
                  <Card>
                     <CardHeader>
-                        <CardTitle>Riwayat Pembelian & Garansi</CardTitle>
-                        <CardDescription>Informasi pembelian dan garansi untuk perangkat Anda.</CardDescription>
+                        <CardTitle>{t('purchase_history_title')}</CardTitle>
+                        <CardDescription>{t('purchase_history_desc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                        <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Tgl. Pembelian</TableHead>
-                                    <TableHead>Nama Perangkat</TableHead>
-                                    <TableHead>Distributor</TableHead>
-                                    <TableHead>Garansi Berakhir</TableHead>
+                                    <TableHead>{t('purchase_date')}</TableHead>
+                                    <TableHead>{t('device_name')}</TableHead>
+                                    <TableHead>{t('distributor')}</TableHead>
+                                    <TableHead>{t('warranty_end_date')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -353,7 +358,7 @@ export default function ClinicDashboard() {
                                 {clinicPurchaseHistory.length === 0 && (
                                      <TableRow>
                                         <TableCell colSpan={4} className="text-center">
-                                            Tidak ada riwayat pembelian.
+                                            {t('no_purchase_history')}
                                         </TableCell>
                                     </TableRow>
                                 )}

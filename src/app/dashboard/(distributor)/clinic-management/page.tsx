@@ -187,7 +187,7 @@ export default function ClinicManagementPage() {
                                     <TableCell className="font-medium">{clinic.name}</TableCell>
                                     <TableCell>
                                         <Badge variant="secondary" className={cn("font-normal", statusBadge[clinicStatus])}>
-                                            {clinicStatus === 'No Devices' ? 'Belum ada perangkat' : t(clinicStatus.toLowerCase().replace(/ /g, '_'))}
+                                            {t(clinicStatus.toLowerCase().replace(/ /g, '_'))}
                                         </Badge>
                                     </TableCell>
                                     <TableCell>{clinicDevices.length}</TableCell>
