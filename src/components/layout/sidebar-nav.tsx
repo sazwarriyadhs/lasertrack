@@ -6,48 +6,12 @@ import { LayoutDashboard, Map, HardHat, Activity, Users, Hospital, Building, Rou
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-
-const superAdminNavItems = [
-    { href: '/dashboard', label: 'Peta Distributor', icon: Map },
-    { href: '/dashboard#distributor-management-section', label: 'Manajemen Distributor', icon: Users },
-    { href: '/dashboard/chat', label: 'Pesan', icon: MessageSquare },
-];
-
-const distributorNavItems = [
-    { 
-        href: '/dashboard',
-        label: 'Peta Klinik', 
-        icon: Map,
-    },
-    { 
-        label: 'Manajemen', 
-        icon: HardHat,
-        subItems: [
-            { href: '/dashboard/clinic-management', label: 'Daftar Klinik' },
-            { href: '/dashboard/device-monitoring', label: 'Monitoring Perangkat' },
-            { href: '/dashboard/technician-management', label: 'Daftar Teknisi' },
-            { href: '/dashboard/technician-tracking', label: 'Pelacakan Teknisi' },
-            { href: '/dashboard/technician-assignment', label: 'Penugasan Baru' },
-        ]
-    },
-    { href: '/dashboard/reports', label: 'Laporan', icon: Activity },
-    { href: '/dashboard/chat', label: 'Pesan', icon: MessageSquare },
-];
-
-const clinicNavItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/dashboard#maintenance-history-section', label: 'Riwayat Maintenance', icon: FileText },
-    { href: '/dashboard#request-service-section', label: 'Permintaan Layanan', icon: Send },
-];
-
-const technicianNavItems = [
-    { href: '/dashboard', label: 'Dashboard Harian', icon: LayoutDashboard },
-    { href: '/dashboard/device-list', label: 'Daftar Perangkat', icon: List },
-];
+import { useLanguage } from '@/context/language-context';
 
 export function SidebarNav() {
     const { user } = useApp();
     const pathname = usePathname();
+    const { t } = useLanguage();
 
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         if (href.includes('#')) {
@@ -73,7 +37,11 @@ export function SidebarNav() {
         let navItems;
         switch (user.role) {
             case 'Super Admin':
-                navItems = superAdminNavItems;
+                navItems = [
+                    { href: '/dashboard', label: t('distributor_map'), icon: Map },
+                    { href: '/dashboard#distributor-management-section', label: t('distributor_management'), icon: Users },
+                    { href: '/dashboard/chat', label: t('messages'), icon: MessageSquare },
+                ];
                 return (
                      <ul className="space-y-1">
                         {navItems.map((item) => (
@@ -89,14 +57,33 @@ export function SidebarNav() {
                     </ul>
                 );
             case 'Distributor':
-                navItems = distributorNavItems;
+                navItems = [
+                    { 
+                        href: '/dashboard',
+                        label: t('clinic_map'), 
+                        icon: Map,
+                    },
+                    { 
+                        label: t('management'), 
+                        icon: HardHat,
+                        subItems: [
+                            { href: '/dashboard/clinic-management', label: t('clinic_list') },
+                            { href: '/dashboard/device-monitoring', label: t('device_monitoring') },
+                            { href: '/dashboard/technician-management', label: t('technician_list') },
+                            { href: '/dashboard/technician-tracking', label: t('technician_tracking') },
+                            { href: '/dashboard/technician-assignment', label: t('new_assignment') },
+                        ]
+                    },
+                    { href: '/dashboard/reports', label: t('reports'), icon: Activity },
+                    { href: '/dashboard/chat', label: t('messages'), icon: MessageSquare },
+                ];
                 const defaultActiveAccordion = navItems
-                    .filter(item => item.subItems && isSubItemActive(item.subItems))
+                    .filter(item => 'subItems' in item && item.subItems && isSubItemActive(item.subItems))
                     .map(item => item.label);
                  return (
                     <Accordion type="multiple" defaultValue={defaultActiveAccordion} className="w-full">
                         {navItems.map((item) => (
-                            item.subItems ? (
+                           'subItems' in item && item.subItems ? (
                                 <AccordionItem value={item.label} key={item.label} className="border-b-0">
                                     <AccordionTrigger className="py-2 hover:no-underline hover:bg-muted rounded-md px-2 [&[data-state=open]>svg]:text-primary">
                                          <div className="flex items-center gap-2 text-base font-medium">
@@ -130,7 +117,11 @@ export function SidebarNav() {
                     </Accordion>
                 );
             case 'Clinic':
-                navItems = clinicNavItems;
+                navItems = [
+                    { href: '/dashboard', label: t('dashboard_title', {role: ''}).replace(' Dashboard', '') },
+                    { href: '/dashboard#maintenance-history-section', label: t('maintenance_history'), icon: FileText },
+                    { href: '/dashboard#request-service-section', label: t('service_request'), icon: Send },
+                ];
                 return (
                      <ul className="space-y-1">
                         {navItems.map((item) => (
@@ -146,7 +137,10 @@ export function SidebarNav() {
                     </ul>
                 );
             case 'Technician':
-                 navItems = technicianNavItems;
+                 navItems = [
+                    { href: '/dashboard', label: t('daily_dashboard'), icon: LayoutDashboard },
+                    { href: '/dashboard/device-list', label: t('device_list'), icon: List },
+                ];
                  return (
                      <ul className="space-y-1">
                         {navItems.map((item) => (

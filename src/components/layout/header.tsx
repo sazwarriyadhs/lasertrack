@@ -4,9 +4,9 @@
 import { useRouter, usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { useApp } from '@/context/app-context';
-import { Bell, LifeBuoy, LogOut, Settings, User as UserIcon, Menu } from 'lucide-react';
+import { Bell, LifeBuoy, LogOut, Settings, User as UserIcon, Menu, Globe } from 'lucide-react';
 import { Logo } from './logo';
 import {
   Sheet,
@@ -18,10 +18,12 @@ import {
 } from "@/components/ui/sheet"
 import { SidebarNav } from './sidebar-nav';
 import Link from 'next/link';
+import { useLanguage } from '@/context/language-context';
 
 
 export function Header() {
   const { user, logout } = useApp();
+  const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -52,12 +54,29 @@ export function Header() {
           </Sheet>
       </div>
       <div className='hidden lg:block flex-1'>
-         <h1 className="text-lg font-semibold">{user.role} Dashboard</h1>
+         <h1 className="text-lg font-semibold">{t('dashboard_title', {role: t(user.role)})}</h1>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
+         <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+                <Globe className="h-5 w-5" />
+                <span className="sr-only">{t('change_language')}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40" align="end">
+            <DropdownMenuLabel>{t('select_language')}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup value={language} onValueChange={(value) => setLanguage(value as 'id' | 'en')}>
+              <DropdownMenuRadioItem value="id">{t('language_id')}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="en">{t('language_en')}</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
+            <span className="sr-only">{t('notifications')}</span>
         </Button>
         
         <DropdownMenu>
@@ -80,21 +99,21 @@ export function Header() {
             <DropdownMenuItem asChild>
               <Link href="/dashboard/profile">
                 <UserIcon className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <span>{t('profile')}</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
+              <span>{t('settings')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <LifeBuoy className="mr-2 h-4 w-4" />
-              <span>Support</span>
+              <span>{t('support')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <span>{t('logout')}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
