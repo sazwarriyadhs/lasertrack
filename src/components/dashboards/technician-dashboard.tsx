@@ -21,10 +21,10 @@ const StatCard = ({ title, value, icon, href }: { title: string, value: number |
                 <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-1">
                      <div className="relative">
                         <Icon className="h-10 w-10 text-primary mb-2" />
-                        {(title.includes("Kunjungan") || title.includes("Visit")) && value > 0 && (
+                        {(title.includes("Kunjungan") || title.includes("Visit")) && Number(value) > 0 && (
                             <span className='absolute top-0 right-0 h-5 w-5 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center' style={{transform: 'translate(40%, -20%)'}}>{value}</span>
                         )}
-                        {title.includes("Notifikasi") && value > 0 && (
+                        {title.includes("Notifikasi") && Number(value) > 0 && (
                              <span className='absolute top-0 right-0 h-5 w-5 bg-destructive text-destructive-foreground text-xs font-bold rounded-full flex items-center justify-center' style={{transform: 'translate(40%, -20%)'}}>{value}</span>
                         )}
                     </div>
@@ -68,7 +68,7 @@ export default function TechnicianDashboard() {
 
         const urgent = myDevices.filter(d => d.status === 'Needs Attention');
         
-        const todayCount = 3;
+        const todayCount = 3; // Dummy data for demonstration
 
         return { 
             urgentTasks: urgent,
