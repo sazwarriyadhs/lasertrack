@@ -33,6 +33,7 @@ export const id = {
     'back_to_dashboard': 'Kembali ke Dashboard',
     'email_address': 'Alamat Email',
     'password': 'Kata Sandi',
+    'welcome_back': 'Selamat datang kembali, {{name}}!',
     
     // Landing Page
     'landing_title': 'Platform Manajemen Terpadu untuk Industri Estetika',
@@ -175,9 +176,21 @@ export const id = {
     'work_order_created': 'Surat Perintah Kerja Dibuat',
     'spk_created_and_downloaded': 'SPK telah berhasil dibuat dan diunduh.',
 
+    // Technician Dashboard
+    'daily_summary': 'Ringkasan Harian',
+    'todays_visits': 'Kunjungan Hari Ini',
+    'devices_needing_service': 'Alat Butuh Servis',
+    'new_notifications': 'Notifikasi Baru',
+    'add_report': 'Tambah Laporan',
+    'visit_schedule': 'Jadwal Kunjungan',
+    'all_devices': 'Semua Alat',
+    'service_history': 'Riwayat Servis',
+    'urgent_tasks': 'Tugas Mendesak',
+    'urgent_tasks_desc': 'Perangkat yang membutuhkan penanganan segera.',
+    'no_urgent_tasks': 'Tidak ada tugas mendesak saat ini.',
+    'view_and_report': 'Lihat & Lapor',
+
     // Reports
     'clinic_app_usage_report': 'Laporan Penggunaan Aplikasi Klinik',
     'clinic_app_usage_desc': 'Aktivitas penggunaan aplikasi oleh masing-masing klinik.',
-
-    // ... continue for all other strings
 };

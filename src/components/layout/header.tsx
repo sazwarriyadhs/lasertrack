@@ -19,6 +19,7 @@ import {
 import { SidebarNav } from './sidebar-nav';
 import Link from 'next/link';
 import { useLanguage } from '@/context/language-context';
+import { Badge } from '../ui/badge';
 
 
 export function Header() {
@@ -74,8 +75,9 @@ export function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" size="icon" className="rounded-full relative">
             <Bell className="h-5 w-5" />
+             <Badge className="absolute top-1 right-1 h-4 w-4 p-0 flex items-center justify-center" variant="destructive">2</Badge>
             <span className="sr-only">{t('notifications')}</span>
         </Button>
         

@@ -33,6 +33,7 @@ export const en = {
     'back_to_dashboard': 'Back to Dashboard',
     'email_address': 'Email Address',
     'password': 'Password',
+    'welcome_back': 'Welcome back, {{name}}!',
 
     // Landing Page
     'landing_title': 'Integrated Management Platform for the Aesthetics Industry',
@@ -175,10 +176,22 @@ export const en = {
     'create_and_download_spk': 'Create & Download SPK',
     'work_order_created': 'Work Order Created',
     'spk_created_and_downloaded': 'Work Order has been successfully created and downloaded.',
+
+    // Technician Dashboard
+    'daily_summary': 'Daily Summary',
+    'todays_visits': 'Today\'s Visits',
+    'devices_needing_service': 'Devices Needing Service',
+    'new_notifications': 'New Notifications',
+    'add_report': 'Add Report',
+    'visit_schedule': 'Visit Schedule',
+    'all_devices': 'All Devices',
+    'service_history': 'Service History',
+    'urgent_tasks': 'Urgent Tasks',
+    'urgent_tasks_desc': 'Devices that require immediate attention.',
+    'no_urgent_tasks': 'No urgent tasks at the moment.',
+    'view_and_report': 'View & Report',
     
     // Reports
     'clinic_app_usage_report': 'Clinic Application Usage Report',
     'clinic_app_usage_desc': 'Application usage activity by each clinic.',
-
-    // ... continue for all other strings
 };

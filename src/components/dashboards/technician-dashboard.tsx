@@ -4,8 +4,8 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { devices, distributorClinics, maintenanceHistory } from '@/lib/data';
-import { ArrowRight, HardHat, Bell, List, Calendar, Wrench, Plus, Briefcase, ClipboardList } from 'lucide-react';
+import { devices, distributorClinics } from '@/lib/data';
+import { ArrowRight, HardHat, Bell, Calendar, Wrench, Plus, Briefcase, ClipboardList } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -21,8 +21,11 @@ const StatCard = ({ title, value, icon, href }: { title: string, value: number |
                 <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-1">
                      <div className="relative">
                         <Icon className="h-10 w-10 text-primary mb-2" />
-                        {title.includes("Kunjungan") && (
-                            <span className='absolute top-0 right-0 h-5 w-5 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center' style={{transform: 'translate(40%, -20%)'}}>3</span>
+                        {(title.includes("Kunjungan") || title.includes("Visit")) && value > 0 && (
+                            <span className='absolute top-0 right-0 h-5 w-5 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center' style={{transform: 'translate(40%, -20%)'}}>{value}</span>
+                        )}
+                        {title.includes("Notifikasi") && value > 0 && (
+                             <span className='absolute top-0 right-0 h-5 w-5 bg-destructive text-destructive-foreground text-xs font-bold rounded-full flex items-center justify-center' style={{transform: 'translate(40%, -20%)'}}>{value}</span>
                         )}
                     </div>
                     <p className="text-2xl font-bold">{value}</p>
@@ -54,19 +57,19 @@ export default function TechnicianDashboard() {
     const { user } = useApp();
     const { t } = useLanguage();
 
-    const { assignedDevices, urgentTasks } = useMemo(() => {
-        if (!user.id) return { assignedDevices: [], urgentTasks: [] };
-        
-        // Devices assigned to this technician
-        const assigned = devices.filter(d => d.assignedTechnicianId === user.id);
+    const { urgentTasks, assignedTodayCount } = useMemo(() => {
+        if (!user.id) return { urgentTasks: [], assignedTodayCount: 0 };
         
         // All devices from the technician's distributor that need attention
         const myClinicIds = distributorClinics.filter(c => c.distributorId === user.distributorId).map(c => c.id);
         const urgent = devices.filter(d => myClinicIds.includes(d.clinicId) && d.status === 'Needs Attention');
         
+        // This is a dummy count for demonstration
+        const todayCount = 3;
+
         return { 
-            assignedDevices: assigned,
-            urgentTasks: urgent
+            urgentTasks: urgent,
+            assignedTodayCount: todayCount
         };
     }, [user.id, user.distributorId]);
     
@@ -80,7 +83,7 @@ export default function TechnicianDashboard() {
                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <h1 className="text-xl font-bold">{user.name}</h1>
+                        <h1 className="text-xl font-bold">{t('welcome_back', {name: user.name})}</h1>
                         <p className="text-muted-foreground">{t('Technician')}</p>
                     </div>
                 </div>
@@ -91,23 +94,23 @@ export default function TechnicianDashboard() {
                 </Button>
             </div>
             
-            <h2 className="text-2xl font-bold">{t('dashboard_title', {role: ''}).replace(' Dashboard', '')}</h2>
+            <h2 className="text-2xl font-bold">{t('daily_summary')}</h2>
 
              <div className="grid grid-cols-3 gap-4">
                 <StatCard 
-                    title={t('Kunjungan Hari Ini')}
-                    value={5}
+                    title={t('todays_visits')}
+                    value={assignedTodayCount}
                     icon={Calendar}
                     href="#"
                 />
                 <StatCard 
-                    title={t('Alat Butuh Perawatan')}
+                    title={t('devices_needing_service')}
                     value={urgentTasks.length}
                     icon={Wrench}
                     href="/dashboard/device-list"
                 />
                 <StatCard 
-                    title={t('Notifikasi Baru')}
+                    title={t('new_notifications')}
                     value={2}
                     icon={Bell}
                     href="#"
@@ -116,22 +119,22 @@ export default function TechnicianDashboard() {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                  <NavCard 
-                    title={t('Tambah Laporan')}
+                    title={t('add_report')}
                     icon={Plus}
                     href="/dashboard/device-list"
                  />
                   <NavCard 
-                    title={t('Jadwal Kunjungan')}
+                    title={t('visit_schedule')}
                     icon={Calendar}
                     href="#"
                  />
                  <NavCard 
-                    title={t('Semua Alat')}
+                    title={t('all_devices')}
                     icon={Briefcase}
                     href="/dashboard/device-list"
                  />
                  <NavCard 
-                    title={t('Riwayat Servis')}
+                    title={t('service_history')}
                     icon={ClipboardList}
                     href="#"
                  />
@@ -141,14 +144,14 @@ export default function TechnicianDashboard() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <HardHat className="text-primary"/>
-                        {t('Tugas Mendesak')}
+                        {t('urgent_tasks')}
                     </CardTitle>
-                    <CardDescription>{t('Perangkat yang membutuhkan penanganan segera.')}</CardDescription>
+                    <CardDescription>{t('urgent_tasks_desc')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                        {assignedDevices.length > 0 ? (
-                            assignedDevices.slice(0, 3).map((device) => {
+                        {urgentTasks.length > 0 ? (
+                            urgentTasks.slice(0, 3).map((device) => {
                                 const clinic = distributorClinics.find(c => c.id === device.clinicId);
                                 return (
                                 <Card key={device.id} className="bg-muted/30">
@@ -164,7 +167,7 @@ export default function TechnicianDashboard() {
                                         </div>
                                         <Button asChild size="sm" className="flex-shrink-0">
                                             <Link href={`/maintenance/${device.id}`}>
-                                                {t('Lihat')} <ArrowRight className="ml-2 h-4 w-4" />
+                                                {t('view_and_report')} <ArrowRight className="ml-2 h-4 w-4" />
                                             </Link>
                                         </Button>
                                     </CardContent>
@@ -172,15 +175,7 @@ export default function TechnicianDashboard() {
                             )})
                         ) : (
                             <div className="text-center py-6 text-muted-foreground">
-                                <p className="text-sm">{t('Tidak ada tugas mendesak.')}</p>
-                            </div>
-                        )}
-                         {assignedDevices.length === 0 && urgentTasks.length > 0 && (
-                             <div className="text-center py-6 text-muted-foreground">
-                                <p className="text-sm">{t('Ada {{count}} perangkat butuh perhatian. Cek daftar perangkat.', {count: urgentTasks.length})}</p>
-                                <Button asChild variant="link">
-                                    <Link href="/dashboard/device-list">{t('Lihat daftar perangkat')}</Link>
-                                </Button>
+                                <p className="text-sm">{t('no_urgent_tasks')}</p>
                             </div>
                         )}
                     </div>
