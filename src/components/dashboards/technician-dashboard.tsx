@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { devices, distributorClinics } from '@/lib/data';
+import { devices as allDevices, distributorClinics as allClinics } from '@/lib/data';
 import { ArrowRight, HardHat, Bell, Calendar, Wrench, Plus, Briefcase, ClipboardList } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { useMemo } from 'react';
@@ -54,15 +54,20 @@ const NavCard = ({ title, icon, href }: { title: string, icon: React.ElementType
 
 
 export default function TechnicianDashboard() {
-    const { user } = useApp();
+    const { user, unreadMessages } = useApp();
     const { t } = useLanguage();
 
     const { urgentTasks, assignedTodayCount } = useMemo(() => {
-        if (!user.id) return { urgentTasks: [], assignedTodayCount: 0 };
+        if (!user.distributorId) return { urgentTasks: [], assignedTodayCount: 0 };
         
-        // All devices from the technician's distributor that need attention
-        const myClinicIds = distributorClinics.filter(c => c.distributorId === user.distributorId).map(c => c.id);
-        const urgent = devices.filter(d => myClinicIds.includes(d.clinicId) && d.status === 'Needs Attention');
+        // Filter clinics and devices relevant to the technician's distributor
+        const myClinicIds = allClinics
+            .filter(c => c.distributorId === user.distributorId)
+            .map(c => c.id);
+        
+        const myDevices = allDevices.filter(d => myClinicIds.includes(d.clinicId));
+
+        const urgent = myDevices.filter(d => d.status === 'Needs Attention');
         
         // This is a dummy count for demonstration
         const todayCount = 3;
@@ -71,7 +76,7 @@ export default function TechnicianDashboard() {
             urgentTasks: urgent,
             assignedTodayCount: todayCount
         };
-    }, [user.id, user.distributorId]);
+    }, [user.distributorId]);
     
 
     return (
@@ -89,7 +94,9 @@ export default function TechnicianDashboard() {
                 </div>
                  <Button variant="ghost" size="icon" className="rounded-full relative">
                     <Bell className="h-6 w-6" />
-                     <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center" variant="destructive">2</Badge>
+                     {unreadMessages > 0 && (
+                        <Badge className="absolute top-0 right-0 h-4 w-4 p-0 flex items-center justify-center" variant="destructive">{unreadMessages}</Badge>
+                     )}
                     <span className="sr-only">{t('notifications')}</span>
                 </Button>
             </div>
@@ -111,7 +118,7 @@ export default function TechnicianDashboard() {
                 />
                 <StatCard 
                     title={t('new_notifications')}
-                    value={2}
+                    value={unreadMessages}
                     icon={Bell}
                     href="#"
                 />
@@ -152,7 +159,7 @@ export default function TechnicianDashboard() {
                     <div className="space-y-4">
                         {urgentTasks.length > 0 ? (
                             urgentTasks.slice(0, 3).map((device) => {
-                                const clinic = distributorClinics.find(c => c.id === device.clinicId);
+                                const clinic = allClinics.find(c => c.id === device.clinicId);
                                 return (
                                 <Card key={device.id} className="bg-muted/30">
                                     <CardContent className="p-4 flex items-center justify-between gap-4">

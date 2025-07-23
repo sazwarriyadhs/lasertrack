@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { UserPlus, Pencil, Trash2, PlusCircle, Search } from 'lucide-react';
 import { devices, distributorClinics as allClinics, locations } from '@/lib/data';
-import type { ClinicLocation, Device } from '@/lib/types';
+import type { ClinicLocation, Device, DeviceStatus } from '@/lib/types';
 import {
   Dialog,
   DialogContent,
@@ -38,9 +38,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/language-context';
+
 
 export default function ClinicManagementPage() {
     const { user } = useApp();
+    const { t } = useLanguage();
     const distributorId = user.distributorId;
 
     const [clinics, setClinics] = useState<ClinicLocation[]>(
@@ -51,20 +54,21 @@ export default function ClinicManagementPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
 
-    const getClinicDeviceStatus = (clinicId: string): Device['status'] | null => {
+    const getClinicDeviceStatus = (clinicId: string): DeviceStatus | 'No Devices' => {
         const clinicDevices = devices.filter(d => d.clinicId === clinicId);
-        if (clinicDevices.length === 0) return null;
+        if (clinicDevices.length === 0) return 'No Devices';
         if (clinicDevices.some(d => d.status === 'Needs Attention')) return 'Needs Attention';
         if (clinicDevices.some(d => d.status === 'Under Maintenance')) return 'Under Maintenance';
         if (clinicDevices.every(d => d.status === 'Operational')) return 'Operational';
-        return null;
+        return 'Operational'; // Default fallback for mixed but not critical statuses
     };
     
-    const statusBadge: Record<Device['status'], string> = {
+    const statusBadge: Record<DeviceStatus | 'No Devices', string> = {
         Operational: 'bg-green-500/80 text-green-50',
         'Under Maintenance': 'bg-yellow-500/80 text-yellow-50',
         'Needs Attention': 'bg-orange-500/80 text-orange-50',
         Decommissioned: 'bg-gray-500/80 text-gray-50',
+        'No Devices': 'bg-gray-400/80 text-gray-50',
     }
 
 
@@ -117,7 +121,7 @@ export default function ClinicManagementPage() {
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
                  <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>{selectedClinic ? 'Edit Klinik' : 'Tambah Klinik Baru'}</DialogTitle>
+                        <DialogTitle>{selectedClinic ? t('edit_clinic') : t('add_clinic')}</DialogTitle>
                         <DialogDescription>
                             {selectedClinic ? 'Ubah informasi klinik di bawah ini.' : 'Isi detail untuk klinik baru.'}
                         </DialogDescription>
@@ -133,12 +137,12 @@ export default function ClinicManagementPage() {
             <Card>
                 <CardHeader className='flex-row items-center justify-between'>
                     <div>
-                        <CardTitle>Manajemen Klinik</CardTitle>
-                        <CardDescription>Kelola daftar klinik yang terhubung dengan distributor Anda.</CardDescription>
+                        <CardTitle>{t('clinic_management_title')}</CardTitle>
+                        <CardDescription>{t('clinic_management_desc')}</CardDescription>
                     </div>
                     <Button onClick={handleAdd}>
                         <PlusCircle className='mr-2' />
-                        Tambah Klinik
+                        {t('add_clinic')}
                     </Button>
                 </CardHeader>
                 <CardContent>
@@ -146,7 +150,7 @@ export default function ClinicManagementPage() {
                         <div className="relative w-full max-w-sm">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
-                                placeholder="Cari nama klinik..."
+                                placeholder={t('search_clinic_name')}
                                 className="pl-10"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -154,24 +158,24 @@ export default function ClinicManagementPage() {
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
                             <SelectTrigger className="w-[220px]">
-                                <SelectValue placeholder="Filter Status Perangkat" />
+                                <SelectValue placeholder={t('filter_device_status')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="All">Semua Status</SelectItem>
-                                <SelectItem value="Needs Attention">Membutuhkan Perhatian</SelectItem>
-                                <SelectItem value="Under Maintenance">Dalam Perbaikan</SelectItem>
-                                <SelectItem value="Operational">Operasional</SelectItem>
+                                <SelectItem value="All">{t('all_statuses')}</SelectItem>
+                                <SelectItem value="Needs Attention">{t('needs_attention')}</SelectItem>
+                                <SelectItem value="Under Maintenance">{t('under_maintenance')}</SelectItem>
+                                <SelectItem value="Operational">{t('operational')}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Nama Klinik</TableHead>
-                                <TableHead>Status Perangkat</TableHead>
-                                <TableHead>Jumlah Perangkat</TableHead>
-                                <TableHead>Kontak</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead>{t('clinic_name')}</TableHead>
+                                <TableHead>{t('device_status')}</TableHead>
+                                <TableHead>{t('device_count')}</TableHead>
+                                <TableHead>{t('contact')}</TableHead>
+                                <TableHead className="text-right">{t('actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -182,13 +186,9 @@ export default function ClinicManagementPage() {
                                 <TableRow key={clinic.id}>
                                     <TableCell className="font-medium">{clinic.name}</TableCell>
                                     <TableCell>
-                                        {clinicStatus ? (
-                                            <Badge variant="secondary" className={cn("font-normal", statusBadge[clinicStatus])}>
-                                                {clinicStatus}
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="outline">N/A</Badge>
-                                        )}
+                                        <Badge variant="secondary" className={cn("font-normal", statusBadge[clinicStatus])}>
+                                            {clinicStatus === 'No Devices' ? 'Belum ada perangkat' : t(clinicStatus.toLowerCase().replace(/ /g, '_'))}
+                                        </Badge>
                                     </TableCell>
                                     <TableCell>{clinicDevices.length}</TableCell>
                                     <TableCell>{clinic.contact.phone}</TableCell>
@@ -204,14 +204,14 @@ export default function ClinicManagementPage() {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                <AlertDialogTitle>{t('are_you_sure')}</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    Tindakan ini tidak dapat diurungkan. Ini akan menghapus data klinik secara permanen dari daftar Anda.
+                                                    {t('action_cannot_be_undone')}
                                                 </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                <AlertDialogAction onClick={() => handleDelete(clinic.id)}>Hapus</AlertDialogAction>
+                                                <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => handleDelete(clinic.id)}>{t('delete')}</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
@@ -222,7 +222,7 @@ export default function ClinicManagementPage() {
                              {filteredClinics.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={5} className="text-center">
-                                        Tidak ada klinik yang cocok dengan kriteria pencarian.
+                                        {t('no_matching_data')}
                                     </TableCell>
                                 </TableRow>
                             )}

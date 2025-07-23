@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -29,19 +29,32 @@ export default function ProfilePage() {
   const { user, updateUser, loading } = useApp();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
-  const [photoPreview, setPhotoPreview] = useState<string | null>(user?.avatarUrl || null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: user?.name || '',
-      email: user?.contact?.email || user.email,
-      phone: user?.contact?.phone || '',
-      address: user?.address || '',
-      avatarUrl: user?.avatarUrl || '',
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      avatarUrl: '',
     },
     mode: "onChange"
   });
+
+  useEffect(() => {
+    if (user) {
+        form.reset({
+            name: user.name || '',
+            email: user.contact?.email || user.email,
+            phone: user.contact?.phone || '',
+            address: user.address || '',
+            avatarUrl: user.avatarUrl || '',
+        });
+        setPhotoPreview(user.avatarUrl || null);
+    }
+  }, [user, form.reset]);
   
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -59,8 +72,10 @@ export default function ProfilePage() {
 
   const onSubmit = (data: ProfileFormValues) => {
     startTransition(() => {
+        if (!user) return;
         const updatedData = {
             name: data.name,
+            email: data.email, // Also update root email for login consistency
             contact: {
                 email: data.email,
                 phone: data.phone,
@@ -74,10 +89,11 @@ export default function ProfilePage() {
             title: "Profil Diperbarui",
             description: "Informasi profil Anda telah berhasil disimpan.",
         });
+        form.reset(data); // Resets form with new values and clears dirty state
     });
   };
   
-  if (loading) {
+  if (loading || !user) {
     return <div className="flex items-center justify-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>
   }
 
@@ -93,7 +109,7 @@ export default function ProfilePage() {
                 <div className="md:col-span-1 flex flex-col items-center gap-4">
                      <Avatar className="h-32 w-32">
                         <AvatarImage src={photoPreview || undefined} alt={user.name} />
-                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <Button asChild variant="outline">
                         <label htmlFor="photo-upload" className="cursor-pointer">

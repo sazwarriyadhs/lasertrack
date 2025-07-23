@@ -33,7 +33,7 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
         notFound();
     }
 
-    const handledDevice = technician.handledDeviceId ? devices.find(d => d.id === technician.handledDeviceId) : null;
+    const handledDevice = technician.dutyStatus === 'On Duty' && technician.handledDeviceId ? devices.find(d => d.id === technician.handledDeviceId) : null;
     const statusInfo = technician.dutyStatus === 'On Duty' && technician.handlingStatus ? handlingStatusInfo[technician.handlingStatus] : null;
 
     return (
@@ -88,7 +88,7 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                                     </div>
                                 )}
 
-                                {handledDevice && (
+                                {handledDevice ? (
                                      <Card className="bg-muted/50">
                                         <CardHeader className="p-3">
                                             <CardTitle className="text-base flex items-center gap-2">
@@ -101,7 +101,20 @@ export default function TechnicianDetailPage({ params }: { params: { distributor
                                              <p className="text-sm text-muted-foreground">SN: {handledDevice.serialNumber}</p>
                                         </CardContent>
                                     </Card>
-                                )}
+                                ) : technician.dutyStatus === 'On Duty' ? (
+                                     <Card className="bg-muted/50">
+                                        <CardHeader className="p-3">
+                                            <CardTitle className="text-base flex items-center gap-2">
+                                                <HardHat className="h-4 w-4" />
+                                                Tugas Saat Ini
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="p-3 pt-0">
+                                             <p className="font-semibold">Standby</p>
+                                             <p className="text-sm text-muted-foreground">Menunggu penugasan baru.</p>
+                                        </CardContent>
+                                    </Card>
+                                ) : null}
                             </div>
                         </CardContent>
                     </Card>

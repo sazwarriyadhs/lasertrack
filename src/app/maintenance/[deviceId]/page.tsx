@@ -1,31 +1,42 @@
+
 'use client';
 import { MaintenanceForm } from '@/components/maintenance/maintenance-form';
-import { devices } from '@/lib/data';
+import { devices, distributorClinics } from '@/lib/data';
 import { notFound, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Logo } from '@/components/layout/logo';
 import { useApp } from '@/context/app-context';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import React from 'react';
 
 export default function MaintenancePage({ params }: { params: { deviceId: string } }) {
     const { deviceId } = params;
     const device = devices.find(d => d.id === deviceId);
-    const { isAuthenticated } = useApp();
+    const { isAuthenticated, user } = useApp();
     const router = useRouter();
+
+    const clinic = useMemo(() => {
+        if (!device) return null;
+        return distributorClinics.find(c => c.id === device.clinicId);
+    }, [device]);
 
     useEffect(() => {
         if(!isAuthenticated) {
             router.push('/');
         }
-    }, [isAuthenticated, router])
+    }, [isAuthenticated, router]);
 
     if (!device) {
         notFound();
     }
     
+    // Ensure that only technicians from the correct distributor can access this page
+    if (isAuthenticated && user.role === 'Technician' && clinic?.distributorId !== user.distributorId) {
+        notFound();
+    }
+
     if (!isAuthenticated) {
         return null;
     }
@@ -47,7 +58,9 @@ export default function MaintenancePage({ params }: { params: { deviceId: string
             <main className="flex-1 p-4 sm:p-6 md:p-10">
                 <div className="mx-auto grid w-full max-w-6xl gap-2 mb-6">
                     <h1 className="text-3xl font-semibold">Maintenance untuk {device.name}</h1>
-                    <p className="text-muted-foreground">SN: {device.serialNumber}</p>
+                    <p className="text-muted-foreground">
+                        Klinik: {clinic?.name || 'N/A'} | SN: {device.serialNumber}
+                    </p>
                 </div>
                 <div className="mx-auto grid w-full max-w-6xl items-start gap-6">
                     <MaintenanceForm device={device} />
