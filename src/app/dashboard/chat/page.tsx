@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useApp } from '@/context/app-context';
-import { users, chatConversations as allConversations, chatMessages as initialMessages } from '@/lib/data';
+import { users, chatConversations as allConversationsData, chatMessages as initialMessages } from '@/lib/data';
 import type { User, ChatConversation, ChatMessage } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,28 +15,34 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/language-context';
 
 export default function ChatPage() {
-    const { user: currentUser } = useApp();
+    const { user: currentUser, isAuthenticated } = useApp();
     const { t } = useLanguage();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const [allMessages, setAllMessages] = useState<ChatMessage[]>(initialMessages);
+    const [allMessages, setAllMessages] = useState<ChatMessage[]>([]);
+    const [myConversations, setMyConversations] = useState<ChatConversation[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const myConversations = useMemo(() => {
-        if (!currentUser) return [];
-        return allConversations.filter(c => c.participantIds.includes(currentUser.id));
-    }, [currentUser?.id]);
+    useEffect(() => {
+        // Load data on the client side to prevent hydration issues
+        setAllMessages(initialMessages);
+        if (currentUser) {
+            setMyConversations(allConversationsData.filter(c => c.participantIds.includes(currentUser.id)));
+        }
+    }, [currentUser]);
+
 
     const filteredConversations = useMemo(() => {
+        if (!isAuthenticated) return [];
         return myConversations.filter(convo => {
             const otherParticipantId = convo.participantIds.find(id => id !== currentUser.id);
             const otherUser = users.find(u => u.id === otherParticipantId);
             return otherUser?.name.toLowerCase().includes(searchTerm.toLowerCase());
         });
-    }, [myConversations, searchTerm, currentUser?.id]);
+    }, [myConversations, searchTerm, currentUser?.id, isAuthenticated]);
 
     useEffect(() => {
         if (selectedConversation) {
@@ -99,7 +106,7 @@ export default function ChatPage() {
                     </div>
                 </CardHeader>
                 <ScrollArea className="flex-1">
-                    {filteredConversations.map(convo => {
+                    {isAuthenticated && filteredConversations.map(convo => {
                         const otherUser = getOtherParticipant(convo);
                         const lastMessage = getLastMessage(convo.id);
 
